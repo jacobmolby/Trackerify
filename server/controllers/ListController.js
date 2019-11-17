@@ -1,15 +1,24 @@
 const List = require('../models/List');
+const Board = require('../models/Board');
 
 module.exports = {
   async create(req, res) {
-    console.log(req.user);
+    const boardId = req.body.boardId;
 
+    const parentBoard = await Board.findById(boardId);
+    if (!parentBoard) {
+      return res.status(403).send('A list needs a parent board');
+    }
     const list = new List({
-      title: req.body.title
+      title: req.body.title,
+      color: req.body.color
     });
 
     try {
       const savedList = await list.save();
+      const listId = savedList._id;
+      parentBoard.lists.addToSet(listId);
+      await parentBoard.save();
       res.send(savedList.toJSON());
     } catch (error) {
       res.status(403).send({ error });

@@ -3,7 +3,8 @@ const Board = require('../models/Board');
 module.exports = {
   async create(req, res) {
     const board = new Board({
-      title: req.body.title
+      title: req.body.title,
+      users: req.user._id
     });
     try {
       const savedBoard = await board.save();
@@ -13,11 +14,14 @@ module.exports = {
     }
   },
   async show(req, res) {
-    const board = await Board.findById(req.params.id);
+    const board = await Board.findById(req.params.id).populate({
+      path: 'users',
+      select: ['_id', 'name', 'profileImage']
+    });
     if (!board) {
       return res.status(403).send({ error: "Board doesn't exist" });
     }
-    res.send(board.populate(['lists', 'users']));
+    res.send(board);
   },
   async destroy(req, res) {
     const id = req.params.id;

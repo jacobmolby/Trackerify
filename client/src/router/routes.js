@@ -26,7 +26,7 @@ const routes = [
     component: Profile
   },
   {
-    path: '/board',
+    path: '/board/:boardId',
     name: 'board',
     component: Board
   }

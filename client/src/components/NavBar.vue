@@ -1,7 +1,7 @@
 <template>
   <aside class="w-40">
     <div class="h-16 flex items-center justify-around bg-indigo-700">
-      <router-link :to="{name: 'home'}" class="text-white font-bold text-lg">Trackerify</router-link>
+      <router-link :to="{name: 'home'}" exact class="text-white font-bold text-lg">Trackerify</router-link>
     </div>
     <div>
       <nav
@@ -21,7 +21,7 @@
           </router-link>
           <router-link
             class="py-5 w-full flex flex-col items-center text-gray-500 hover:text-gray-700"
-            to="#"
+            to="/board"
           >
             <svg class="h-6 w-6 fill-current" viewBox="0 0 20 20">
               <path d="M12 4H8v12h4V4zm2 0v12h4V4h-4zM6 4H2v12h4V4zM0 2h20v16H0V2z" />
@@ -76,10 +76,10 @@ export default {
 </script>
 
 <style scoped>
-.router-link-exact-active {
+.router-link-active {
   border-style: solid;
   border-left-width: 2px;
-  border-color: #7f9cf5;
+  border-color: #877ff5;
   color: #4a5568;
 }
 </style>

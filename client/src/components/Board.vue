@@ -7,7 +7,7 @@
         <!-- OVER THE lists -->
         <div class="ml-2 pt-6 flex justify-between items-center">
           <div class="flex items-center">
-            <h1 class="font-semibold text-2xl text-gray-700">Studio Board</h1>
+            <h1 class="font-semibold text-2xl text-gray-700">{{this.board.title}}</h1>
 
             <add-list class="block"></add-list>
           </div>
@@ -39,10 +39,10 @@
         </div>
         <!-- BOARD AREA -->
         <div class="overflow-x-auto">
-          <div class="py-6 h-full inline-flex flex-shrink-0 items-start">
+          <div v-if="this.board.lists" class="py-6 h-full inline-flex flex-shrink-0 items-start">
             <div
-              v-for="i in lists"
-              :key="i"
+              v-for="list in this.board.lists"
+              :key="list._id"
               class="overflow-hidden mx-2 my-2 px-3 py-2 w-72 flex-shrink-0 flex flex-col bg-gray-200 rounded shadow-md border-t-4 border-red-300"
             >
               <List :numberofposts="posts" title="Backlog">
@@ -57,11 +57,13 @@
 </template>
 
 <script>
-import List from '@/components/List.vue';
-import Card from '@/components/Card.vue';
-import AddList from '@/components/AddList.vue';
-import NavBar from '@/components/NavBar.vue';
-import TopBar from '@/components/TopBar.vue';
+import { mapState } from 'vuex';
+import List from '@/components/List';
+import Card from '@/components/Card';
+import AddList from '@/components/AddList';
+import NavBar from '@/components/NavBar';
+import TopBar from '@/components/TopBar';
+import BoardService from '@/services/BoardService';
 export default {
   name: 'Board',
   data() {
@@ -76,6 +78,21 @@ export default {
     AddList,
     NavBar,
     TopBar
+  },
+  methods: {
+    addList() {}
+  },
+  computed: {
+    ...mapState(['board'])
+  },
+  async mounted() {
+    const boardId = this.$route.params.boardId;
+    try {
+      const response = (await BoardService.show(boardId)).data;
+      this.$store.dispatch('setBoard', response);
+    } catch (error) {
+      console.log(error);
+    }
   }
 };
 </script>

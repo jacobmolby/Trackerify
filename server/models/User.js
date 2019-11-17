@@ -1,4 +1,4 @@
-const mongoose = require("mongoose");
+const mongoose = require('mongoose');
 
 const userSchema = new mongoose.Schema({
   name: {
@@ -18,11 +18,15 @@ const userSchema = new mongoose.Schema({
     max: 1024,
     min: 8
   },
-  boards: [{ type: mongoose.Schema.Types.ObjectId, ref: "Board" }],
+  profileImage: {
+    type: String,
+    default: 'https://img.icons8.com/officel/16/000000/user.png'
+  },
+  boards: [{ type: mongoose.Schema.Types.ObjectId, ref: 'Board' }],
   created: {
     type: Date,
     default: Date.now
   }
 });
 
-module.exports = mongoose.model("User", userSchema);
+module.exports = mongoose.model('User', userSchema);
