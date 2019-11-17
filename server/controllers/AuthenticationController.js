@@ -12,9 +12,9 @@ module.exports = {
   async register(req, res) {
     //Check if email exists
     const emailExist = await User.findOne({ email: req.body.email });
-    if (emailExist)
+    if (emailExist) {
       return res.status(400).send({ error: 'Email already in use.' });
-
+    }
     //Hashing the password
     const salt = await bcrypt.genSalt(10);
     const hashPassword = await bcrypt.hash(req.body.password, salt);

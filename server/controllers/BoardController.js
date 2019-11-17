@@ -1,11 +1,9 @@
 const Board = require('../models/Board');
-const User = require('../models/User');
 
 module.exports = {
   async create(req, res) {
     const board = new Board({
-      title: req.body.title,
-      users: [req.body.userid]
+      title: req.body.title
     });
     try {
       const savedBoard = await board.save();
@@ -31,7 +29,7 @@ module.exports = {
       const result = await Board.findByIdAndDelete(id);
 
       if (result) {
-        return res.send(`${result.title} deleted`);
+        return res.send(`Board: "${result.title}" deleted`);
       } else {
         return res.status(403).send({ error: 'Something went wrong' });
       }

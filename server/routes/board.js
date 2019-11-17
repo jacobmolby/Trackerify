@@ -1,9 +1,9 @@
 const router = require('express').Router();
-const verifyToken = require('./verifyToken');
+const verifyToken = require('../policies/verifyToken');
 const BoardController = require('../controllers/BoardController');
 
-router.get('/board/:id', verifyToken, BoardController.show);
-router.post('/board/', verifyToken, BoardController.create);
-router.delete('/board/:id', verifyToken, BoardController.destroy);
+router.get('/:id', verifyToken, BoardController.show);
+router.post('/', verifyToken, BoardController.create);
+router.delete('/:id', verifyToken, BoardController.destroy);
 
 module.exports = router;

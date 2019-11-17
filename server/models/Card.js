@@ -1,4 +1,4 @@
-const mongoose = require("mongoose");
+const mongoose = require('mongoose');
 
 const cardSchema = new mongoose.Schema({
   title: {
@@ -10,13 +10,14 @@ const cardSchema = new mongoose.Schema({
     type: String,
     required: false
   },
-  assignedUsers: [{ type: mongoose.Schema.Types.ObjectId, ref: "User" }],
-  comments: [{ type: mongoose.Schema.Types.ObjectId, ref: "Comment" }],
-  attachments: [{ type: mongoose.Schema.Types.ObjectId, ref: "Attachment" }],
+  labels: [{ type: mongoose.Schema.Types.ObjectId, ref: 'Label' }],
+  assignedUsers: [{ type: mongoose.Schema.Types.ObjectId, ref: 'User' }],
+  comments: [{ type: mongoose.Schema.Types.ObjectId, ref: 'Comment' }],
+  attachments: [{ type: mongoose.Schema.Types.ObjectId, ref: 'Attachment' }],
   created: {
     type: Date,
     default: Date.now
   }
 });
 
-module.exports = mongoose.model("Card", cardSchema);
+module.exports = mongoose.model('Card', cardSchema);

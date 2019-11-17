@@ -39,11 +39,7 @@ app.use(morgan('tiny'));
 app.use(cors());
 app.use(express.json());
 
-// Import Routes
-const authRoutes = require('./routes/auth');
-const boardRoutes = require('./routes/board');
-// Route Middleware
-app.use('/api/auth', authRoutes);
-app.use('/api', boardRoutes);
+//Routing
+require('./routes')(app);
 
 app.listen(port, () => console.log(`Server running on port ${port}.`));
