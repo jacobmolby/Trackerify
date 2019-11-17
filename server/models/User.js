@@ -18,8 +18,8 @@ const userSchema = new mongoose.Schema({
     max: 1024,
     min: 8
   },
-  teams: [{ type: mongoose.Schema.Types.ObjectId, ref: "Team" }],
-  date: {
+  boards: [{ type: mongoose.Schema.Types.ObjectId, ref: "Board" }],
+  created: {
     type: Date,
     default: Date.now
   }

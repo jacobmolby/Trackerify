@@ -43,7 +43,7 @@
 
 <script>
 export default {
-  name: 'header'
+  name: 'TopBar'
 };
 </script>
 
