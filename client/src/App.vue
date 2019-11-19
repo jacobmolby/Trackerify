@@ -1,5 +1,5 @@
 <template>
-  <div id="app" class>
+  <div id="app" class="h-screen">
     <!-- <NavBar /> -->
     <!-- <div class="flex">
       <div class="h-12 w-1/5 bg-deepblue-300"></div>

@@ -1,5 +1,5 @@
 <template>
-  <div class="bg-white flex min-w-screen h-screen">
+  <div style="height: calc(100% - 4em);" class="bg-white flex min-w-screen">
     <nav-bar></nav-bar>
     <div class="overflow-x-hidden w-full">
       <top-bar></top-bar>
