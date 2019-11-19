@@ -25,11 +25,11 @@ module.exports = {
     }
   },
   async show(req, res) {
-    const list = await List.findById(req.params.id);
+    const list = await List.findById(req.params.id).populate('cards');
     if (!list) {
       return res.status(403).send({ error: "List doesn't exist" });
     }
-    res.send(board.populate('cards'));
+    res.send(list.toJSON());
   },
   async destroy(req, res) {
     const id = req.params.id;

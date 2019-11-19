@@ -57,8 +57,6 @@ export default {
   },
   methods: {
     async addList() {
-      //TODO MANGLER SERVERSIDE
-      //console.log(this.$store.state.board._id);
       if (!this.list.title || !this.list.color) {
         console.log('error');
 

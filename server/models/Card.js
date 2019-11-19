@@ -6,6 +6,11 @@ const cardSchema = new mongoose.Schema({
     required: true,
     maxlength: 255
   },
+  list: {
+    type: mongoose.Schema.Types.ObjectId,
+    ref: 'List',
+    required: true
+  },
   description: {
     type: String,
     required: false

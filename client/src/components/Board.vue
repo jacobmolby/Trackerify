@@ -1,15 +1,15 @@
 <template>
-  <div class="bg-gray-100 flex min-w-screen h-screen">
+  <div class="bg-white flex min-w-screen h-screen">
     <nav-bar></nav-bar>
     <div class="overflow-x-hidden w-full">
       <top-bar></top-bar>
       <main class="px-10">
         <!-- OVER THE lists -->
         <div class="ml-2 pt-6 flex justify-between items-center">
-          <div class="flex items-center">
+          <div class="inline-flex items-baseline">
             <h1 class="font-semibold text-2xl text-gray-700">{{this.board.title}}</h1>
 
-            <add-list class="block"></add-list>
+            <add-list class></add-list>
           </div>
           <div class="flex">
             <button>
@@ -43,11 +43,13 @@
             <div
               v-for="list in this.board.lists"
               :key="list._id"
-              class="overflow-hidden mx-2 my-2 px-3 py-2 w-72 flex-shrink-0 flex flex-col bg-gray-200 rounded shadow-md border-t-4 border-red-300"
+              class="overflow-hidden mx-2 my-2 px-3 py-2 w-72 flex-shrink-0 flex flex-col bg-gray-100 rounded shadow-md border-t-4 border-red-300"
             >
-              <List :numberofposts="posts" title="Backlog">
-                <Card></Card>
-              </List>
+              <div v-if="list.cards">
+                <List :cards="list.cards" :listId="list._id" :title="list.title">
+                  <!-- <Card></Card> -->
+                </List>
+              </div>
             </div>
           </div>
         </div>
@@ -59,7 +61,7 @@
 <script>
 import { mapState } from 'vuex';
 import List from '@/components/List';
-import Card from '@/components/Card';
+// import Card from '@/components/Card';
 import AddList from '@/components/AddList';
 import NavBar from '@/components/NavBar';
 import TopBar from '@/components/TopBar';
@@ -74,13 +76,10 @@ export default {
   },
   components: {
     List,
-    Card,
+    // Card,
     AddList,
     NavBar,
     TopBar
-  },
-  methods: {
-    addList() {}
   },
   computed: {
     ...mapState(['board'])

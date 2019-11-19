@@ -1,4 +1,4 @@
-const mongoose = require("mongoose");
+const mongoose = require('mongoose');
 
 const listSchema = new mongoose.Schema({
   title: {
@@ -6,11 +6,11 @@ const listSchema = new mongoose.Schema({
     required: true,
     maxlength: 255
   },
-  cards: [{ type: mongoose.Schema.Types.ObjectId, ref: "Card" }],
+  cards: [{ type: mongoose.Schema.Types.ObjectId, ref: 'Card' }],
   created: {
     type: Date,
     default: Date.now
   }
 });
 
-module.exports = mongoose.model("List", listSchema);
+module.exports = mongoose.model('List', listSchema);

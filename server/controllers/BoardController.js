@@ -14,10 +14,19 @@ module.exports = {
     }
   },
   async show(req, res) {
-    const board = await Board.findById(req.params.id).populate({
-      path: 'users',
-      select: ['_id', 'name', 'profileImage']
-    });
+    const board = await Board.findById(req.params.id)
+      .populate({
+        path: 'users',
+        select: ['_id', 'name', 'profileImage']
+      })
+      .populate({
+        path: 'lists',
+        // model: 'List',
+        populate: {
+          path: 'cards'
+          // model: 'Card'
+        }
+      });
     if (!board) {
       return res.status(403).send({ error: "Board doesn't exist" });
     }

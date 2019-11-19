@@ -1,10 +1,10 @@
-<template>
+<template v-slot:default="card">
   <div class="flex flex-col flex-shrink-0 justify-between">
     <div>
       <div class="text-xs text-gray-700 px-2 inline-block bg-teal-400 rounded-lg">Low Priority</div>
     </div>
     <span class="text-sm leading-snug text-gray-600">
-      <button @click="isOpen = !isOpen" class="text-left">Company website redesign website redesign</button>
+      <button @click="isOpen = !isOpen" class="text-left">{{card.title}}</button>
     </span>
     <div class="pt-4 flex justify-between items-end">
       <div class="w-1/2 flex justify-start items-center">
@@ -46,7 +46,7 @@
       class="fixed inset-0 h-full w-full bg-black opacity-25 cursor-default"
     ></button>
     <div v-if="isOpen" class="popup bg-white shadow-xl rounded p-6 text-gray-700">
-      <h2 class="text-lg font-bold">Company website redesign website redesign</h2>
+      <h2 class="text-lg font-bold">{{card.title}}</h2>
       <p
         class="py-2 text-sm border-b-2 border-gray-200"
       >Lorem ipsum dolor sit amet, consectetur adipiscing elit. Sed quis malesuada eros, non efficitur magna. Fusce mollis lacus ut congue gravida.</p>
@@ -72,6 +72,7 @@
       <div class="py-2 border-t-2 border-gray-200">Attachments:</div>
       <div class="flex items-center justify-between">
         <button
+          @click="deleteCard"
           class="px-2 py-1 font-semibold text-white bg-red-500 rounded shadow hover:bg-red-800"
         >Delete Card</button>
         <button
@@ -84,12 +85,15 @@
 </template>
 
 <script>
+import { mapState } from 'vuex';
+import CardService from '@/services/CardService';
 import Comment from '@/components/Comment';
 export default {
   name: 'Card',
   components: {
     Comment
   },
+  props: { card: Object },
   data() {
     return {
       isOpen: false
@@ -105,6 +109,25 @@ export default {
     this.$once('hook:beforeDestroy', () => {
       document.removeEventListener('keydown', handleEscape);
     });
+  },
+  methods: {
+    async deleteCard() {
+      const cardId = this.card._id;
+      console.log(cardId);
+      console.log(this.card.list);
+
+      try {
+        const response = (await CardService.delete(cardId)).data;
+        const cardAndListId = {
+          deletedCard: response,
+          listId: this.card.list
+        };
+        this.$store.dispatch('removeCard', cardAndListId);
+        this.isOpen = false;
+      } catch (error) {
+        console.log(error);
+      }
+    }
   }
 };
 </script>

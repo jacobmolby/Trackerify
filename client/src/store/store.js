@@ -24,6 +24,23 @@ export const store = new Vuex.Store({
     },
     addList(state, list) {
       state.board.lists.push(list);
+    },
+    addCard(state, cardAndListId) {
+      const { card, listId } = cardAndListId;
+
+      let listIndex = state.board.lists.findIndex(list => list._id == listId);
+
+      state.board.lists[listIndex].cards.push(card);
+    },
+    removeCard(state, cardAndListId) {
+      const { deletedCard, listId } = cardAndListId;
+
+      let listIndex = state.board.lists.findIndex(list => list._id == listId);
+      state.board.lists[listIndex].cards = state.board.lists[
+        listIndex
+      ].cards.filter(card => {
+        return card._id !== deletedCard._id;
+      });
     }
   },
   actions: {
@@ -38,6 +55,12 @@ export const store = new Vuex.Store({
     },
     addList({ commit }, list) {
       commit('addList', list);
+    },
+    addCard({ commit }, cardAndListId) {
+      commit('addCard', cardAndListId);
+    },
+    removeCard({ commit }, cardAndListId) {
+      commit('removeCard', cardAndListId);
     }
   }
 });
