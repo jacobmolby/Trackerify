@@ -6,5 +6,8 @@ export default {
     console.log(payload);
 
     return Api().post('/list', payload);
+  },
+  delete(listId) {
+    return Api().delete(`/list/${listId}`);
   }
 };

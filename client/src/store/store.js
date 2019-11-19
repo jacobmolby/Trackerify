@@ -41,6 +41,11 @@ export const store = new Vuex.Store({
       ].cards.filter(card => {
         return card._id !== deletedCard._id;
       });
+    },
+    removeList(state, deletedList) {
+      state.board.lists = state.board.lists.filter(list => {
+        return list._id !== deletedList._id;
+      });
     }
   },
   actions: {
@@ -61,6 +66,9 @@ export const store = new Vuex.Store({
     },
     removeCard({ commit }, cardAndListId) {
       commit('removeCard', cardAndListId);
+    },
+    removeList({ commit }, deletedList) {
+      commit('removeList', deletedList);
     }
   }
 });

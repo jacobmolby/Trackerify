@@ -1,15 +1,17 @@
 <template>
   <div id="app" class="h-screen">
-    <!-- <NavBar /> -->
-    <!-- <div class="flex">
+    <div style="height: calc(100% - 4em);" class="bg-white flex min-w-screen">
+      <NavBar />
+      <!-- <div class="flex">
       <div class="h-12 w-1/5 bg-deepblue-300"></div>
       <div class="h-12 w-1/5 bg-deepblue-400"></div>
       <div class="h-12 w-1/5 bg-deepblue-500"></div>
       <div class="h-12 w-1/5 bg-deepblue-600"></div>
       <div class="h-12 w-1/5 bg-deepblue-700"></div>
-    </div>-->
-    <router-view />
+      </div>-->
 
+      <router-view />
+    </div>
     <!-- <div class="container mx-auto">
     </div>-->
   </div>
@@ -20,7 +22,7 @@ import NavBar from '@/components/NavBar.vue';
 export default {
   name: 'app',
   components: {
-    //NavBar
+    NavBar
   }
 };
 </script>

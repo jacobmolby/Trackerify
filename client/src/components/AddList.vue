@@ -32,6 +32,7 @@
           type="text"
           placeholder="Accent Color"
         />
+        <div>{{this.error}}</div>
         <button
           type="submit"
           class="mt-2 py-2 text-white bg-indigo-400 rounded shadow hover:bg-indigo-500"
@@ -57,6 +58,7 @@ export default {
   },
   methods: {
     async addList() {
+      this.error = null;
       if (!this.list.title || !this.list.color) {
         console.log('error');
 

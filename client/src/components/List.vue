@@ -3,7 +3,7 @@
     <!-- List Title -->
     <div class="flex justify-between items-center">
       <h2 class="py-4 font-semibold text-gray-700 text-xl">{{title}}</h2>
-      <button class="text-xs px-2 py-1 bg-red-400 rounded shadow">Delete List</button>
+      <button @click="deleteList" class="text-xs px-2 py-1 bg-red-400 rounded shadow">Delete List</button>
     </div>
     <!-- Scrollable area -->
     <!-- List CONTENT -->
@@ -19,14 +19,26 @@
 </template>
 
 <script>
-import Card from '@/components/Card.vue';
-import AddCard from '@/components/AddCard.vue';
+import ListService from '@/services/ListService';
+import Card from '@/components/Card';
+import AddCard from '@/components/AddCard';
 export default {
   components: {
     Card,
     AddCard
   },
-  props: ['cards', 'title', 'listId']
+  props: ['cards', 'title', 'listId'],
+  methods: {
+    async deleteList() {
+      try {
+        const response = (await ListService.delete(this.listId)).data;
+
+        this.$store.dispatch('removeList', response);
+      } catch (error) {
+        console.log(error);
+      }
+    }
+  }
 };
 </script>
 

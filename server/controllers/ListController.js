@@ -1,5 +1,6 @@
 const List = require('../models/List');
 const Board = require('../models/Board');
+const Card = require('../models/Card');
 
 module.exports = {
   async create(req, res) {
@@ -39,13 +40,20 @@ module.exports = {
     }
     try {
       const result = await List.findByIdAndDelete(id);
+      const { deletedCount } = await Card.deleteMany({ list: id });
+      const response = {
+        ...result._doc,
+        deletedCount
+      };
 
-      if (result) {
-        return res.send(`List: "${result.title}" deleted`);
+      if (response) {
+        return res.send(response);
       } else {
         return res.status(403).send({ error: 'Something went wrong' });
       }
     } catch (error) {
+      console.log(error);
+
       res.send({ error: error });
     }
   }
