@@ -41,13 +41,14 @@
       <!-- BOARD AREA -->
       <div class="overflow-x-auto">
         <div v-if="this.board.lists" class="py-6 h-full inline-flex flex-shrink-0 items-start">
-          <div
-            v-for="list in this.board.lists"
-            :key="list._id"
-            class="overflow-hidden mx-2 my-2 px-3 py-2 w-72 flex-shrink-0 flex flex-col bg-gray-100 rounded shadow-md border-t-4 border-red-300"
-          >
+          <div v-for="list in this.board.lists" :key="list._id">
             <div v-if="list.cards">
-              <List :cards="list.cards" :listId="list._id" :title="list.title">
+              <List
+                :cards="list.cards"
+                :listId="list._id"
+                :title="list.title"
+                :listColor="list.color"
+              >
                 <!-- <Card></Card> -->
               </List>
             </div>
@@ -89,7 +90,7 @@ export default {
       const response = (await BoardService.show(boardId)).data;
       this.$store.dispatch('setBoard', response);
     } catch (error) {
-      console.log(error);
+      this.$router.push({ path: '/' });
     }
   }
 };

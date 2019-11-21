@@ -7,7 +7,7 @@ module.exports = {
 
     const parentList = await List.findById(listId);
     if (!parentList) {
-      return res.status(403).send('A list needs a parent list');
+      return res.status(400).send('A list needs a parent list');
     }
     const card = new Card({
       title: req.body.title,

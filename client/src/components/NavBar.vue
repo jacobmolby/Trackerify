@@ -9,7 +9,7 @@
     >
       <div class="min-w-full">
         <router-link
-          class="py-5 w-full flex flex-col items-center text-gray-500 hover:text-gray-700"
+          class="py-5 w-full flex flex-col items-center text-gray-500 hover:text-gray-700 nav"
           to="/manage"
         >
           <svg class="h-6 w-6 fill-current" viewBox="0 0 20 20">
@@ -20,7 +20,7 @@
           Manage
         </router-link>
         <router-link
-          class="py-5 w-full flex flex-col items-center text-gray-500 hover:text-gray-700"
+          class="py-5 w-full flex flex-col items-center text-gray-500 hover:text-gray-700 nav"
           to="/board"
         >
           <svg class="h-6 w-6 fill-current" viewBox="0 0 20 20">
@@ -29,7 +29,7 @@
           Boards
         </router-link>
         <router-link
-          class="py-5 w-full flex flex-col items-center text-gray-500 hover:text-gray-700"
+          class="py-5 w-full flex flex-col items-center text-gray-500 hover:text-gray-700 nav"
           to="/schedule"
         >
           <svg class="h-6 w-6 fill-current" viewBox="0 0 20 20">
@@ -40,7 +40,7 @@
           Schedule
         </router-link>
         <router-link
-          class="py-5 w-full flex flex-col items-center text-gray-500 hover:text-gray-700"
+          class="py-5 w-full flex flex-col items-center text-gray-500 hover:text-gray-700 nav"
           to="/reports"
         >
           <svg class="h-6 w-6 fill-current" viewBox="0 0 20 20">
@@ -53,7 +53,7 @@
       </div>
       <div class="min-w-full">
         <router-link
-          class="py-5 w-full flex flex-col items-center text-gray-500 hover:text-gray-700"
+          class="py-5 w-full flex flex-col items-center text-gray-500 hover:text-gray-700 nav"
           to="/settings"
         >
           <svg class="h-6 w-6 fill-current" viewBox="0 0 20 20">
@@ -75,7 +75,7 @@ export default {
 </script>
 
 <style scoped>
-.router-link-active {
+.router-link-active.nav {
   border-style: solid;
   border-left-width: 2px;
   border-color: #877ff5;

@@ -66,9 +66,10 @@
           />
         </div>
       </div>
-      <div class="my-1 h-72 overflow-y-auto">
-        <comment v-for="i in 3" :key="i"></comment>
+      <div class="my-1 max-h-72 overflow-y-auto">
+        <comment v-for="comment in card.comments" :key="comment._id" :comment="comment"></comment>
       </div>
+      <add-comment :cardId="card._id" :listId="card.list"></add-comment>
       <div class="py-2 border-t-2 border-gray-200">Attachments:</div>
       <div class="flex items-center justify-between">
         <button
@@ -88,10 +89,12 @@
 import { mapState } from 'vuex';
 import CardService from '@/services/CardService';
 import Comment from '@/components/Comment';
+import AddComment from '@/components/AddComment';
 export default {
   name: 'Card',
   components: {
-    Comment
+    Comment,
+    AddComment
   },
   props: { card: Object },
   data() {

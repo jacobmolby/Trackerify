@@ -10,6 +10,10 @@ const listSchema = new mongoose.Schema({
   created: {
     type: Date,
     default: Date.now
+  },
+  color: {
+    type: String,
+    default: '#00b6f3'
   }
 });
 

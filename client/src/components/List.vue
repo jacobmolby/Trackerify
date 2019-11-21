@@ -1,5 +1,8 @@
 <template>
-  <div>
+  <div
+    class="overflow-hidden mx-2 my-2 px-3 py-2 w-72 flex-shrink-0 flex flex-col bg-gray-100 rounded shadow-md border-t-4"
+    :style="borderColor"
+  >
     <!-- List Title -->
     <div class="flex justify-between items-center">
       <h2 class="py-4 font-semibold text-gray-700 text-xl">{{title}}</h2>
@@ -27,7 +30,7 @@ export default {
     Card,
     AddCard
   },
-  props: ['cards', 'title', 'listId'],
+  props: ['cards', 'title', 'listId', 'listColor'],
   methods: {
     async deleteList() {
       try {
@@ -36,6 +39,20 @@ export default {
         this.$store.dispatch('removeList', response);
       } catch (error) {
         console.log(error);
+      }
+    }
+  },
+  computed: {
+    borderColor() {
+      const validColor = new RegExp('^#([A-Fa-f0-9]{6}|[A-Fa-f0-9]{3})$');
+      if (validColor.test(this.listColor)) {
+        return {
+          'border-color': this.listColor
+        };
+      } else {
+        return {
+          'border-color': '#000'
+        };
       }
     }
   }
