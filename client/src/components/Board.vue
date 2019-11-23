@@ -8,7 +8,11 @@
       <!-- OVER THE lists -->
       <div class="ml-2 pt-6 flex justify-between items-center">
         <div class="inline-flex items-baseline">
-          <h1 class="font-semibold text-2xl text-gray-700">{{this.board.title}}</h1>
+          <h1
+            v-if="this.board.title"
+            class="font-semibold text-2xl text-gray-700"
+          >{{this.board.title}}</h1>
+          <h1 v-else class="font-semibold text-2xl text-gray-700">Loading Title</h1>
 
           <add-list class></add-list>
         </div>
@@ -90,7 +94,9 @@ export default {
       const response = (await BoardService.show(boardId)).data;
       this.$store.dispatch('setBoard', response);
     } catch (error) {
-      this.$router.push({ path: '/' });
+      //this.$router.push({ path: '/' });
+      alert(error.response.data.error);
+      console.log(error.response);
     }
   }
 };

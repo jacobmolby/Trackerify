@@ -1,8 +1,8 @@
 <template>
   <div class="my-2 p-3 shadow border rounded">
     <div class="flex items-baseline justify-between">
-      <h3 class="font-bold">{{comment.user.name}}</h3>
-      <time datetime="INDSÆT DYNAMISK" class="text-xs">{{date}}</time>
+      <h3 class="font-semibold text-sm">{{comment.user.name}}</h3>
+      <time :datetime="this.date" class="text-xs">{{date}}</time>
     </div>
     <p>{{comment.content}}</p>
   </div>

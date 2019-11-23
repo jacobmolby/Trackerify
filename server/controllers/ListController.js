@@ -11,6 +11,7 @@ module.exports = {
       return res.status(403).send('A list needs a parent board');
     }
     const list = new List({
+      boardId,
       title: req.body.title,
       color: req.body.color
     });
@@ -40,6 +41,12 @@ module.exports = {
     }
     try {
       const result = await List.findByIdAndDelete(id);
+      //removiung the list from the board
+      await Board.updateOne(
+        { _id: result._doc.boardId },
+        { $pullAll: { lists: [id] } }
+      );
+
       const { deletedCount } = await Card.deleteMany({ list: id });
       const response = {
         ...result._doc,

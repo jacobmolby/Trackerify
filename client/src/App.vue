@@ -29,7 +29,7 @@ export default {
 
 <style>
 .popup {
-  z-index: 9999;
+  z-index: 5;
   position: fixed;
   top: 50%;
   left: 50%;

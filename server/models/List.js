@@ -6,6 +6,11 @@ const listSchema = new mongoose.Schema({
     required: true,
     maxlength: 255
   },
+  boardId: {
+    type: mongoose.Schema.Types.ObjectId,
+    ref: 'Board',
+    required: true
+  },
   cards: [{ type: mongoose.Schema.Types.ObjectId, ref: 'Card' }],
   created: {
     type: Date,

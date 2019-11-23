@@ -43,6 +43,7 @@ export default {
             listId: this.listId
           };
           this.$store.dispatch('addComment', response);
+          this.comment = '';
         } catch (error) {
           console.log(error);
         }

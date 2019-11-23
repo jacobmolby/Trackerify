@@ -11,6 +11,7 @@ module.exports = {
     }
     const card = new Card({
       title: req.body.title,
+      description: req.body.description,
       list: listId
     });
 
@@ -44,6 +45,22 @@ module.exports = {
       }
     } catch (error) {
       res.send({ error: error });
+    }
+  },
+  async put(req, res) {
+    const { description, cardId } = req.body;
+    try {
+      const response = await Card.findByIdAndUpdate(
+        { _id: cardId },
+        {
+          description
+        },
+        { new: true }
+      );
+      console.log(response);
+      res.send(response);
+    } catch (error) {
+      console.log(error);
     }
   }
 };

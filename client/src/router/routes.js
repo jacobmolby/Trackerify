@@ -3,6 +3,7 @@ import Profile from '@/components/Profile';
 import Login from '@/components/Login';
 import Register from '@/components/Register';
 import Board from '@/components/Board';
+import BoardOverview from '@/components/BoardOverview';
 
 const routes = [
   {
@@ -26,8 +27,13 @@ const routes = [
     component: Profile
   },
   {
+    path: '/board/',
+    name: 'boardOverview',
+    component: BoardOverview
+  },
+  {
     path: '/board/:boardId',
-    name: 'board',
+    name: 'Board',
     component: Board
   }
 ];

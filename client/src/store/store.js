@@ -28,14 +28,14 @@ export const store = new Vuex.Store({
     addCard(state, cardAndListId) {
       const { card, listId } = cardAndListId;
 
-      let listIndex = state.board.lists.findIndex(list => list._id == listId);
+      const listIndex = state.board.lists.findIndex(list => list._id == listId);
 
       state.board.lists[listIndex].cards.push(card);
     },
     removeCard(state, cardAndListId) {
       const { deletedCard, listId } = cardAndListId;
 
-      let listIndex = state.board.lists.findIndex(list => list._id == listId);
+      const listIndex = state.board.lists.findIndex(list => list._id == listId);
       state.board.lists[listIndex].cards = state.board.lists[
         listIndex
       ].cards.filter(card => {
@@ -55,6 +55,16 @@ export const store = new Vuex.Store({
         card => card._id == comment.cardId
       );
       state.board.lists[listIndex].cards[cardIndex].comments.push(comment);
+    },
+    updateDescription(state, card) {
+      const listIndex = state.board.lists.findIndex(
+        list => list._id == card.list
+      );
+      const cardIndex = state.board.lists[listIndex].cards.findIndex(
+        cardIterator => cardIterator._id == card._id
+      );
+      state.board.lists[listIndex].cards[cardIndex].description =
+        card.description;
     }
   },
   actions: {
@@ -81,6 +91,9 @@ export const store = new Vuex.Store({
     },
     addComment({ commit }, comment) {
       commit('addComment', comment);
+    },
+    updateDescription({ commit }, card) {
+      commit('updateDescription', card);
     }
   }
 });

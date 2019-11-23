@@ -19,6 +19,7 @@
     ></button>
     <div v-if="isOpen" class="popup bg-white shadow-xl rounded p-6 text-gray-700">
       <h2 class="text-left text-lg font-semibold">Add List</h2>
+
       <form class="pt-3 flex flex-col" @submit.prevent="addList">
         <input
           v-model="list.title"
@@ -26,13 +27,13 @@
           type="text"
           placeholder="List Title"
         />
-        <input
-          v-model="list.color"
-          class="mt-2 p-2 rounded border border-gray-400"
-          type="text"
-          placeholder="Accent Color"
-        />
-        <div>{{this.error}}</div>
+        <button
+          :style="{'background-color':list.color.hex}"
+          class="mt-2 p-2 rounded border border-gray-400 font-extrabold"
+          @click.prevent="pickingColor = !pickingColor"
+        >{{this.list.color.hex}}</button>
+        <chrome v-if="pickingColor" class="mx-auto my-2 shadow-none" v-model="list.color">TEST</chrome>
+        <div class="text-red-500 font-semibold">{{this.error}}</div>
         <button
           type="submit"
           class="mt-2 py-2 text-white bg-indigo-400 rounded shadow hover:bg-indigo-500"
@@ -44,39 +45,46 @@
 
 <script>
 import ListService from '@/services/ListService';
+import { Chrome } from 'vue-color';
 export default {
   name: 'AddList',
+  components: {
+    Chrome
+  },
   data() {
     return {
       isOpen: false,
+      pickingColor: false,
       list: {
         title: null,
-        color: null
+        color: {
+          hex: '#00FFFF'
+        }
       },
       error: null
     };
   },
   methods: {
+    onChange(val) {
+      this.list.color = val;
+    },
     async addList() {
       this.error = null;
-      if (!this.list.title || !this.list.color) {
-        console.log('error');
-
-        this.error = 'Please fill out the fields.';
+      if (!this.list.title) {
+        this.error = 'Please choose a title.';
       }
       if (this.list.title && this.list.color) {
-        console.log('succes');
-
         const payload = {
           title: this.list.title,
-          color: this.list.color,
+          color: this.list.color.hex,
           boardId: this.$store.state.board._id
         };
         try {
           const response = (await ListService.post(payload)).data;
-          console.log(response);
 
           this.$store.dispatch('addList', response);
+          this.list.title = null;
+          this.pickingColor = false;
           this.isOpen = false;
         } catch (error) {
           console.log(error);

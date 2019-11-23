@@ -10,6 +10,8 @@ module.exports = {
       const savedBoard = await board.save();
       res.send(savedBoard.toJSON());
     } catch (error) {
+      console.log(error);
+
       res.status(400).send({ error });
     }
   },

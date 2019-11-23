@@ -47,9 +47,34 @@
     ></button>
     <div v-if="isOpen" class="popup bg-white shadow-xl rounded p-6 text-gray-700">
       <h2 class="text-lg font-bold">{{card.title}}</h2>
-      <p
-        class="py-2 text-sm border-b-2 border-gray-200"
-      >Lorem ipsum dolor sit amet, consectetur adipiscing elit. Sed quis malesuada eros, non efficitur magna. Fusce mollis lacus ut congue gravida.</p>
+      <div
+        v-if="card.description"
+        class="py-2 flex items-center justify-between text-sm border-b-2 border-gray-200"
+      >
+        <textarea
+          v-model="description"
+          :disabled="!this.isEditing"
+          :class="[isEditing ? 'bg-gray-200 border' : '']"
+          class="w-10/12 h-16 py-1 bg-transparent resize-none outline-none rounded"
+        ></textarea>
+        <button
+          v-if="!this.isEditing"
+          class="ml-2 px-1 py-2 w-2/12 bg-green-400 rounded text-white focus:outline-none shadow opacity-75"
+          @click="isEditing = !isEditing"
+        >Edit</button>
+        <button
+          v-else
+          class="ml-2 px-1 py-2 w-2/12 bg-green-800 rounded text-white focus:outline-none shadow"
+          @click="updateDescription"
+        >Save</button>
+      </div>
+
+      <div v-else class="py-2 flex items-center justify-between text-sm border-b-2 border-gray-200">
+        <p class="italic">No description</p>
+        <!-- TODO Add description, use the same code as update -->
+        <button>Add</button>
+      </div>
+
       <div class="py-2 flex items-center justify-between border-b-2 border-gray-200">
         <h3 class="text-md font-medium">Assigned to:</h3>
         <div class="flex justify-end">
@@ -99,7 +124,9 @@ export default {
   props: { card: Object },
   data() {
     return {
-      isOpen: false
+      isOpen: false,
+      description: '',
+      isEditing: false
     };
   },
   created() {
@@ -116,8 +143,6 @@ export default {
   methods: {
     async deleteCard() {
       const cardId = this.card._id;
-      console.log(cardId);
-      console.log(this.card.list);
 
       try {
         const response = (await CardService.delete(cardId)).data;
@@ -130,7 +155,29 @@ export default {
       } catch (error) {
         console.log(error);
       }
+    },
+    async updateDescription() {
+      if (this.description == this.card.description) {
+        this.isEditing = false;
+
+        return;
+      }
+      const payload = {
+        cardId: this.card._id,
+        description: this.description
+      };
+
+      try {
+        const response = (await CardService.updateDescription(payload)).data;
+        this.$store.dispatch('updateDescription', response);
+        this.isEditing = false;
+      } catch (error) {
+        console.log(error);
+      }
     }
+  },
+  mounted() {
+    this.description = this.card.description;
   }
 };
 </script>
