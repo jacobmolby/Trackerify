@@ -47,14 +47,11 @@
     ></button>
     <div v-if="isOpen" class="popup bg-white shadow-xl rounded p-6 text-gray-700">
       <h2 class="text-lg font-bold">{{card.title}}</h2>
-      <div
-        v-if="card.description"
-        class="py-2 flex items-center justify-between text-sm border-b-2 border-gray-200"
-      >
+      <div class="py-2 flex items-center justify-between text-sm border-b-2 border-gray-200">
         <textarea
           v-model="description"
           :disabled="!this.isEditing"
-          :class="[isEditing ? 'bg-gray-200 border' : '']"
+          :class="[(isEditing ? 'bg-gray-200 border' : ''),(description == 'No description' ? 'italic' : '')]"
           class="w-10/12 h-16 py-1 bg-transparent resize-none outline-none rounded"
         ></textarea>
         <button
@@ -67,12 +64,6 @@
           class="ml-2 px-1 py-2 w-2/12 bg-green-800 rounded text-white focus:outline-none shadow"
           @click="updateDescription"
         >Save</button>
-      </div>
-
-      <div v-else class="py-2 flex items-center justify-between text-sm border-b-2 border-gray-200">
-        <p class="italic">No description</p>
-        <!-- TODO Add description, use the same code as update -->
-        <button>Add</button>
       </div>
 
       <div class="py-2 flex items-center justify-between border-b-2 border-gray-200">
@@ -125,7 +116,7 @@ export default {
   data() {
     return {
       isOpen: false,
-      description: '',
+      description: null,
       isEditing: false
     };
   },
@@ -177,7 +168,9 @@ export default {
     }
   },
   mounted() {
-    this.description = this.card.description;
+    this.description = this.card.description
+      ? this.card.description
+      : 'No description';
   }
 };
 </script>
