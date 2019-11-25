@@ -69,7 +69,11 @@ export default {
     async addCard() {
       this.error = null;
       if (!this.title) {
-        this.error = 'Please enter a title.';
+        return (this.error = 'Please enter a title.');
+      }
+      if (this.title && this.title.trim() === '') {
+        this.title = null;
+        return (this.error = 'Please enter a title.');
       }
       if (this.title) {
         const payload = {
