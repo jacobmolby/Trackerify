@@ -2,7 +2,7 @@
   <!-- <div style="height: calc(100% - 4em);" class="bg-white flex min-w-screen"> -->
   <!-- <nav-bar></!-->
 
-  <div class="overflow-x-hidden w-full">
+  <div class="overflow-x-hidden flex flex-col flex-1">
     <top-bar></top-bar>
     <main class="px-10">
       <!-- OVER THE lists -->

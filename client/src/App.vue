@@ -1,6 +1,6 @@
 <template>
   <div id="app" class="h-screen">
-    <div style="height: calc(100% - 4em);" class="bg-white flex min-w-screen">
+    <div class="bg-white flex">
       <NavBar />
       <!-- <div class="flex">
       <div class="h-12 w-1/5 bg-deepblue-300"></div>

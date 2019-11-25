@@ -1,11 +1,11 @@
 <template>
-  <aside class="w-40 h-full">
-    <div class="h-16 flex items-center justify-around bg-indigo-700">
+  <aside class="w-32 flex-none">
+    <div class="py-5 mb-20 leading-snug flex items-center justify-around bg-indigo-700">
       <router-link :to="{name: 'home'}" exact class="text-white font-bold text-lg">Trackerify</router-link>
     </div>
 
     <nav
-      class="h-full flex flex-col items-center justify-between bg-gray-100 border-r border-gray-300 shadow"
+      class="-mt-20 h-full flex flex-col items-center justify-between bg-gray-100 border-r border-gray-300 shadow"
     >
       <div class="min-w-full">
         <router-link
