@@ -8,7 +8,7 @@ export const store = new Vuex.Store({
   state: {
     token: null,
     user: null,
-    isBoardLoggedIn: false,
+    isUserLoggedIn: false,
     board: null
   },
   mutations: {
@@ -25,17 +25,17 @@ export const store = new Vuex.Store({
     addList(state, list) {
       state.board.lists.push(list);
     },
-    addCard(state, cardAndListId) {
-      const { card, listId } = cardAndListId;
-
-      const listIndex = state.board.lists.findIndex(list => list._id == listId);
+    addCard(state, card) {
+      const listIndex = state.board.lists.findIndex(
+        list => list._id === card.list
+      );
 
       state.board.lists[listIndex].cards.push(card);
     },
-    removeCard(state, cardAndListId) {
-      const { deletedCard, listId } = cardAndListId;
-
-      const listIndex = state.board.lists.findIndex(list => list._id == listId);
+    removeCard(state, deletedCard) {
+      const listIndex = state.board.lists.findIndex(
+        list => list._id === deletedCard.list
+      );
       state.board.lists[listIndex].cards = state.board.lists[
         listIndex
       ].cards.filter(card => {
@@ -49,22 +49,23 @@ export const store = new Vuex.Store({
     },
     addComment(state, comment) {
       const listIndex = state.board.lists.findIndex(
-        list => list._id == comment.listId
+        list => list._id === comment.listId
       );
       const cardIndex = state.board.lists[listIndex].cards.findIndex(
-        card => card._id == comment.cardId
+        card => card._id === comment.cardId
       );
       state.board.lists[listIndex].cards[cardIndex].comments.push(comment);
     },
-    updateDescription(state, card) {
+    updateCard(state, card) {
       const listIndex = state.board.lists.findIndex(
-        list => list._id == card.list
+        list => list._id === card.list
       );
       const cardIndex = state.board.lists[listIndex].cards.findIndex(
-        cardIterator => cardIterator._id == card._id
+        cardIterator => cardIterator._id === card._id
       );
-      state.board.lists[listIndex].cards[cardIndex].description =
-        card.description;
+      state.board.lists[listIndex].cards[cardIndex] = {
+        card
+      };
     }
   },
   actions: {
@@ -80,11 +81,11 @@ export const store = new Vuex.Store({
     addList({ commit }, list) {
       commit('addList', list);
     },
-    addCard({ commit }, cardAndListId) {
-      commit('addCard', cardAndListId);
+    addCard({ commit }, card) {
+      commit('addCard', card);
     },
-    removeCard({ commit }, cardAndListId) {
-      commit('removeCard', cardAndListId);
+    removeCard({ commit }, deletedCard) {
+      commit('removeCard', deletedCard);
     },
     removeList({ commit }, deletedList) {
       commit('removeList', deletedList);
@@ -92,8 +93,8 @@ export const store = new Vuex.Store({
     addComment({ commit }, comment) {
       commit('addComment', comment);
     },
-    updateDescription({ commit }, card) {
-      commit('updateDescription', card);
+    updateCard({ commit }, card) {
+      commit('updateCard', card);
     }
   }
 });

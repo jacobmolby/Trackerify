@@ -82,12 +82,11 @@ export default {
           listId: this.listId
         };
         try {
-          const response = (await CardService.post(payload)).data;
-          const cardAndListId = {
-            card: response,
-            listId: this.listId
-          };
-          this.$store.dispatch('addCard', cardAndListId);
+          const card = (await CardService.post(payload)).data;
+
+          console.log(card);
+
+          this.$store.dispatch('addCard', card);
           //reset component
           this.isOpen = false;
           this.title = null;

@@ -14,7 +14,7 @@
               d="M10 15l-4 4v-4H2a2 2 0 0 1-2-2V3c0-1.1.9-2 2-2h16a2 2 0 0 1 2 2v10a2 2 0 0 1-2 2h-8zM5 7v2h2V7H5zm4 0v2h2V7H9zm4 0v2h2V7h-2z"
             />
           </svg>
-          <span class="text-xs pl-1">1</span>
+          <span class="text-xs pl-1">{{card.comments.length}}</span>
         </div>
         <div class="pl-2 flex items-center">
           <svg class="h-4 w-4 fill-current text-gray-500" viewBox="0 0 20 20">
@@ -22,7 +22,7 @@
               d="M15 3H7a7 7 0 1 0 0 14h8v-2H7A5 5 0 0 1 7 5h8a3 3 0 0 1 0 6H7a1 1 0 0 1 0-2h8V7H7a3 3 0 1 0 0 6h8a5 5 0 0 0 0-10z"
             />
           </svg>
-          <span class="text-xs pl-1">2</span>
+          <span class="text-xs pl-1">{{card.attachments.length}}</span>
         </div>
       </div>
       <div class="w-1/2 flex justify-end">
@@ -46,7 +46,15 @@
       class="fixed inset-0 h-full w-full bg-black opacity-25 cursor-default"
     ></button>
     <div v-if="isOpen" class="popup bg-white shadow-xl rounded p-6 text-gray-700">
-      <h2 class="text-lg font-bold">{{card.title}}</h2>
+      <div class="flex items-center">
+        <h2 v-if="!isEditing" class="text-lg font-bold">{{title}}</h2>
+        <input
+          v-else-if="isEditing"
+          class="px-1 text-lg font-bold bg-gray-200 border rounded focus:outline-none"
+          type="text"
+          v-model="title"
+        />
+      </div>
       <div class="py-2 flex items-center justify-between text-sm border-b-2 border-gray-200">
         <textarea
           v-model="description"
@@ -62,7 +70,7 @@
         <button
           v-else
           class="ml-2 px-1 py-2 w-2/12 bg-green-800 rounded text-white focus:outline-none shadow"
-          @click="updateDescription"
+          @click="updateCard"
         >Save</button>
       </div>
 
@@ -117,6 +125,7 @@ export default {
     return {
       isOpen: false,
       description: null,
+      title: null,
       isEditing: false
     };
   },
@@ -136,31 +145,32 @@ export default {
       const cardId = this.card._id;
 
       try {
-        const response = (await CardService.delete(cardId)).data;
-        const cardAndListId = {
-          deletedCard: response,
-          listId: this.card.list
-        };
-        this.$store.dispatch('removeCard', cardAndListId);
+        const deletedCard = (await CardService.delete(cardId)).data;
+
+        this.$store.dispatch('removeCard', deletedCard);
         this.isOpen = false;
       } catch (error) {
         console.log(error);
       }
     },
-    async updateDescription() {
-      if (this.description == this.card.description) {
+    async updateCard() {
+      if (
+        this.description == this.card.description &&
+        this.title == this.card.title
+      ) {
         this.isEditing = false;
 
         return;
       }
       const payload = {
         cardId: this.card._id,
+        title: this.title,
         description: this.description
       };
 
       try {
-        const response = (await CardService.updateDescription(payload)).data;
-        this.$store.dispatch('updateDescription', response);
+        const card = (await CardService.updateCard(payload)).data;
+        this.$store.dispatch('updateCard', card);
         this.isEditing = false;
       } catch (error) {
         console.log(error);
@@ -171,6 +181,7 @@ export default {
     this.description = this.card.description
       ? this.card.description
       : 'No description';
+    this.title = this.card.title;
   }
 };
 </script>

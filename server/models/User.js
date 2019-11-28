@@ -20,7 +20,7 @@ const userSchema = new mongoose.Schema({
   },
   profileImage: {
     type: String,
-    default: 'https://img.icons8.com/officel/16/000000/user.png'
+    default: 'https://img.icons8.com/officel/48/000000/user.png'
   },
   boards: [{ type: mongoose.Schema.Types.ObjectId, ref: 'Board' }],
   created: {

@@ -10,7 +10,11 @@
       <div class="h-12 w-1/5 bg-deepblue-700"></div>
       </div>-->
 
-      <router-view />
+      <div class="overflow-x-hidden flex flex-col flex-1">
+        <TopBar />
+
+        <router-view />
+      </div>
     </div>
     <!-- <div class="container mx-auto">
     </div>-->
@@ -19,10 +23,12 @@
 
 <script>
 import NavBar from '@/components/NavBar.vue';
+import TopBar from '@/components/TopBar.vue';
 export default {
   name: 'app',
   components: {
-    NavBar
+    NavBar,
+    TopBar
   }
 };
 </script>

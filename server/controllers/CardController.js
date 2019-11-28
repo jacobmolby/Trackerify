@@ -28,12 +28,12 @@ module.exports = {
   async show(req, res) {},
   async destroy(req, res) {
     const cardId = req.params.id;
-    const card = await Card.findById(cardId);
-    const listId = card.list;
-    if (!card) {
-      return res.status(403).send({ error: "Card doesn't exist" });
-    }
     try {
+      const card = await Card.findById(cardId);
+      const listId = card.list;
+      if (!card) {
+        return res.status(403).send({ error: "Card doesn't exist" });
+      }
       const result = await Card.findByIdAndDelete(cardId);
       const list = await List.findById(listId);
       list.cards.pull(cardId);
@@ -47,17 +47,17 @@ module.exports = {
       res.send({ error: error });
     }
   },
-  async put(req, res) {
-    const { description, cardId } = req.body;
+  async update(req, res) {
+    const { title, description, cardId } = req.body;
+    let response;
     try {
-      const response = await Card.findByIdAndUpdate(
+      response = await Card.findByIdAndUpdate(
         { _id: cardId },
-        {
-          description
-        },
-        { new: true }
+        { title, description },
+        { new: true, useFindAndModify: false }
       );
       console.log(response);
+
       res.send(response);
     } catch (error) {
       console.log(error);

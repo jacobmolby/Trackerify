@@ -2,8 +2,7 @@
   <!-- <div style="height: calc(100% - 4em);" class="bg-white flex min-w-screen"> -->
   <!-- <nav-bar></!-->
 
-  <div class="overflow-x-hidden flex flex-col flex-1">
-    <top-bar></top-bar>
+  <div>
     <main class="px-10">
       <!-- OVER THE lists -->
       <div class="ml-2 pt-6 flex justify-between items-center">
@@ -69,21 +68,12 @@ import { mapState } from 'vuex';
 import List from '@/components/List';
 import AddList from '@/components/AddList';
 import NavBar from '@/components/NavBar';
-import TopBar from '@/components/TopBar';
 import BoardService from '@/services/BoardService';
 export default {
   name: 'Board',
-  data() {
-    return {
-      posts: 4,
-      lists: 4
-    };
-  },
   components: {
     List,
-    AddList,
-    // NavBar,
-    TopBar
+    AddList
   },
   computed: {
     ...mapState(['board'])
@@ -92,9 +82,10 @@ export default {
     const boardId = this.$route.params.boardId;
     try {
       const response = (await BoardService.show(boardId)).data;
+      console.log(response);
       this.$store.dispatch('setBoard', response);
     } catch (error) {
-      //this.$router.push({ path: '/' });
+      this.$router.push({ path: '/board' });
       alert(error.response.data.error);
       console.log(error.response);
     }

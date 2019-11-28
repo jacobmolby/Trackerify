@@ -8,7 +8,7 @@ export default {
   delete(cardId) {
     return Api().delete(`/card/${cardId}`);
   },
-  updateDescription(payload) {
+  updateCard(payload) {
     return Api().put('/card', payload);
   }
 };
