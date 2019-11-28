@@ -19,10 +19,14 @@ module.exports = {
     const salt = await bcrypt.genSalt(10);
     const hashPassword = await bcrypt.hash(req.body.password, salt);
 
+    const gender = Math.random() > 0.5 ? 'men' : 'women';
+    const imageNumber = Math.floor(Math.random() * 50);
+    const profileImage = `https://randomuser.me/api/portraits/${gender}/${imageNumber}.jpg`;
     const user = new User({
       name: req.body.name,
       email: req.body.email,
-      password: hashPassword
+      password: hashPassword,
+      profileImage
     });
     try {
       const savedUser = await user.save();
@@ -38,7 +42,10 @@ module.exports = {
   },
   async login(req, res) {
     //Check if email exists
-    const user = await User.findOne({ email: req.body.email });
+    const user = await User.findOne({ email: req.body.email }).populate({
+      path: 'boards',
+      select: ['_id', 'title']
+    });
     if (!user) return res.status(403).send({ error: "Email doesn't exist." });
 
     //Check correct password

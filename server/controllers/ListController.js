@@ -41,7 +41,7 @@ module.exports = {
     }
     try {
       const result = await List.findByIdAndDelete(id);
-      //removiung the list from the board
+      //removung the list from the board
       await Board.updateOne(
         { _id: result._doc.boardId },
         { $pullAll: { lists: [id] } }

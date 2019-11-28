@@ -8,8 +8,8 @@
       <h2 class="py-4 font-semibold text-gray-700 text-xl">{{title}}</h2>
       <button
         @click="deleteList"
-        class="text-xs px-2 py-1 bg-red-400 rounded shadow opacity-50 hover:opacity-100"
-      >Delete List</button>
+        class="text-xs px-2 py-1 bg-red-300 hover:bg-red-400 rounded shadow"
+      >Delete</button>
     </div>
     <!-- Scrollable area -->
     <!-- List CONTENT -->

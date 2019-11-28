@@ -52,6 +52,13 @@
         </div>
         <div
           v-if="!this.$store.state.isUserLoggedIn"
+          @click="register"
+          class="py-5 h-4 flex items-center text-white border-indigo-400"
+        >
+          <button class="ml-4 p-2 rounded hover:bg-indigo-400">Register</button>
+        </div>
+        <div
+          v-if="!this.$store.state.isUserLoggedIn"
           @click="login"
           class="py-5 h-4 flex items-center text-white border-indigo-400"
         >
@@ -72,9 +79,16 @@ export default {
         name: 'login'
       });
     },
+    register() {
+      this.$router.push({
+        name: 'register'
+      });
+    },
     logout() {
       this.$store.dispatch('setToken', null);
       this.$store.dispatch('setUser', null);
+      this.$store.dispatch('setBoard', null);
+
       this.$router.push({
         name: 'home'
       });

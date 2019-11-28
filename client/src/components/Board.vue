@@ -3,7 +3,7 @@
   <!-- <nav-bar></!-->
 
   <div>
-    <main class="px-10">
+    <main v-if="board" class="px-10">
       <!-- OVER THE lists -->
       <div class="ml-2 pt-6 flex justify-between items-center">
         <div class="inline-flex items-baseline">
@@ -13,38 +13,25 @@
           >{{this.board.title}}</h1>
           <h1 v-else class="font-semibold text-2xl text-gray-700">Loading Title</h1>
 
-          <add-list class></add-list>
+          <add-list></add-list>
         </div>
         <div class="flex">
-          <button>
-            <svg
-              class="mx-1 h-8 w-8 rounded-full border border-dashed border-gray-500 fill-current border-gray-500 text-gray-500"
-              viewBox="0 0 30 30"
-            >
-              <path d="M20.64 15.64H15.64V20.64H14V15.64H9V14H14V9H15.64V14H20.64V15.64Z" />
-            </svg>
-          </button>
-          <img
-            class="mx-1 h-8 w-8 rounded-full object-cover"
-            src="../../public/img/profile-img.jpg"
-            alt="Profile Image"
-          />
-          <img
-            class="mx-1 h-8 w-8 rounded-full object-cover"
-            src="../../public/img/profile-img.jpg"
-            alt="Profile Image"
-          />
-          <img
-            class="mx-1 h-8 w-8 rounded-full object-cover"
-            src="../../public/img/profile-img.jpg"
-            alt="Profile Image"
-          />
+          <addUserToBoard class="mr-4" />
+          <div class="flex flex-row-reverse">
+            <img
+              v-for="user in board.users"
+              :key="user._id"
+              class="-ml-2 h-8 w-8 rounded-full border-white border-2"
+              :src="user.profileImage"
+              alt="Profile Image"
+            />
+          </div>
         </div>
       </div>
       <!-- BOARD AREA -->
       <div class="overflow-x-auto">
-        <div v-if="this.board.lists" class="py-6 h-full inline-flex flex-shrink-0 items-start">
-          <div v-for="list in this.board.lists" :key="list._id">
+        <div v-if="board.lists" class="py-6 h-full inline-flex flex-shrink-0 items-start">
+          <div v-for="list in board.lists" :key="list._id">
             <div v-if="list.cards">
               <List
                 :cards="list.cards"
@@ -67,27 +54,32 @@
 import { mapState } from 'vuex';
 import List from '@/components/List';
 import AddList from '@/components/AddList';
-import NavBar from '@/components/NavBar';
+import AddUserToBoard from '@/components/AddUserToBoard';
 import BoardService from '@/services/BoardService';
 export default {
   name: 'Board',
+  data() {
+    return {
+      boardId: this.$route.params.boardId
+    };
+  },
   components: {
     List,
-    AddList
+    AddList,
+    AddUserToBoard
   },
   computed: {
     ...mapState(['board'])
   },
   async mounted() {
-    const boardId = this.$route.params.boardId;
     try {
-      const response = (await BoardService.show(boardId)).data;
-      console.log(response);
-      this.$store.dispatch('setBoard', response);
+      const board = (await BoardService.show(this.boardId)).data;
+      console.log(board);
+      this.$store.dispatch('setBoard', board);
     } catch (error) {
       this.$router.push({ path: '/board' });
       alert(error.response.data.error);
-      console.log(error.response);
+      console.log(error);
     }
   }
 };

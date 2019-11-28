@@ -1,6 +1,7 @@
 import Vue from 'vue';
 import Vuex from 'vuex';
 import createPersistedState from 'vuex-persistedstate';
+import { Z_ASCII } from 'zlib';
 Vue.use(Vuex);
 
 export const store = new Vuex.Store({
@@ -66,6 +67,9 @@ export const store = new Vuex.Store({
       state.board.lists[listIndex].cards[cardIndex] = {
         card
       };
+    },
+    addUserToBoard(state, userId) {
+      state.board.users.push(userId);
     }
   },
   actions: {
@@ -78,6 +82,7 @@ export const store = new Vuex.Store({
     setBoard({ commit }, board) {
       commit('setBoard', board);
     },
+
     addList({ commit }, list) {
       commit('addList', list);
     },
@@ -95,6 +100,9 @@ export const store = new Vuex.Store({
     },
     updateCard({ commit }, card) {
       commit('updateCard', card);
+    },
+    addUserToBoard({ commit }, userId) {
+      commit('addUserToBoard', userId);
     }
   }
 });

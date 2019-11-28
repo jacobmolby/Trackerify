@@ -1,4 +1,5 @@
 const Board = require('../models/Board');
+const User = require('../models/User');
 const mongoose = require('mongoose');
 module.exports = {
   async create(req, res) {
@@ -8,6 +9,9 @@ module.exports = {
     });
     try {
       const savedBoard = await board.save();
+      const user = await User.findById(req.user._id);
+      user.boards.addToSet(savedBoard);
+      await user.save();
       res.send(savedBoard.toJSON());
     } catch (error) {
       console.log(error);
@@ -42,6 +46,11 @@ module.exports = {
           });
         if (!board) {
           return res.status(400).send({ error: "Board doesn't exist" });
+        }
+        if (board.users.find(user => user._id === req.user._id)) {
+          return res
+            .status(401)
+            .send({ error: 'User not member of the board' });
         }
         res.send(board);
       } catch (error) {
