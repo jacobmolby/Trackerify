@@ -6,6 +6,7 @@ const commentRoutes = require('./routes/comment');
 const labelRoutes = require('./routes/label');
 const attachmentRoutes = require('./routes/attachment');
 const userBoardRoutes = require('./routes/userBoard');
+const userCardRoutes = require('./routes/userCard');
 
 module.exports = app => {
   app.use('/api/auth', authRoutes);
@@ -16,4 +17,5 @@ module.exports = app => {
   app.use('/api/label', labelRoutes);
   app.use('/api/attachment', attachmentRoutes);
   app.use('/api/board/user', userBoardRoutes);
+  app.use('/api/card/user', userCardRoutes);
 };

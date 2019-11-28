@@ -26,17 +26,16 @@
         </div>
       </div>
       <div class="w-1/2 flex justify-end">
-        <svg
-          class="mx-1 h-8 w-8 rounded-full border border-dashed border-gray-500 fill-current text-gray-500"
-          viewBox="0 0 30 30"
-        >
-          <path d="M20.64 15.64H15.64V20.64H14V15.64H9V14H14V9H15.64V14H20.64V15.64Z" />
-        </svg>
-        <img
-          class="mx-1 h-8 w-8 rounded-full object-cover"
-          src="../../public/img/profile-img.jpg"
-          alt="Profile Image"
-        />
+        <AddUserToCard :cardId="card._id" class="mr-3"></AddUserToCard>
+        <div class="flex flex-row-reverse">
+          <img
+            v-for="user in card.assignedUsers"
+            :key="user._id"
+            class="-ml-2 h-8 w-8 rounded-full border-white border-2"
+            :src="user.profileImage"
+            alt="Profile Image"
+          />
+        </div>
       </div>
     </div>
     <button
@@ -77,17 +76,16 @@
       <div class="py-2 flex items-center justify-between border-b-2 border-gray-200">
         <h3 class="text-md font-medium">Assigned to:</h3>
         <div class="flex justify-end">
-          <svg
-            class="mx-1 h-8 w-8 rounded-full border border-dashed border-gray-500 fill-current text-gray-500"
-            viewBox="0 0 30 30"
-          >
-            <path d="M20.64 15.64H15.64V20.64H14V15.64H9V14H14V9H15.64V14H20.64V15.64Z" />
-          </svg>
-          <img
-            class="mx-1 h-8 w-8 rounded-full object-cover"
-            src="../../public/img/profile-img.jpg"
-            alt="Profile Image"
-          />
+          <AddUserToCard :cardId="card._id" class="mr-3"></AddUserToCard>
+          <div class="flex flex-row-reverse">
+            <img
+              v-for="user in card.assignedUsers"
+              :key="user._id"
+              class="-ml-2 h-8 w-8 rounded-full border-white border-2"
+              :src="user.profileImage"
+              alt="Profile Image"
+            />
+          </div>
         </div>
       </div>
       <div class="my-1 max-h-72 overflow-y-auto">
@@ -114,11 +112,13 @@ import { mapState } from 'vuex';
 import CardService from '@/services/CardService';
 import Comment from '@/components/Comment';
 import AddComment from '@/components/AddComment';
+import AddUserToCard from '@/components/AddUserToCard';
 export default {
   name: 'Card',
   components: {
     Comment,
-    AddComment
+    AddComment,
+    AddUserToCard
   },
   props: { card: Object },
   data() {

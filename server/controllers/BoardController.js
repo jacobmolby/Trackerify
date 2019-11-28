@@ -41,6 +41,10 @@ module.exports = {
                 populate: {
                   path: 'user'
                 }
+              },
+              populate: {
+                path: 'assignedUsers',
+                select: ['_id', 'name', 'profileImage']
               }
             }
           });

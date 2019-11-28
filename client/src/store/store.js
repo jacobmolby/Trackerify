@@ -70,6 +70,15 @@ export const store = new Vuex.Store({
     },
     addUserToBoard(state, userId) {
       state.board.users.push(userId);
+    },
+    addUserToCard(state, payload) {
+      const { user, listId, cardId } = payload;
+      console.log(payload);
+
+      state.board.lists
+        .find(list => list._id === listId)
+        .cards.find(card => card._id === cardId)
+        .assignedUsers.push(user);
     }
   },
   actions: {
@@ -103,6 +112,9 @@ export const store = new Vuex.Store({
     },
     addUserToBoard({ commit }, userId) {
       commit('addUserToBoard', userId);
+    },
+    addUserToCard({ commit }, payload) {
+      commit('addUserToCard', payload);
     }
   }
 });
