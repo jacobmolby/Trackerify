@@ -4,6 +4,6 @@ const UserBoardController = require('../controllers/UserBoardController');
 
 router.post('/', verifyToken, UserBoardController.create);
 // router.get('/:id', verifyToken, UserBoardController.show);
-// router.delete('/:id', verifyToken, UserBoardController.destroy);
+router.delete('/:userId&:boardId', verifyToken, UserBoardController.destroy);
 
 module.exports = router;

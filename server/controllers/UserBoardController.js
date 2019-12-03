@@ -37,7 +37,21 @@ module.exports = {
     } catch (error) {
       console.log(error);
 
-      res.status(400).send({ error });
+      res.status(400).send({ error: 'Something went wrong.' });
+    }
+  },
+  async destroy(req, res) {
+    const { userId, boardId } = req.params;
+    try {
+      const user = await User.findById(userId);
+      user.boards.pull(boardId);
+      await user.save();
+      const board = await Board.findById(boardId);
+      board.users.pull(userId);
+      const response = await board.save();
+      res.send(response);
+    } catch (error) {
+      res.status(400).send({ error: 'Something went wrong.' });
     }
   }
 };

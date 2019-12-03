@@ -12,9 +12,9 @@
       v-if="isOpen"
       @click="isOpen = false"
       tabindex="-1"
-      class="fixed inset-0 h-full w-full bg-black opacity-25 cursor-default"
+      class="fixed z-10 inset-0 h-full w-full bg-black opacity-25 cursor-default"
     ></button>
-    <div v-if="isOpen" class="popup bg-white shadow-xl rounded p-6 text-gray-700">
+    <div v-if="isOpen" class="p-6 popup bg-white shadow-xl rounded text-gray-700">
       <h2 class="text-left text-lg font-semibold">Add User To Board</h2>
 
       <form class="pt-3 flex flex-col" @submit.prevent="addUserToBoard">
