@@ -47,16 +47,17 @@ export const store = new Vuex.Store({
         .comments.push(comment);
     },
     updateCard(state, card) {
-      // const listIndex = state.board.lists.findIndex(
-      //   list => list._id === card.list
-      // );
-      // const cardIndex = state.board.lists[listIndex].cards.findIndex(
-      //   cardIterator => cardIterator._id === card._id
-      // );
-      // state.board.lists[listIndex].cards[cardIndex] = {
-      //   card
-      // };
-      state.board.lists.find(list => list._id === card);
+      const listIndex = state.board.lists.findIndex(
+        list => list._id === card.list
+      );
+      const cardIndex = state.board.lists[listIndex].cards.findIndex(
+        cardIterator => cardIterator._id === card._id
+      );
+      state.board.lists[listIndex].cards[cardIndex] = {
+        card
+      };
+
+      // state.board.lists.find(list => list._id === card);
     },
     addUserToBoard(state, userId) {
       state.board.users.push(userId);
@@ -81,6 +82,20 @@ export const store = new Vuex.Store({
           });
         });
       });
+    },
+    removeUserFromCard(state, payload) {
+      //Payload has userId, cardId and listId on it.
+
+      const { userId, cardId, listId } = payload;
+
+      state.board.lists
+        .find(list => list._id === listId)
+        .cards.find(
+          card => card._id === cardId
+        ).assignedUsers = state.board.lists
+        .find(list => list._id === listId)
+        .cards.find(card => card._id === cardId)
+        .assignedUsers.filter(user => user._id !== userId);
     }
   },
   actions: {
@@ -93,7 +108,6 @@ export const store = new Vuex.Store({
     setBoard({ commit }, board) {
       commit('setBoard', board);
     },
-
     addList({ commit }, list) {
       commit('addList', list);
     },
@@ -120,6 +134,9 @@ export const store = new Vuex.Store({
     },
     removeUserFromBoard({ commit }, userId) {
       commit('removeUserFromBoard', userId);
+    },
+    removeUserFromCard({ commit }, payload) {
+      commit('removeUserFromCard', payload);
     }
   }
 });

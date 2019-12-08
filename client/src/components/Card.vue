@@ -28,12 +28,24 @@
       <div class="w-1/2 flex justify-end">
         <AddUserToCard :assignedUsers="card.assignedUsers" :cardId="card._id" class="mr-3 flex"></AddUserToCard>
         <div class="flex flex-row-reverse">
-          <div v-for="user in card.assignedUsers" :key="user._id" class="-ml-2 h-8 w-8">
+          <div v-for="user in card.assignedUsers" :key="user._id" class="relative -ml-2 h-8 w-8">
             <img
               class="rounded-full border-white border-2"
               :src="user.profileImage"
               alt="Profile Image"
             />
+            <div class="absolute inset-0 flex opacity-0 bg-red-400 rounded-full hover:opacity-75">
+              <button
+                class="flex justify-center w-full items-center focus:outline-none"
+                @click="removeUser(user._id)"
+              >
+                <svg class="h-3 w-3 fill-current text-gray-800 opacity-100" viewBox="0 0 20 20">
+                  <path
+                    d="M10 8.586L2.929 1.515 1.515 2.929 8.586 10l-7.071 7.071 1.414 1.414L10 11.414l7.071 7.071 1.414-1.414L11.414 10l7.071-7.071-1.414-1.414L10 8.586z"
+                  />
+                </svg>
+              </button>
+            </div>
           </div>
         </div>
       </div>
@@ -78,12 +90,24 @@
         <div class="flex justify-end">
           <AddUserToCard :assignedUsers="card.assignedUsers" :cardId="card._id" class="mr-3 flex"></AddUserToCard>
           <div class="flex flex-row-reverse">
-            <div v-for="user in card.assignedUsers" :key="user._id" class="-ml-2 h-8 w-8">
+            <div v-for="user in card.assignedUsers" :key="user._id" class="relative -ml-2 h-8 w-8">
               <img
                 class="rounded-full border-white border-2"
                 :src="user.profileImage"
                 alt="Profile Image"
               />
+              <div class="absolute inset-0 flex opacity-0 bg-red-400 rounded-full hover:opacity-75">
+                <button
+                  class="flex justify-center w-full items-center focus:outline-none"
+                  @click="removeUser(user._id)"
+                >
+                  <svg class="h-3 w-3 fill-current text-gray-800 opacity-100" viewBox="0 0 20 20">
+                    <path
+                      d="M10 8.586L2.929 1.515 1.515 2.929 8.586 10l-7.071 7.071 1.414 1.414L10 11.414l7.071 7.071 1.414-1.414L11.414 10l7.071-7.071-1.414-1.414L10 8.586z"
+                    />
+                  </svg>
+                </button>
+              </div>
             </div>
           </div>
         </div>
@@ -113,6 +137,8 @@ import CardService from '@/services/CardService';
 import Comment from '@/components/Comment';
 import AddComment from '@/components/AddComment';
 import AddUserToCard from '@/components/AddUserToCard';
+import UserCardService from '@/services/UserCardService';
+
 export default {
   name: 'Card',
   components: {
@@ -174,6 +200,21 @@ export default {
         this.isEditing = false;
       } catch (error) {
         console.log(error);
+      }
+    },
+    async removeUser(userId) {
+      try {
+        await UserCardService.delete(userId, this.card._id);
+        const payload = {
+          userId,
+          cardId: this.card._id,
+          listId: this.card.list
+        };
+        this.$store.dispatch('removeUserFromCard', payload);
+      } catch (error) {
+        console.log('error occured');
+
+        console.log(error.response.data.error);
       }
     }
   },
