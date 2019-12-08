@@ -66,16 +66,21 @@ module.exports = {
   },
   async update(req, res) {
     const { listId, cards } = req.body;
+    const updatedOrder = [];
+    // console.log(updatedOrder);
 
     try {
       for (let i = 0; i < cards.length; i++) {
         //Updates the listid for the cards
         const cardId = cards[i]._id;
+        updatedOrder.push(cardId);
         await Card.updateOne({ _id: cardId }, { $set: { list: listId } });
       }
       const list = await List.findById(listId);
-      list.cards = cards;
+      list.cards = updatedOrder;
       const response = await list.save();
+      console.log(response);
+
       res.send(response);
     } catch (error) {
       res.status(400).send({ error });

@@ -66,6 +66,7 @@ module.exports = {
       return res.status(400).send({ error: "ID isn't valid" });
     }
   },
+  //TODO Index route for board overview
   async destroy(req, res) {
     const id = req.params.id;
     const board = await Board.findById(id);

@@ -18,7 +18,7 @@
       <draggable group="card" v-model="cards" @start="drag=true" @end="drag=false">
         <li v-for="card in cards" :key="card._id" class="my-2 px-3 py-3 bg-white shadow rounded">
           <!-- {{card.title}} -->
-          <card :card="card"></card>
+          <card :cardId="card._id"></card>
         </li>
       </draggable>
     </ul>

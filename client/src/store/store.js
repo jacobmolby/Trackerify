@@ -14,6 +14,17 @@ export const store = new Vuex.Store({
   getters: {
     getCardsByListId: state => listId => {
       return state.board.lists.find(list => list._id === listId).cards;
+    },
+    getCardById: state => cardId => {
+      let cardById = {};
+      state.board.lists.forEach(list =>
+        list.cards.forEach(card => {
+          if (card._id === cardId) {
+            cardById = card;
+          }
+        })
+      );
+      return cardById;
     }
   },
   mutations: {
@@ -61,15 +72,11 @@ export const store = new Vuex.Store({
       state.board.lists[listIndex].cards[cardIndex] = {
         card
       };
-
-      // state.board.lists.find(list => list._id === card);
     },
     addUserToBoard(state, userId) {
       state.board.users.push(userId);
     },
     addUserToCard(state, payload) {
-      console.log(payload);
-
       const { user, listId, cardId } = payload;
 
       state.board.lists

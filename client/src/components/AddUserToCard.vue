@@ -43,14 +43,20 @@ export default {
     };
   },
   computed: {
-    ...mapState({
-      users: state => state.board.users
-    }),
+    card() {
+      return this.$store.getters.getCardById(this.cardId);
+    },
+    // ...mapState({
+    //   users: state => state.board.users
+    // }),
     notAssignedUsers() {
-      let allUsers = [...this.users];
+      let allUsers = [...this.$store.state.board.users];
       for (let i = allUsers.length - 1; i >= 0; i--) {
-        for (let j = 0; j < this.assignedUsers.length; j++) {
-          if (allUsers[i] && allUsers[i]._id === this.assignedUsers[j]._id) {
+        for (let j = 0; j < this.card.assignedUsers.length; j++) {
+          if (
+            allUsers[i] &&
+            allUsers[i]._id === this.card.assignedUsers[j]._id
+          ) {
             allUsers.splice(i, 1);
           }
         }
