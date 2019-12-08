@@ -68,6 +68,8 @@ export const store = new Vuex.Store({
       state.board.users.push(userId);
     },
     addUserToCard(state, payload) {
+      console.log(payload);
+
       const { user, listId, cardId } = payload;
 
       state.board.lists

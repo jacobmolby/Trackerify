@@ -49,6 +49,13 @@ export default {
       } catch (error) {
         console.log(error);
       }
+    },
+    async updateListOrder(payload) {
+      try {
+        const response = (await ListService.put(payload)).data;
+      } catch (error) {
+        console.log(error.response.data.error);
+      }
     }
   },
   computed: {
@@ -69,11 +76,16 @@ export default {
         return this.$store.getters.getCardsByListId(this.listId);
       },
       set(cards) {
-        const payload = {
-          cards,
-          listId: this.listId
-        };
-        this.$store.dispatch('updateListOrder', payload);
+        try {
+          const payload = {
+            cards,
+            listId: this.listId
+          };
+          this.updateListOrder(payload);
+          this.$store.dispatch('updateListOrder', payload);
+        } catch (error) {
+          console.log(error);
+        }
       }
     }
   }

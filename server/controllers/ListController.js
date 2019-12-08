@@ -63,5 +63,22 @@ module.exports = {
 
       res.send({ error: error });
     }
+  },
+  async update(req, res) {
+    const { listId, cards } = req.body;
+
+    try {
+      for (let i = 0; i < cards.length; i++) {
+        //Updates the listid for the cards
+        const cardId = cards[i]._id;
+        await Card.updateOne({ _id: cardId }, { $set: { list: listId } });
+      }
+      const list = await List.findById(listId);
+      list.cards = cards;
+      const response = await list.save();
+      res.send(response);
+    } catch (error) {
+      res.status(400).send({ error });
+    }
   }
 };
