@@ -7,7 +7,6 @@ module.exports = {
       user: req.user._id,
       filepath: req.body.filepath
     });
-    // console.log(attachment);
 
     try {
       const savedAttachment = await attachment.save();

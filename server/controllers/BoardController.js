@@ -21,7 +21,6 @@ module.exports = {
   },
   async show(req, res) {
     const { id } = req.params;
-    console.log(mongoose.Types.ObjectId.isValid(id));
 
     if (mongoose.Types.ObjectId.isValid(id)) {
       try {
@@ -36,16 +35,18 @@ module.exports = {
             populate: {
               path: 'cards',
               // model: 'Card'
-              populate: {
-                path: 'comments',
-                populate: {
-                  path: 'user'
+              populate: [
+                {
+                  path: 'comments',
+                  populate: {
+                    path: 'user'
+                  }
+                },
+                {
+                  path: 'assignedUsers',
+                  select: ['_id', 'name', 'profileImage']
                 }
-              },
-              populate: {
-                path: 'assignedUsers',
-                select: ['_id', 'name', 'profileImage']
-              }
+              ]
             }
           });
         if (!board) {
@@ -56,6 +57,7 @@ module.exports = {
             .status(401)
             .send({ error: 'User not member of the board' });
         }
+
         res.send(board);
       } catch (error) {
         res.send(error);

@@ -84,8 +84,6 @@ export default {
         try {
           const card = (await CardService.post(payload)).data;
 
-          console.log(card);
-
           this.$store.dispatch('addCard', card);
           //reset component
           this.isOpen = false;

@@ -26,15 +26,15 @@
         </div>
       </div>
       <div class="w-1/2 flex justify-end">
-        <AddUserToCard :cardId="card._id" class="mr-3"></AddUserToCard>
+        <AddUserToCard :assignedUsers="card.assignedUsers" :cardId="card._id" class="mr-3 flex"></AddUserToCard>
         <div class="flex flex-row-reverse">
-          <img
-            v-for="user in card.assignedUsers"
-            :key="user._id"
-            class="-ml-2 h-8 w-8 rounded-full border-white border-2"
-            :src="user.profileImage"
-            alt="Profile Image"
-          />
+          <div v-for="user in card.assignedUsers" :key="user._id" class="-ml-2 h-8 w-8">
+            <img
+              class="rounded-full border-white border-2"
+              :src="user.profileImage"
+              alt="Profile Image"
+            />
+          </div>
         </div>
       </div>
     </div>
@@ -76,15 +76,15 @@
       <div class="py-2 flex items-center justify-between border-b-2 border-gray-200">
         <h3 class="text-md font-medium">Assigned to:</h3>
         <div class="flex justify-end">
-          <AddUserToCard :cardId="card._id" class="mr-3"></AddUserToCard>
+          <AddUserToCard :assignedUsers="card.assignedUsers" :cardId="card._id" class="mr-3 flex"></AddUserToCard>
           <div class="flex flex-row-reverse">
-            <img
-              v-for="user in card.assignedUsers"
-              :key="user._id"
-              class="-ml-2 h-8 w-8 rounded-full border-white border-2"
-              :src="user.profileImage"
-              alt="Profile Image"
-            />
+            <div v-for="user in card.assignedUsers" :key="user._id" class="-ml-2 h-8 w-8">
+              <img
+                class="rounded-full border-white border-2"
+                :src="user.profileImage"
+                alt="Profile Image"
+              />
+            </div>
           </div>
         </div>
       </div>

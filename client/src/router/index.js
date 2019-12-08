@@ -5,4 +5,8 @@ const router = new VueRouter({
   routes
 });
 
+// router.beforeEach((to, from, next) => {
+//   if()
+// });
+
 export default router;

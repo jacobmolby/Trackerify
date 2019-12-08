@@ -19,7 +19,7 @@ module.exports = {
 
         if (alreadyInCard) {
           return res
-            .status(400)
+            .status(200)
             .send({ error: 'User is already assigned to the card.' });
         }
         card.assignedUsers.addToSet(user._id);

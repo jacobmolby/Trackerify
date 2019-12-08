@@ -56,7 +56,6 @@ module.exports = {
         { title, description },
         { new: true, useFindAndModify: false }
       );
-      console.log(response);
 
       res.send(response);
     } catch (error) {

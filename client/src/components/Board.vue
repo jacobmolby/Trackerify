@@ -95,10 +95,11 @@ export default {
   async mounted() {
     try {
       const board = (await BoardService.show(this.boardId)).data;
+
       this.$store.dispatch('setBoard', board);
     } catch (error) {
       this.$router.push({ path: '/board' });
-      alert(error.response.data.error);
+      alert(error.response.data.error, 'Please logout and in again');
       console.log(error);
     }
   },
@@ -106,16 +107,15 @@ export default {
     async removeUser(userId) {
       this.removeUserError = null;
       if (userId === this.$store.state.user._id) {
-        this.removeUserError = 'You cannot remove yourself';
-        return console.log('Cannot remove yourself');
+        return (this.removeUserError = 'You cannot remove yourself');
       }
       try {
-        // const response = (await UserBoardService.delete(userId, this.boardId))
-        //   .data;
-        // console.log(response);
-        //this.$store.dispatch('removeList', response);
+        await UserBoardService.delete(userId, this.boardId);
+        this.$store.dispatch('removeUserFromBoard', userId);
       } catch (error) {
-        console.log(error);
+        console.log('error occured');
+
+        console.log(error.response.data.error);
       }
     }
   }

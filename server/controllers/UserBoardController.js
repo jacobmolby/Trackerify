@@ -1,5 +1,6 @@
 const Board = require('../models/Board');
 const User = require('../models/User');
+const Card = require('../models/Card');
 const mongoose = require('mongoose');
 
 module.exports = {
@@ -13,10 +14,8 @@ module.exports = {
           return res.status(400).send({ error: 'No user with that id.' });
         }
         const board = await Board.findById(boardId);
-        console.log(board.users);
 
         const alreadyInBoard = board.users.find(user => user == userId);
-        console.log(alreadyInBoard);
 
         if (alreadyInBoard) {
           return res
@@ -48,6 +47,12 @@ module.exports = {
       await user.save();
       const board = await Board.findById(boardId);
       board.users.pull(userId);
+      //Removes the user from all the cards assigned to the user
+      await Card.updateMany(
+        { assignedUsers: userId },
+        { $pull: { assignedUsers: { $in: userId } } }
+      );
+
       const response = await board.save();
       res.send(response);
     } catch (error) {
