@@ -52,12 +52,7 @@
         <div v-if="board.lists" class="py-6 h-full inline-flex flex-shrink-0 items-start">
           <div v-for="list in board.lists" :key="list._id">
             <div v-if="list.cards">
-              <List
-                :cards="list.cards"
-                :listId="list._id"
-                :title="list.title"
-                :listColor="list.color"
-              >
+              <List :listId="list._id" :title="list.title" :listColor="list.color">
                 <!-- <Card></Card> -->
               </List>
             </div>

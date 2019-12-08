@@ -11,6 +11,11 @@ export const store = new Vuex.Store({
     isUserLoggedIn: false,
     board: null
   },
+  getters: {
+    getCardsByListId: state => listId => {
+      return state.board.lists.find(list => list._id === listId).cards;
+    }
+  },
   mutations: {
     setToken(state, token) {
       state.token = token;
@@ -96,6 +101,10 @@ export const store = new Vuex.Store({
         .find(list => list._id === listId)
         .cards.find(card => card._id === cardId)
         .assignedUsers.filter(user => user._id !== userId);
+    },
+    updateListOrder(state, payload) {
+      const { cards, listId } = payload;
+      state.board.lists.find(list => list._id === listId).cards = cards;
     }
   },
   actions: {
@@ -137,6 +146,9 @@ export const store = new Vuex.Store({
     },
     removeUserFromCard({ commit }, payload) {
       commit('removeUserFromCard', payload);
+    },
+    updateListOrder({ commit }, value) {
+      commit('updateListOrder', value);
     }
   }
 });

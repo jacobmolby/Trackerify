@@ -13,10 +13,14 @@
     </div>
     <!-- Scrollable area -->
     <!-- List CONTENT -->
+
     <ul>
-      <li v-for="card in cards" :key="card._id" class="my-2 px-3 py-3 bg-white shadow rounded">
-        <card :card="card"></card>
-      </li>
+      <draggable group="card" v-model="cards" @start="drag=true" @end="drag=false">
+        <li v-for="card in cards" :key="card._id" class="my-2 px-3 py-3 bg-white shadow rounded">
+          <!-- {{card.title}} -->
+          <card :card="card"></card>
+        </li>
+      </draggable>
     </ul>
 
     <!-- ADD LIST BUTTON -->
@@ -25,15 +29,17 @@
 </template>
 
 <script>
+import draggable from 'vuedraggable';
 import ListService from '@/services/ListService';
 import Card from '@/components/Card';
 import AddCard from '@/components/AddCard';
 export default {
   components: {
+    draggable,
     Card,
     AddCard
   },
-  props: ['cards', 'title', 'listId', 'listColor'],
+  props: ['title', 'listId', 'listColor'],
   methods: {
     async deleteList() {
       try {
@@ -56,6 +62,18 @@ export default {
         return {
           'border-color': '#000'
         };
+      }
+    },
+    cards: {
+      get() {
+        return this.$store.getters.getCardsByListId(this.listId);
+      },
+      set(cards) {
+        const payload = {
+          cards,
+          listId: this.listId
+        };
+        this.$store.dispatch('updateListOrder', payload);
       }
     }
   }
