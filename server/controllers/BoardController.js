@@ -68,6 +68,7 @@ module.exports = {
   },
   //TODO Index route for board overview
   async destroy(req, res) {
+    //TODO Check if the person deleting the board is part of it
     const id = req.params.id;
     const board = await Board.findById(id);
     if (!board) {

@@ -1,4 +1,4 @@
-<template v-slot:default="card">
+<template>
   <div class="flex flex-col flex-shrink-0 justify-between">
     <div>
       <div class="text-xs text-gray-700 px-2 inline-block bg-teal-400 rounded-lg">Low Priority</div>
@@ -54,7 +54,7 @@
       v-if="isOpen"
       @click="isOpen = false"
       tabindex="-1"
-      class="fixed inset-0 h-full w-full bg-black opacity-25 cursor-default"
+      class="fixed inset-0 h-full w-full z-10 bg-black opacity-25 cursor-default"
     ></button>
     <div v-if="isOpen" class="popup bg-white shadow-xl rounded p-6 text-gray-700">
       <div class="flex items-center">
@@ -76,7 +76,7 @@
         <button
           v-if="!this.isEditing"
           class="ml-2 px-1 py-2 w-2/12 bg-green-400 rounded text-white focus:outline-none shadow opacity-75"
-          @click="isEditing = !isEditing"
+          @click="isEditing = !isEditing;"
         >Edit</button>
         <button
           v-else
@@ -150,8 +150,8 @@ export default {
   data() {
     return {
       isOpen: false,
-      description: null,
-      title: null,
+      description: '',
+      title: '',
       isEditing: false
     };
   },
@@ -189,9 +189,7 @@ export default {
         this.description == this.card.description &&
         this.title == this.card.title
       ) {
-        this.isEditing = false;
-
-        return;
+        return (this.isEditing = false);
       }
       const payload = {
         cardId: this.card._id,
@@ -203,6 +201,8 @@ export default {
         const card = (await CardService.updateCard(payload)).data;
         this.$store.dispatch('updateCard', card);
         this.isEditing = false;
+        // FIXME titlen bliver ikke opdateret
+        this.$forceUpdate();
       } catch (error) {
         console.log(error);
       }
@@ -224,6 +224,7 @@ export default {
     }
   },
   mounted() {
+    //FIXME Titlen ændre sig ikke når der opdateres
     this.description = this.card.description
       ? this.card.description
       : 'No description';

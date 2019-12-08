@@ -69,9 +69,7 @@ export const store = new Vuex.Store({
       const cardIndex = state.board.lists[listIndex].cards.findIndex(
         cardIterator => cardIterator._id === card._id
       );
-      state.board.lists[listIndex].cards[cardIndex] = {
-        card
-      };
+      state.board.lists[listIndex].cards[cardIndex] = card;
     },
     addUserToBoard(state, userId) {
       state.board.users.push(userId);

@@ -55,7 +55,12 @@ module.exports = {
         { _id: cardId },
         { title, description },
         { new: true, useFindAndModify: false }
-      );
+      ).populate([
+        { path: 'assignedUsers', select: ['name', 'id', 'profileImage'] },
+        { path: 'comments' },
+        { path: 'labels' },
+        { path: 'attachments' }
+      ]);
 
       res.send(response);
     } catch (error) {

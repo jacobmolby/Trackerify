@@ -14,14 +14,14 @@
     <!-- Scrollable area -->
     <!-- List CONTENT -->
 
-    <ul>
-      <draggable group="card" v-model="cards" @start="drag=true" @end="drag=false">
-        <li v-for="card in cards" :key="card._id" class="my-2 px-3 py-3 bg-white shadow rounded">
-          <!-- {{card.title}} -->
-          <card :cardId="card._id"></card>
-        </li>
-      </draggable>
-    </ul>
+    <!-- <ul> -->
+    <draggable group="card" tag="ul" v-model="cards" @start="drag=true" @end="drag=false">
+      <li v-for="card in cards" :key="card._id" class="my-2 px-3 py-3 bg-white shadow rounded">
+        <!-- {{card.title}} -->
+        <card :cardId="card._id"></card>
+      </li>
+    </draggable>
+    <!-- </ul> -->
 
     <!-- ADD LIST BUTTON -->
     <add-card :listId="listId"></add-card>
@@ -81,6 +81,7 @@ export default {
             cards,
             listId: this.listId
           };
+
           this.updateListOrder(payload);
           this.$store.dispatch('updateListOrder', payload);
         } catch (error) {

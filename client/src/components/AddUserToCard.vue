@@ -80,6 +80,8 @@ export default {
       };
       try {
         const response = (await UserCardService.post(payload)).data;
+        console.log(response);
+
         if (response.error) {
           return (this.error = response.error);
         }
