@@ -8,26 +8,23 @@
         <path d="M20.64 15.64H15.64V20.64H14V15.64H9V14H14V9H15.64V14H20.64V15.64Z" />
       </svg>
     </button>
-    <button
-      v-if="isOpen"
-      @click="isOpen = false"
-      tabindex="-1"
-      class="fixed inset-0 h-full w-full bg-black opacity-25 cursor-default"
-    ></button>
-    <div v-if="isOpen" class="w-full max-w-md popup bg-white shadow-xl rounded p-6 text-gray-700">
-      <h2 class="text-left text-lg font-semibold">Add User To Card</h2>
-      <form class="pt-3 flex flex-col" @submit.prevent="addUserToCard">
-        <select v-model="userId" class="p-2 border-2 rounded">
-          <option disabled value>Please select one</option>
-          <option v-for="user in notAssignedUsers" :key="user._id" :value="user._id">{{user.name}}</option>
-        </select>
-        <div class="text-red-500 font-semibold">{{this.error}}</div>
-        <button
-          type="submit"
-          class="mt-2 py-2 text-white bg-indigo-400 rounded shadow hover:bg-indigo-500"
-        >Add User</button>
-      </form>
-    </div>
+    <portal to="popup-container-important" v-if="isOpen">
+      <button @click="isOpen = false" tabindex="-1" class="popup-bg"></button>
+      <div class="popup">
+        <h2 class="text-left text-lg font-semibold">Add User To Card</h2>
+        <form class="pt-3 flex flex-col" @submit.prevent="addUserToCard">
+          <select v-model="userId" class="p-2 border-2 rounded">
+            <option disabled value>Please select one</option>
+            <option v-for="user in notAssignedUsers" :key="user._id" :value="user._id">{{user.name}}</option>
+          </select>
+          <div class="text-red-500 font-semibold">{{this.error}}</div>
+          <button
+            type="submit"
+            class="mt-2 py-2 text-white bg-indigo-400 rounded shadow hover:bg-indigo-500"
+          >Add User</button>
+        </form>
+      </div>
+    </portal>
   </div>
 </template>
 

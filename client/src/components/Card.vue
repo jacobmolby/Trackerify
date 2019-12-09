@@ -50,84 +50,90 @@
         </div>
       </div>
     </div>
-    <button
-      v-if="isOpen"
-      @click="isOpen = false"
-      tabindex="-1"
-      class="fixed inset-0 h-full w-full z-10 bg-black opacity-25 cursor-default"
-    ></button>
-    <div v-if="isOpen" class="popup bg-white shadow-xl rounded p-6 text-gray-700">
-      <div class="flex items-center">
-        <h2 v-if="!isEditing" class="text-lg font-bold">{{title}}</h2>
-        <input
-          v-else-if="isEditing"
-          class="px-1 text-lg font-bold bg-gray-200 border rounded focus:outline-none"
-          type="text"
-          v-model="title"
-        />
-      </div>
-      <div class="py-2 flex items-center justify-between text-sm border-b-2 border-gray-200">
-        <textarea
-          v-model="description"
-          :disabled="!this.isEditing"
-          :class="[(isEditing ? 'bg-gray-200 border' : ''),(description == 'No description' ? 'italic' : '')]"
-          class="w-10/12 h-16 py-1 bg-transparent resize-none outline-none rounded"
-        ></textarea>
-        <button
-          v-if="!this.isEditing"
-          class="ml-2 px-1 py-2 w-2/12 bg-green-400 rounded text-white focus:outline-none shadow opacity-75"
-          @click="isEditing = !isEditing;"
-        >Edit</button>
-        <button
-          v-else
-          class="ml-2 px-1 py-2 w-2/12 bg-green-800 rounded text-white focus:outline-none shadow"
-          @click="updateCard"
-        >Save</button>
-      </div>
+    <portal to="popup-container" v-if="isOpen">
+      <button @click="isOpen = false" tabindex="-1" class="popup-bg"></button>
+      <div class="popup">
+        <div class="flex items-center">
+          <h2 v-if="!isEditing" class="text-lg font-bold">{{title}}</h2>
+          <input
+            v-else-if="isEditing"
+            class="px-1 text-lg font-bold bg-gray-200 border rounded focus:outline-none"
+            type="text"
+            v-model="title"
+          />
+        </div>
+        <div class="py-2 flex items-center justify-between text-sm border-b-2 border-gray-200">
+          <textarea
+            v-model="description"
+            :disabled="!this.isEditing"
+            :class="[(isEditing ? 'bg-gray-200 border' : ''),(description == 'No description' ? 'italic' : '')]"
+            class="w-10/12 h-16 py-1 bg-transparent resize-none outline-none rounded"
+          ></textarea>
+          <button
+            v-if="!this.isEditing"
+            class="ml-2 px-1 py-2 w-2/12 bg-green-400 rounded text-white focus:outline-none shadow opacity-75"
+            @click="isEditing = !isEditing;"
+          >Edit</button>
+          <button
+            v-else
+            class="ml-2 px-1 py-2 w-2/12 bg-green-800 rounded text-white focus:outline-none shadow"
+            @click="updateCard"
+          >Save</button>
+        </div>
 
-      <div class="py-2 flex items-center justify-between border-b-2 border-gray-200">
-        <h3 class="text-md font-medium">Assigned to:</h3>
-        <div class="flex justify-end">
-          <AddUserToCard :assignedUsers="card.assignedUsers" :cardId="card._id" class="mr-3 flex"></AddUserToCard>
-          <div class="flex flex-row-reverse">
-            <div v-for="user in card.assignedUsers" :key="user._id" class="relative -ml-2 h-8 w-8">
-              <img
-                class="rounded-full border-white border-2"
-                :src="user.profileImage"
-                alt="Profile Image"
-              />
-              <div class="absolute inset-0 flex opacity-0 bg-red-400 rounded-full hover:opacity-75">
-                <button
-                  class="flex justify-center w-full items-center focus:outline-none"
-                  @click="removeUser(user._id)"
+        <div class="py-2 flex items-center justify-between border-b-2 border-gray-200">
+          <h3 class="text-md font-medium">Assigned to:</h3>
+          <div class="flex justify-end">
+            <AddUserToCard :assignedUsers="card.assignedUsers" :cardId="card._id" class="mr-3 flex"></AddUserToCard>
+            <div class="flex flex-row-reverse">
+              <div
+                v-for="user in card.assignedUsers"
+                :key="user._id"
+                class="relative -ml-2 h-8 w-8"
+              >
+                <img
+                  class="rounded-full border-white border-2"
+                  :src="user.profileImage"
+                  alt="Profile Image"
+                />
+                <div
+                  class="absolute inset-0 flex opacity-0 bg-red-400 rounded-full hover:opacity-75"
                 >
-                  <svg class="h-3 w-3 fill-current text-gray-800 opacity-100" viewBox="0 0 20 20">
-                    <path
-                      d="M10 8.586L2.929 1.515 1.515 2.929 8.586 10l-7.071 7.071 1.414 1.414L10 11.414l7.071 7.071 1.414-1.414L11.414 10l7.071-7.071-1.414-1.414L10 8.586z"
-                    />
-                  </svg>
-                </button>
+                  <button
+                    class="flex justify-center w-full items-center focus:outline-none"
+                    @click="removeUser(user._id)"
+                  >
+                    <svg
+                      class="h-3 w-3 fill-current text-gray-800 opacity-100"
+                      viewBox="0 0 20 20"
+                    >
+                      <path
+                        d="M10 8.586L2.929 1.515 1.515 2.929 8.586 10l-7.071 7.071 1.414 1.414L10 11.414l7.071 7.071 1.414-1.414L11.414 10l7.071-7.071-1.414-1.414L10 8.586z"
+                      />
+                    </svg>
+                  </button>
+                </div>
               </div>
             </div>
           </div>
         </div>
+        <div class="my-1 max-h-72 overflow-y-auto">
+          <comment v-for="comment in card.comments" :key="comment._id" :comment="comment"></comment>
+        </div>
+        <add-comment :cardId="card._id" :listId="card.list"></add-comment>
+        <div class="py-2 border-t-2 border-gray-200">Attachments:</div>
+        <div class="flex items-center justify-between">
+          <button
+            @click="deleteCard"
+            class="px-2 py-1 font-semibold text-white bg-red-500 rounded shadow hover:bg-red-800"
+          >Delete Card</button>
+          <button
+            @click="isOpen = false"
+            class="px-2 py-1 font-semibold text-white bg-indigo-400 rounded shadow hover:bg-indigo-800"
+          >Close Card</button>
+        </div>
       </div>
-      <div class="my-1 max-h-72 overflow-y-auto">
-        <comment v-for="comment in card.comments" :key="comment._id" :comment="comment"></comment>
-      </div>
-      <add-comment :cardId="card._id" :listId="card.list"></add-comment>
-      <div class="py-2 border-t-2 border-gray-200">Attachments:</div>
-      <div class="flex items-center justify-between">
-        <button
-          @click="deleteCard"
-          class="px-2 py-1 font-semibold text-white bg-red-500 rounded shadow hover:bg-red-800"
-        >Delete Card</button>
-        <button
-          @click="isOpen = false"
-          class="px-2 py-1 font-semibold text-white bg-indigo-400 rounded shadow hover:bg-indigo-800"
-        >Close Card</button>
-      </div>
-    </div>
+    </portal>
   </div>
 </template>
 

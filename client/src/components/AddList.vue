@@ -1,5 +1,5 @@
 <template>
-  <div class="relative">
+  <div>
     <button
       @click="isOpen = !isOpen"
       class="ml-6 inline-flex items-center text-gray-600 hover:text-gray-900"
@@ -11,35 +11,32 @@
       </span>
       Add List
     </button>
-    <button
-      v-if="isOpen"
-      @click="isOpen = false"
-      tabindex="-1"
-      class="fixed inset-0 h-full w-full bg-black opacity-25 cursor-default"
-    ></button>
-    <div v-if="isOpen" class="popup bg-white shadow-xl rounded p-6 text-gray-700">
-      <h2 class="text-left text-lg font-semibold">Add List</h2>
+    <portal to="popup-container" v-if="isOpen">
+      <button @click="isOpen = false" tabindex="-1" class="popup-bg"></button>
+      <div class="popup">
+        <h2 class="text-left text-lg font-semibold">Add List</h2>
 
-      <form class="pt-3 flex flex-col" @submit.prevent="addList">
-        <input
-          v-model="list.title"
-          class="p-2 rounded border border-gray-400"
-          type="text"
-          placeholder="List Title"
-        />
-        <button
-          :style="{'background-color':list.color.hex}"
-          class="mt-2 p-2 rounded border border-gray-400 font-extrabold"
-          @click.prevent="pickingColor = !pickingColor"
-        >{{this.list.color.hex}}</button>
-        <chrome v-if="pickingColor" class="mx-auto my-2 shadow-none" v-model="list.color">TEST</chrome>
-        <div class="text-red-500 font-semibold">{{this.error}}</div>
-        <button
-          type="submit"
-          class="mt-2 py-2 text-white bg-indigo-400 rounded shadow hover:bg-indigo-500"
-        >Add New List</button>
-      </form>
-    </div>
+        <form class="pt-3 flex flex-col" @submit.prevent="addList">
+          <input
+            v-model="list.title"
+            class="p-2 rounded border border-gray-400"
+            type="text"
+            placeholder="List Title"
+          />
+          <button
+            :style="{'background-color':list.color.hex}"
+            class="mt-2 p-2 rounded border border-gray-400 font-extrabold"
+            @click="pickingColor = !pickingColor"
+          >{{this.list.color.hex}}</button>
+          <chrome v-if="!pickingColor" class="mx-auto my-2 shadow-none" v-model="list.color"></chrome>
+          <div class="text-red-500 font-semibold">{{this.error}}</div>
+          <button
+            type="submit"
+            class="mt-2 py-2 text-white bg-indigo-400 rounded shadow hover:bg-indigo-500"
+          >Add New List</button>
+        </form>
+      </div>
+    </portal>
   </div>
 </template>
 

@@ -94,7 +94,7 @@ export default {
       this.$store.dispatch('setBoard', board);
     } catch (error) {
       this.$router.push({ path: '/board' });
-      alert(error.response.data.error, 'Please logout and in again');
+      alert(error.response.data.error + 'Please logout and in again');
       console.log(error);
     }
   },
