@@ -66,7 +66,21 @@ module.exports = {
       return res.status(400).send({ error: "ID isn't valid" });
     }
   },
-  //TODO Index route for board overview
+  async update(req, res) {
+    const { boardId, title } = req.body;
+    //TODO check if user is part of board
+    try {
+      const board = await Board.findByIdAndUpdate(
+        boardId,
+        { $set: { title } },
+        { useFindAndModify: false, new: true }
+      );
+      console.log(board);
+      res.send(board);
+    } catch (error) {
+      res.status(400).send({ error });
+    }
+  },
   async destroy(req, res) {
     //TODO Check if the person deleting the board is part of it
     const id = req.params.id;

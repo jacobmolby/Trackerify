@@ -83,12 +83,12 @@
 </template>
 
 <script>
-import AuthenticationService from "@/services/AuthenticationService";
-import validEmail from "@/utilities/validEmail";
-import validPassword from "@/utilities/validPassword";
+import AuthenticationService from '@/services/AuthenticationService';
+import validEmail from '@/utilities/validEmail';
+import validPassword from '@/utilities/validPassword';
 
 export default {
-  name: "register",
+  name: 'register',
   data() {
     return {
       firstName: null,
@@ -118,26 +118,26 @@ export default {
         this.fullName = `${this.firstName} ${this.lastName}`;
       }
       if (!this.firstName) {
-        this.firstNameError = "Please choose a first name.";
+        this.firstNameError = 'Please choose a first name.';
       }
       if (!this.lastName) {
-        this.lastNameError = "Please choose a last name.";
+        this.lastNameError = 'Please choose a last name.';
       }
       // Check valid email
       let emailIsValid = validEmail(this.email);
 
       if (!this.email) {
-        this.emailError = "Please choose an email.";
+        this.emailError = 'Please choose an email.';
       } else if (this.email && !emailIsValid) {
-        this.emailError = "Email is not valid";
+        this.emailError = 'Email is not valid';
       }
       // Check valid password
       let passwordIsValid = validPassword(this.password);
       if (!this.password) {
-        this.passwordError = "Please choose a password.";
+        this.passwordError = 'Please choose a password.';
       } else if (this.password && !passwordIsValid) {
         this.passwordError =
-          "A password must contain at least a letter, a capital letter, a number and must be between 8 and 32 characters long";
+          'A password must contain at least a letter, a capital letter, a number and must be between 8 and 32 characters long';
       }
       if (emailIsValid && passwordIsValid && this.fullName) {
         //this.error = "Det virker";
@@ -152,13 +152,13 @@ export default {
           password: this.password
         });
 
-        this.$store.dispatch("setToken", response.data.token);
-        this.$store.dispatch("setUser", response.data.user);
+        this.$store.dispatch('setToken', response.data.token);
+        this.$store.dispatch('setUser', response.data.user);
         this.$router.push({
-          name: "profile"
+          name: 'boardOverview'
         });
       } catch (error) {
-        this.error = "Server is down";
+        this.error = 'Server is down';
         if (error.response.data.error) {
           this.error = error.response.data.error;
         }

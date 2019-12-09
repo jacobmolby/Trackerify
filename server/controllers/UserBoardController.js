@@ -32,6 +32,10 @@ module.exports = {
           profileImage: savedUser.profileImage
         };
         res.send(response);
+      } else {
+        console.log('not valid');
+
+        res.status(400).send({ error: 'Not a valid ID' });
       }
     } catch (error) {
       console.log(error);

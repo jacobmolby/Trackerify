@@ -46,7 +46,7 @@ module.exports = {
     //Check if email exists
     const user = await User.findOne({ email: req.body.email }).populate({
       path: 'boards',
-      select: ['_id', 'title']
+      select: ['_id', 'title', 'users', 'lists']
     });
     if (!user) return res.status(403).send({ error: "Email doesn't exist." });
 

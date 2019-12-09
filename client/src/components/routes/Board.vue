@@ -8,10 +8,17 @@
       <div class="ml-2 pt-6 flex justify-between items-center">
         <div class="inline-flex items-baseline">
           <h1
-            v-if="this.board.title"
+            v-if="!editingTitle"
+            @click="editingTitle = !editingTitle"
             class="font-semibold text-2xl text-gray-700"
-          >{{this.board.title}}</h1>
-          <h1 v-else class="font-semibold text-2xl text-gray-700">Loading Title</h1>
+          >{{title}}</h1>
+          <input
+            v-else
+            v-model="title"
+            type="text"
+            class="font-semibold text-2xl bg-gray-300 text-gray-700 focus:outline-none"
+          />
+          <delete-board :board="board" class="ml-2">Hej</delete-board>
 
           <add-list></add-list>
         </div>
@@ -52,9 +59,7 @@
         <div v-if="board.lists" class="py-6 h-full inline-flex flex-shrink-0 items-start">
           <div v-for="list in board.lists" :key="list._id">
             <div v-if="list.cards">
-              <List :listId="list._id" :title="list.title" :listColor="list.color">
-                <!-- <Card></Card> -->
-              </List>
+              <List :listId="list._id" :title="list.title" :listColor="list.color"></List>
             </div>
           </div>
         </div>
@@ -69,6 +74,7 @@ import { mapState } from 'vuex';
 import List from '@/components/List';
 import AddList from '@/components/AddList';
 import AddUserToBoard from '@/components/AddUserToBoard';
+import DeleteBoard from '@/components/DeleteBoard';
 import BoardService from '@/services/BoardService';
 import UserBoardService from '@/services/UserBoardService';
 export default {
@@ -76,13 +82,16 @@ export default {
   data() {
     return {
       boardId: this.$route.params.boardId,
-      removeUserError: null
+      removeUserError: null,
+      editingTitle: false,
+      title: ''
     };
   },
   components: {
     List,
     AddList,
-    AddUserToBoard
+    AddUserToBoard,
+    DeleteBoard
   },
   computed: {
     ...mapState(['board'])
@@ -92,6 +101,7 @@ export default {
       const board = (await BoardService.show(this.boardId)).data;
 
       this.$store.dispatch('setBoard', board);
+      this.title = board.title;
     } catch (error) {
       this.$router.push({ path: '/board' });
       alert(error.response.data.error + 'Please logout and in again');
@@ -106,13 +116,59 @@ export default {
       }
       try {
         await UserBoardService.delete(userId, this.boardId);
-        this.$store.dispatch('removeUserFromBoard', userId);
+        const storePayload = {
+          userId,
+          boardId: this.boardId
+        };
+        this.$store.dispatch('removeUserFromBoard', storePayload);
       } catch (error) {
         console.log('error occured');
 
         console.log(error.response.data.error);
       }
+    },
+    async updateTitle() {
+      if (this.title === this.board.title) {
+        this.editingTitle = false;
+
+        return;
+      }
+      if (this.title.trim() === '') {
+        //TODO implement an error
+        this.title = 'Enter a title';
+        return;
+      }
+      const payload = {
+        title: this.title,
+        boardId: this.boardId
+      };
+      try {
+        const board = (await BoardService.update(payload)).data;
+        //Dipatch action
+        this.$store.dispatch('updateBoard', board);
+
+        this.editingTitle = false;
+      } catch (error) {
+        console.log(error.response.data.error);
+      }
     }
+  },
+  created() {
+    const handleTitleKeyPresses = e => {
+      if (this.editingTitle === false) {
+        return;
+      }
+      if (e.key === 'Esc' || e.key === 'Escape') {
+        this.editingTitle = false;
+      }
+      if (e.key === 'Enter') {
+        this.updateTitle();
+      }
+    };
+    document.addEventListener('keydown', handleTitleKeyPresses);
+    this.$once('hook:beforeDestroy', () => {
+      document.removeEventListener('keydown', handleTitleKeyPresses);
+    });
   }
 };
 </script>

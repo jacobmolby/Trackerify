@@ -53,8 +53,8 @@ export default {
       //TODO check if the user is in the board client side
       this.error = null;
 
-      if (!this.userId) {
-        return (this.error = 'Please enter a user Id.');
+      if (!this.userId || !this.userId.match(/^[0-9a-fA-F]{24}$/)) {
+        return (this.error = 'Please enter a valid user ID.');
       }
 
       const payload = {
@@ -64,7 +64,12 @@ export default {
       try {
         const user = (await UserBoardService.post(payload)).data;
 
-        this.$store.dispatch('addUserToBoard', user);
+        const storePayload = {
+          user,
+          boardId: this.boardId
+        };
+
+        this.$store.dispatch('addUserToBoard', storePayload);
         this.userId = null;
         this.isOpen = false;
       } catch (error) {
@@ -72,6 +77,16 @@ export default {
         console.log(error.response.data.error);
       }
     }
+  }, created() {
+    const handleEscape = e => {
+      if (e.key === 'Esc' || e.key === 'Escape') {
+        this.isOpen = false;
+      }
+    };
+    document.addEventListener('keydown', handleEscape);
+    this.$once('hook:beforeDestroy', () => {
+      document.removeEventListener('keydown', handleEscape);
+    });
   }
 };
 </script>

@@ -38,8 +38,24 @@ export const store = new Vuex.Store({
     setBoard(state, board) {
       state.board = board;
     },
+    createBoard(state, board) {
+      state.user.boards.push(board);
+    },
+    updateBoard(state, board) {
+      state.user.boards.find(stateBoard => stateBoard._id === board._id).title =
+        board.title;
+    },
+    deleteBoard(state, boardId) {
+      state.board = null;
+      state.user.boards = state.user.boards.filter(
+        board => board._id !== boardId
+      );
+    },
     addList(state, list) {
       state.board.lists.push(list);
+      state.user.boards
+        .find(board => board._id === list.boardId)
+        .lists.push(list._id);
     },
     addCard(state, card) {
       state.board.lists.find(list => list._id === card.list).cards.push(card);
@@ -55,6 +71,13 @@ export const store = new Vuex.Store({
       state.board.lists = state.board.lists.filter(list => {
         return list._id !== deletedList._id;
       });
+
+      //For boardOverview
+      state.user.boards.find(
+        board => board._id === deletedList.boardId
+      ).lists = state.user.boards
+        .find(board => board._id === deletedList.boardId)
+        .lists.filter(list => list !== deletedList._id);
     },
     addComment(state, comment) {
       state.board.lists
@@ -71,8 +94,11 @@ export const store = new Vuex.Store({
       );
       state.board.lists[listIndex].cards[cardIndex] = card;
     },
-    addUserToBoard(state, userId) {
-      state.board.users.push(userId);
+    addUserToBoard(state, payload) {
+      state.board.users.push(payload.user);
+      state.user.boards
+        .find(board => board._id === payload.boardId)
+        .users.push(payload.userId);
     },
     addUserToCard(state, payload) {
       const { user, listId, cardId } = payload;
@@ -82,18 +108,25 @@ export const store = new Vuex.Store({
         .cards.find(card => card._id === cardId)
         .assignedUsers.push(user);
     },
-    removeUserFromBoard(state, userId) {
+    removeUserFromBoard(state, payload) {
+      //For the setBoard
       state.board.users = state.board.users.filter(user => {
-        return user._id !== userId;
+        return user._id !== payload.userId;
       });
-
+      //For the cards in setBoard
       state.board.lists.forEach(list => {
         list.cards.forEach(card => {
           card.assignedUsers = card.assignedUsers.filter(user => {
-            return user._id !== userId;
+            return user._id !== payload.userId;
           });
         });
       });
+      //For boardOverview
+      state.user.boards.find(
+        board => board._id === payload.boardId
+      ).users = state.user.boards
+        .find(board => board._id === payload.boardId)
+        .users.filter(user => user !== payload.userId);
     },
     removeUserFromCard(state, payload) {
       //Payload has userId, cardId and listId on it.
@@ -124,6 +157,15 @@ export const store = new Vuex.Store({
     setBoard({ commit }, board) {
       commit('setBoard', board);
     },
+    createBoard({ commit }, board) {
+      commit('createBoard', board);
+    },
+    updateBoard({ commit }, board) {
+      commit('updateBoard', board);
+    },
+    deleteBoard({ commit }, boardId) {
+      commit('deleteBoard', boardId);
+    },
     addList({ commit }, list) {
       commit('addList', list);
     },
@@ -142,8 +184,8 @@ export const store = new Vuex.Store({
     updateCard({ commit }, card) {
       commit('updateCard', card);
     },
-    addUserToBoard({ commit }, userId) {
-      commit('addUserToBoard', userId);
+    addUserToBoard({ commit }, payload) {
+      commit('addUserToBoard', payload);
     },
     addUserToCard({ commit }, payload) {
       commit('addUserToCard', payload);

@@ -1,6 +1,9 @@
 module.exports = {
   theme: {
     extend: {
+      flex: {
+        '2': '0 45%'
+      },
       colors: {
         deepblue: {
           '700': '#3a3663',
@@ -28,7 +31,7 @@ module.exports = {
     }
   },
   variants: {
-    borderWidth: ['responsive', 'first', 'hover', 'focus']
+    margin: ['responsive', 'odd', 'hover', 'focus']
   },
   plugins: []
 };

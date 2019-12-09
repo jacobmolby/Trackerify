@@ -23,7 +23,7 @@
           :class="{'border-red-500': this.passwordError}"
           id="password"
           type="password"
-          placeholder="******************"
+          placeholder="***********"
           v-model="password"
         />
         <p class="text-red-500 mt-3 text-xs italic">{{this.passwordError}}</p>
@@ -44,10 +44,10 @@
 </template>
 
 <script>
-import AuthenticationService from "@/services/AuthenticationService";
+import AuthenticationService from '@/services/AuthenticationService';
 
 export default {
-  name: "login",
+  name: 'login',
   data() {
     return {
       email: null,
@@ -71,13 +71,13 @@ export default {
       }
 
       if (!this.email) {
-        this.emailError = "Please choose an email.";
+        this.emailError = 'Please choose an email.';
       } else if (this.email && !emailIsValid) {
-        this.emailError = "Email is not valid";
+        this.emailError = 'Email is not valid';
       }
 
       if (!this.password) {
-        this.passwordError = "Please choose a password.";
+        this.passwordError = 'Please choose a password.';
       }
     },
     async login() {
@@ -87,13 +87,13 @@ export default {
           password: this.password
         });
 
-        this.$store.dispatch("setToken", response.data.token);
-        this.$store.dispatch("setUser", response.data.user);
+        this.$store.dispatch('setToken', response.data.token);
+        this.$store.dispatch('setUser', response.data.user);
         this.$router.push({
-          name: "profile"
+          name: 'boardOverview'
         });
       } catch (error) {
-        this.error = "Server is down";
+        this.error = 'Server is down';
         console.log(error);
 
         if (error.response.data.error) {

@@ -27,7 +27,7 @@
 
 <script>
 export default {
-  name: "Profile",
+  name: 'settings',
   data() {
     return {};
   },
@@ -41,7 +41,7 @@ export default {
       if (this.user.profileIMG) {
         return this.user.profileIMG;
       } else {
-        return "img/no-profile-picture.png";
+        return 'img/no-profile-picture.png';
       }
     }
   }

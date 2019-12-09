@@ -1,9 +1,9 @@
-import Home from '@/components/Home';
-import Profile from '@/components/Profile';
-import Login from '@/components/Login';
-import Register from '@/components/Register';
-import Board from '@/components/Board';
-import BoardOverview from '@/components/BoardOverview';
+import Home from '@/components/routes/Home';
+import Settings from '@/components/routes/Settings';
+import Login from '@/components/routes/Login';
+import Register from '@/components/routes/Register';
+import Board from '@/components/routes/Board';
+import BoardOverview from '@/components/routes/BoardOverview';
 
 const routes = [
   {
@@ -22,9 +22,9 @@ const routes = [
     component: Register
   },
   {
-    path: '/profile',
-    name: 'profile',
-    component: Profile
+    path: '/settings',
+    name: 'settings',
+    component: Settings
   },
   {
     path: '/board/',
@@ -33,7 +33,7 @@ const routes = [
   },
   {
     path: '/board/:boardId',
-    name: 'Board',
+    name: 'board',
     component: Board
   }
 ];
