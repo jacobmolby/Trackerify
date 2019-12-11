@@ -1,10 +1,14 @@
 import Vue from 'vue';
 import Vuex from 'vuex';
 import createPersistedState from 'vuex-persistedstate';
+import socketio from './socketio';
 Vue.use(Vuex);
 
 export const store = new Vuex.Store({
   plugins: [createPersistedState()],
+  modules: {
+    socketio
+  },
   state: {
     token: null,
     user: null,
@@ -199,12 +203,6 @@ export const store = new Vuex.Store({
     },
     updateListOrder({ commit }, value) {
       commit('updateListOrder', value);
-    },
-    SOCKET_boardUpdated({ commit }, board) {
-      commit('updateBoard', board);
-    },
-    SOCKET_ListOrderUpdated({ commit }, list) {
-      commit('updateListOrder', list);
     }
   }
 });

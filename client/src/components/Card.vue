@@ -182,9 +182,11 @@ export default {
       const cardId = this.card._id;
 
       try {
-        const deletedCard = (await CardService.delete(cardId)).data;
-
+        let deletedCard = (await CardService.delete(cardId)).data;
+        //Add boardId for sockets
+        deletedCard.boardId = this.$store.state.board._id;
         this.$store.dispatch('removeCard', deletedCard);
+        this.$socket.emit('removeCard', deletedCard);
         this.isOpen = false;
       } catch (error) {
         console.log(error);
@@ -205,10 +207,13 @@ export default {
 
       try {
         const card = (await CardService.updateCard(payload)).data;
+        //Add boardId for socket.io
+        card.boardId = this.$store.state.board._id;
+
         this.$store.dispatch('updateCard', card);
+        this.$socket.emit('updateCard', card);
         this.isEditing = false;
         // FIXME titlen bliver ikke opdateret
-        this.$forceUpdate();
       } catch (error) {
         console.log(error);
       }
@@ -219,9 +224,12 @@ export default {
         const payload = {
           userId,
           cardId: this.card._id,
-          listId: this.card.list
+          listId: this.card.list,
+          boardId: this.$store.state.board._id
         };
+
         this.$store.dispatch('removeUserFromCard', payload);
+        this.$socket.emit('removeUserFromCard', payload);
       } catch (error) {
         console.log('error occured');
 

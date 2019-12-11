@@ -80,6 +80,7 @@ export default {
           const response = (await ListService.post(payload)).data;
 
           this.$store.dispatch('addList', response);
+          this.$socket.emit('addList', response);
           this.list.title = null;
           this.pickingColor = false;
           this.isOpen = false;

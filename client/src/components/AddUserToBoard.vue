@@ -70,6 +70,7 @@ export default {
         };
 
         this.$store.dispatch('addUserToBoard', storePayload);
+        this.$socket.emit('addUserToBoard', storePayload);
         this.userId = null;
         this.isOpen = false;
       } catch (error) {
@@ -77,7 +78,8 @@ export default {
         console.log(error.response.data.error);
       }
     }
-  }, created() {
+  },
+  created() {
     const handleEscape = e => {
       if (e.key === 'Esc' || e.key === 'Escape') {
         this.isOpen = false;

@@ -122,6 +122,7 @@ export default {
           boardId: this.boardId
         };
         this.$store.dispatch('removeUserFromBoard', storePayload);
+        this.$socket.emit('removeUserFromBoard', storePayload);
       } catch (error) {
         console.log('error occured');
 
@@ -172,13 +173,6 @@ export default {
       document.removeEventListener('keydown', handleTitleKeyPresses);
     });
   }
-  // sockets: {
-  //   boardUpdated(board) {
-  //     if (board._id === this.board._id) {
-  //       this.$store.dispatch('updateBoard', board);
-  //     }
-  //   }
-  // }
 };
 </script>
 

@@ -47,6 +47,7 @@ export default {
         const response = (await ListService.delete(this.listId)).data;
 
         this.$store.dispatch('removeList', response);
+        this.$socket.emit('removeList', response);
       } catch (error) {
         console.log(error);
       }
@@ -94,13 +95,6 @@ export default {
         } catch (error) {
           console.log(error);
         }
-      }
-    }
-  },
-  sockets: {
-    ListOrderUpdated(list) {
-      if (list.listId === this.listId) {
-        this.$store.dispatch('updateListOrder', list);
       }
     }
   }

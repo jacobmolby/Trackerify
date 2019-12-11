@@ -79,9 +79,11 @@ export default {
           listId: this.listId
         };
         try {
-          const card = (await CardService.post(payload)).data;
-
+          let card = (await CardService.post(payload)).data;
+          //BoardId used for socket io
+          card.boardId = this.$store.state.board._id;
           this.$store.dispatch('addCard', card);
+          this.$socket.emit('addCard', card);
           //reset component
           this.isOpen = false;
           this.title = null;

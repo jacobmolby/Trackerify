@@ -76,22 +76,23 @@ export default {
         userId: this.userId
       };
       try {
-        const response = (await UserCardService.post(payload)).data;
-        console.log(response);
-
+        let response = (await UserCardService.post(payload)).data;
+        //TODO check om det stadig bliver brugt
         if (response.error) {
           return (this.error = response.error);
         }
-
+        //Add board id for socket.io
+        response.boardId = this.$store.state.board._id;
         this.$store.dispatch('addUserToCard', response);
+        this.$socket.emit('addUserToCard', response);
         this.userId = '';
         this.isOpen = false;
       } catch (error) {
         this.error = error.response.data.error;
-        //console.log(error.response.data.error);
       }
     }
-  }, created() {
+  },
+  created() {
     const handleEscape = e => {
       if (e.key === 'Esc' || e.key === 'Escape') {
         this.isOpen = false;

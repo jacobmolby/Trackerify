@@ -45,6 +45,6 @@ app.use(express.json());
 require('./routes')(app);
 
 //socket.io
-require('./socketio')(io);
+require('./socket.io/socketio')(io);
 
 server.listen(port, () => console.log(`Server running on port ${port}.`));
