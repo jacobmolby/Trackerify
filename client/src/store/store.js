@@ -42,6 +42,7 @@ export const store = new Vuex.Store({
       state.user.boards.push(board);
     },
     updateBoard(state, board) {
+      state.board.title = board.title;
       state.user.boards.find(stateBoard => stateBoard._id === board._id).title =
         board.title;
     },
@@ -198,6 +199,12 @@ export const store = new Vuex.Store({
     },
     updateListOrder({ commit }, value) {
       commit('updateListOrder', value);
+    },
+    SOCKET_boardUpdated({ commit }, board) {
+      commit('updateBoard', board);
+    },
+    SOCKET_ListOrderUpdated({ commit }, list) {
+      commit('updateListOrder', list);
     }
   }
 });

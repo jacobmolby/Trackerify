@@ -11,14 +11,14 @@
             v-if="!editingTitle"
             @click="editingTitle = !editingTitle"
             class="font-semibold text-2xl text-gray-700"
-          >{{title}}</h1>
+          >{{board.title}}</h1>
           <input
             v-else
             v-model="title"
             type="text"
             class="font-semibold text-2xl bg-gray-300 text-gray-700 focus:outline-none"
           />
-          <delete-board :board="board" class="ml-2">Hej</delete-board>
+          <delete-board :board="board" class="ml-2"></delete-board>
 
           <add-list></add-list>
         </div>
@@ -101,7 +101,8 @@ export default {
       const board = (await BoardService.show(this.boardId)).data;
 
       this.$store.dispatch('setBoard', board);
-      this.title = board.title;
+      this.title = this.board.title;
+      this.$socket.emit('setBoard', board);
     } catch (error) {
       this.$router.push({ path: '/board' });
       alert(error.response.data.error + 'Please logout and in again');
@@ -145,6 +146,7 @@ export default {
       try {
         const board = (await BoardService.update(payload)).data;
         //Dipatch action
+        this.$socket.emit('updateBoard', board);
         this.$store.dispatch('updateBoard', board);
 
         this.editingTitle = false;
@@ -170,6 +172,13 @@ export default {
       document.removeEventListener('keydown', handleTitleKeyPresses);
     });
   }
+  // sockets: {
+  //   boardUpdated(board) {
+  //     if (board._id === this.board._id) {
+  //       this.$store.dispatch('updateBoard', board);
+  //     }
+  //   }
+  // }
 };
 </script>
 

@@ -75,7 +75,6 @@ module.exports = {
         { $set: { title } },
         { useFindAndModify: false, new: true }
       );
-      console.log(board);
       res.send(board);
     } catch (error) {
       res.status(400).send({ error });

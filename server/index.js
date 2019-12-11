@@ -1,6 +1,8 @@
 // Import Dependencies
 const express = require('express');
 const app = express();
+const server = require('http').Server(app);
+const io = require('socket.io')(server);
 const morgan = require('morgan');
 const mongoose = require('mongoose');
 const cors = require('cors');
@@ -42,4 +44,7 @@ app.use(express.json());
 //Routing
 require('./routes')(app);
 
-app.listen(port, () => console.log(`Server running on port ${port}.`));
+//socket.io
+require('./socketio')(io);
+
+server.listen(port, () => console.log(`Server running on port ${port}.`));

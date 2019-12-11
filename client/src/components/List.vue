@@ -30,6 +30,7 @@
 
 <script>
 import draggable from 'vuedraggable';
+import { mapState } from 'vuex';
 import ListService from '@/services/ListService';
 import Card from '@/components/Card';
 import AddCard from '@/components/AddCard';
@@ -59,6 +60,9 @@ export default {
     }
   },
   computed: {
+    boardId() {
+      return this.$store.state.board._id;
+    },
     borderColor() {
       const validColor = new RegExp('^#([A-Fa-f0-9]{6}|[A-Fa-f0-9]{3})$');
       if (validColor.test(this.listColor)) {
@@ -79,14 +83,24 @@ export default {
         try {
           const payload = {
             cards,
-            listId: this.listId
+            listId: this.listId,
+            boardId: this.boardId
           };
 
           this.updateListOrder(payload);
           this.$store.dispatch('updateListOrder', payload);
+          this.$socket.emit('updateListOrder', payload);
+          this.$socket.emit('CUSTOM', payload);
         } catch (error) {
           console.log(error);
         }
+      }
+    }
+  },
+  sockets: {
+    ListOrderUpdated(list) {
+      if (list.listId === this.listId) {
+        this.$store.dispatch('updateListOrder', list);
       }
     }
   }
