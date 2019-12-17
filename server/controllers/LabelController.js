@@ -3,7 +3,8 @@ const Label = require('../models/Label');
 module.exports = {
   async create(req, res) {
     const label = new Label({
-      title: req.body.title
+      title: req.body.title,
+      color: req.body.color || undefined
     });
 
     try {

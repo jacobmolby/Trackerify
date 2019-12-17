@@ -8,7 +8,7 @@ const labelSchema = new mongoose.Schema({
   },
   color: {
     type: String,
-    default: '#00c1e0'
+    default: '#97dcd6'
   },
   created: {
     type: Date,

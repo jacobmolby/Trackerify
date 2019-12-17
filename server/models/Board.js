@@ -8,6 +8,7 @@ const boardSchema = new mongoose.Schema({
   },
   lists: [{ type: mongoose.Schema.Types.ObjectId, ref: 'List' }],
   users: [{ type: mongoose.Schema.Types.ObjectId, ref: 'User' }],
+  labels: [{ type: mongoose.Schema.Types.ObjectId, ref: 'Label' }],
   created: {
     type: Date,
     default: Date.now

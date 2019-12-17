@@ -43,6 +43,9 @@ module.exports = {
                   }
                 },
                 {
+                  path: 'labels'
+                },
+                {
                   path: 'assignedUsers',
                   select: ['_id', 'name', 'profileImage']
                 }
@@ -73,7 +76,7 @@ module.exports = {
       const board = await Board.findByIdAndUpdate(
         boardId,
         { $set: { title } },
-        { useFindAndModify: false, new: true }
+        { new: true }
       );
       res.send(board);
     } catch (error) {

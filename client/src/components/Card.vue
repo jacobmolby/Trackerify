@@ -1,7 +1,7 @@
 <template>
   <div class="flex flex-col flex-shrink-0 justify-between">
     <div>
-      <div class="text-xs text-gray-700 px-2 inline-block bg-teal-400 rounded-lg">Low Priority</div>
+      <Label v-for="label in card.labels" :key="label._id" :color="label.color">{{label.title}}</Label>
     </div>
     <span class="text-sm leading-snug text-gray-600">
       <button @click="isOpen = !isOpen" class="text-left">{{card.title}}</button>
@@ -50,6 +50,9 @@
         </div>
       </div>
     </div>
+
+    <!-- CARD POPUP -->
+
     <portal to="popup-container" v-if="isOpen">
       <button @click="isOpen = false" tabindex="-1" class="popup-bg"></button>
       <div class="popup">
@@ -57,16 +60,16 @@
           <h2 v-if="!isEditing" class="text-lg font-bold">{{title}}</h2>
           <input
             v-else-if="isEditing"
-            class="px-1 text-lg font-bold bg-gray-200 border rounded focus:outline-none"
+            class="px-1 text-lg w-full font-bold bg-gray-100 border rounded focus:outline-none"
             type="text"
             v-model="title"
           />
         </div>
-        <div class="py-2 flex items-center justify-between text-sm border-b-2 border-gray-200">
+        <div class="py-2 flex items-center justify-between text-sm border-b border-gray-300">
           <textarea
             v-model="description"
             :disabled="!this.isEditing"
-            :class="[(isEditing ? 'bg-gray-200 border' : ''),(description == 'No description' ? 'italic' : '')]"
+            :class="[(isEditing ? 'bg-gray-100 border' : ''),(description == 'No description' ? 'italic' : '')]"
             class="w-10/12 h-16 py-1 bg-transparent resize-none outline-none rounded"
           ></textarea>
           <button
@@ -80,8 +83,10 @@
             @click="updateCard"
           >Save</button>
         </div>
-
-        <div class="py-2 flex items-center justify-between border-b-2 border-gray-200">
+        <div v-if="card.labels.length > 0" class="py-2 border-b border-gray-300">
+          <Label v-for="label in card.labels" :key="label._id" :color="label.color">{{label.title}}</Label>
+        </div>
+        <div class="py-2 flex items-center justify-between border-b border-gray-300">
           <h3 class="text-md font-medium">Assigned to:</h3>
           <div class="flex justify-end">
             <AddUserToCard :assignedUsers="card.assignedUsers" :cardId="card._id" class="mr-3 flex"></AddUserToCard>
@@ -143,6 +148,7 @@ import CardService from '@/services/CardService';
 import Comment from '@/components/Comment';
 import AddComment from '@/components/AddComment';
 import AddUserToCard from '@/components/AddUserToCard';
+import Label from '@/components/Label';
 import UserCardService from '@/services/UserCardService';
 
 export default {
@@ -150,7 +156,8 @@ export default {
   components: {
     Comment,
     AddComment,
-    AddUserToCard
+    AddUserToCard,
+    Label
   },
   props: { cardId: String },
   data() {
