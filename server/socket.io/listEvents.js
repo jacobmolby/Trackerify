@@ -8,7 +8,12 @@ module.exports = socket => {
   });
 
   //update list order (draggable)
+  socket.on('updateCardOrder', listOrder => {
+    socket.broadcast.to(listOrder.boardId).emit('updateCardOrder', listOrder);
+  });
   socket.on('updateListOrder', listOrder => {
-    socket.broadcast.to(listOrder.boardId).emit('updateListOrder', listOrder);
+    socket.broadcast
+      .to(listOrder.boardId)
+      .emit('updateListOrder', listOrder.lists);
   });
 };

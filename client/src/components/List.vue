@@ -52,7 +52,7 @@ export default {
         console.log(error);
       }
     },
-    async updateListOrder(payload) {
+    async updateCardOrder(payload) {
       try {
         const response = (await ListService.put(payload)).data;
       } catch (error) {
@@ -88,10 +88,9 @@ export default {
             boardId: this.boardId
           };
 
-          this.updateListOrder(payload);
-          this.$store.dispatch('updateListOrder', payload);
-          this.$socket.emit('updateListOrder', payload);
-          this.$socket.emit('CUSTOM', payload);
+          this.updateCardOrder(payload);
+          this.$store.dispatch('updateCardOrder', payload);
+          this.$socket.emit('updateCardOrder', payload);
         } catch (error) {
           console.log(error);
         }

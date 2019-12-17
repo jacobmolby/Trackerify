@@ -147,9 +147,12 @@ export const store = new Vuex.Store({
         .cards.find(card => card._id === cardId)
         .assignedUsers.filter(user => user._id !== userId);
     },
-    updateListOrder(state, payload) {
+    updateCardOrder(state, payload) {
       const { cards, listId } = payload;
       state.board.lists.find(list => list._id === listId).cards = cards;
+    },
+    updateListOrder(state, lists) {
+      state.board.lists = lists;
     }
   },
   actions: {
@@ -206,8 +209,11 @@ export const store = new Vuex.Store({
     removeUserFromCard({ commit }, payload) {
       commit('removeUserFromCard', payload);
     },
-    updateListOrder({ commit }, value) {
-      commit('updateListOrder', value);
+    updateCardOrder({ commit }, value) {
+      commit('updateCardOrder', value);
+    },
+    updateListOrder({ commit }, lists) {
+      commit('updateListOrder', lists);
     }
   }
 });

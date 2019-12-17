@@ -22,8 +22,11 @@ export default {
     SOCKET_updateBoard({ commit }, board) {
       commit('updateBoard', board, { root: true });
     },
-    SOCKET_updateListOrder({ commit }, list) {
-      commit('updateListOrder', list, { root: true });
+    SOCKET_updateCardOrder({ commit }, list) {
+      commit('updateCardOrder', list, { root: true });
+    },
+    SOCKET_updateListOrder({ commit }, lists) {
+      commit('updateListOrder', lists, { root: true });
     },
     SOCKET_deleteBoard({ commit }, boardId) {
       commit('deleteBoard', boardId, { root: true });

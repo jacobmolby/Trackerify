@@ -30,6 +30,7 @@ module.exports = {
         profileImage
       });
       user.password = undefined;
+      user.created = undefined;
 
       const savedUser = await user.save();
       const savedUserJson = savedUser.toJSON();
@@ -56,6 +57,8 @@ module.exports = {
       return res.status(403).send({ error: 'Password is wrong.' });
 
     user.password = undefined;
+    user.created = undefined;
+
     const userJson = user.toJSON();
 
     //Create and assign JWT

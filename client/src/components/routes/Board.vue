@@ -1,6 +1,5 @@
 <template>
   <!-- <div style="height: calc(100% - 4em);" class="bg-white flex min-w-screen"> -->
-  <!-- <nav-bar></!-->
 
   <div>
     <main v-if="board" class="px-10">
@@ -56,12 +55,21 @@
       </div>
       <!-- BOARD AREA -->
       <div class="overflow-x-auto">
-        <div v-if="board.lists" class="py-6 h-full inline-flex flex-shrink-0 items-start">
-          <div v-for="list in board.lists" :key="list._id">
-            <div v-if="list.cards">
-              <List :listId="list._id" :title="list.title" :listColor="list.color"></List>
+        <div v-if="lists">
+          <draggable
+            class="py-6 h-full inline-flex flex-shrink-0 items-start"
+            group="list"
+            tag="div"
+            v-model="lists"
+            @start="drag=true"
+            @end="drag=false"
+          >
+            <div v-for="list in lists" :key="list._id">
+              <div v-if="list.cards">
+                <List :listId="list._id" :title="list.title" :listColor="list.color"></List>
+              </div>
             </div>
-          </div>
+          </draggable>
         </div>
       </div>
     </main>
@@ -77,6 +85,7 @@ import AddUserToBoard from '@/components/AddUserToBoard';
 import DeleteBoard from '@/components/DeleteBoard';
 import BoardService from '@/services/BoardService';
 import UserBoardService from '@/services/UserBoardService';
+import draggable from 'vuedraggable';
 export default {
   name: 'Board',
   data() {
@@ -91,10 +100,31 @@ export default {
     List,
     AddList,
     AddUserToBoard,
-    DeleteBoard
+    DeleteBoard,
+    draggable
   },
   computed: {
-    ...mapState(['board'])
+    ...mapState(['board']),
+    lists: {
+      get() {
+        return this.$store.state.board.lists;
+      },
+      set(lists) {
+        console.log(lists);
+
+        try {
+          const payload = {
+            lists,
+            boardId: this.boardId
+          };
+          this.updateListOrder(payload);
+          this.$store.dispatch('updateListOrder', lists);
+          this.$socket.emit('updateListOrder', payload);
+        } catch (error) {
+          console.log(error);
+        }
+      }
+    }
   },
   async mounted() {
     try {
@@ -104,12 +134,19 @@ export default {
       this.title = this.board.title;
       this.$socket.emit('setBoard', board);
     } catch (error) {
-      // this.$router.push({ path: '/board' });
-      // alert(error.response.data.error + 'Please logout and in again');
-      console.log(error);
+      console.log(error.response.data.error);
     }
   },
   methods: {
+    async updateListOrder(payload) {
+      payload.lists = payload.lists.map(list => list._id);
+      console.log(payload);
+      // try {
+      //   const response = (await ListOrderService.put(payload)).data;
+      // } catch (error) {
+      //   console.log(error.response.data.error);
+      // }
+    },
     async removeUser(userId) {
       this.removeUserError = null;
       if (userId === this.$store.state.user._id) {
@@ -124,8 +161,6 @@ export default {
         this.$store.dispatch('removeUserFromBoard', storePayload);
         this.$socket.emit('removeUserFromBoard', storePayload);
       } catch (error) {
-        console.log('error occured');
-
         console.log(error.response.data.error);
       }
     },
