@@ -85,6 +85,7 @@ import AddUserToBoard from '@/components/AddUserToBoard';
 import DeleteBoard from '@/components/DeleteBoard';
 import BoardService from '@/services/BoardService';
 import UserBoardService from '@/services/UserBoardService';
+import ListOrderService from '@/services/ListOrderService';
 import draggable from 'vuedraggable';
 export default {
   name: 'Board',
@@ -110,8 +111,6 @@ export default {
         return this.$store.state.board.lists;
       },
       set(lists) {
-        console.log(lists);
-
         try {
           const payload = {
             lists,
@@ -140,12 +139,11 @@ export default {
   methods: {
     async updateListOrder(payload) {
       payload.lists = payload.lists.map(list => list._id);
-      console.log(payload);
-      // try {
-      //   const response = (await ListOrderService.put(payload)).data;
-      // } catch (error) {
-      //   console.log(error.response.data.error);
-      // }
+      try {
+        const response = (await ListOrderService.put(payload)).data;
+      } catch (error) {
+        console.log(error.response.data.error);
+      }
     },
     async removeUser(userId) {
       this.removeUserError = null;

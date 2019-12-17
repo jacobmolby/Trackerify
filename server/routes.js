@@ -7,6 +7,7 @@ const labelRoutes = require('./routes/label');
 const attachmentRoutes = require('./routes/attachment');
 const userBoardRoutes = require('./routes/userBoard');
 const userCardRoutes = require('./routes/userCard');
+const listOrderRoutes = require('./routes/listOrder');
 
 module.exports = app => {
   app.use('/api/auth', authRoutes);
@@ -18,4 +19,5 @@ module.exports = app => {
   app.use('/api/attachment', attachmentRoutes);
   app.use('/api/board/user', userBoardRoutes);
   app.use('/api/card/user', userCardRoutes);
+  app.use('/api/list/order', listOrderRoutes);
 };

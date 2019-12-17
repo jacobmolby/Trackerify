@@ -44,7 +44,6 @@ export default {
       try {
         const board = (await BoardService.post({ title: this.title })).data;
 
-        console.log(board);
         this.$store.dispatch('createBoard', board);
 
         //reset component
