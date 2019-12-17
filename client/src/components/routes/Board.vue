@@ -104,8 +104,8 @@ export default {
       this.title = this.board.title;
       this.$socket.emit('setBoard', board);
     } catch (error) {
-      this.$router.push({ path: '/board' });
-      alert(error.response.data.error + 'Please logout and in again');
+      // this.$router.push({ path: '/board' });
+      // alert(error.response.data.error + 'Please logout and in again');
       console.log(error);
     }
   },

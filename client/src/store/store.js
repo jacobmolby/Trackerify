@@ -153,6 +153,11 @@ export const store = new Vuex.Store({
     }
   },
   actions: {
+    logout({ commit }) {
+      commit('setToken', null);
+      commit('setUser', null);
+      commit('setBoard', null);
+    },
     setToken({ commit }, token) {
       commit('setToken', token);
     },
