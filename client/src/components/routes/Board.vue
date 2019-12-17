@@ -116,9 +116,10 @@ export default {
             lists,
             boardId: this.boardId
           };
+
           this.updateListOrder(payload);
           this.$store.dispatch('updateListOrder', lists);
-          this.$socket.emit('updateListOrder', payload);
+          this.$socket.emit('updateListOrder', lists);
         } catch (error) {
           console.log(error);
         }

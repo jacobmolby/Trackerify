@@ -11,9 +11,7 @@ module.exports = socket => {
   socket.on('updateCardOrder', listOrder => {
     socket.broadcast.to(listOrder.boardId).emit('updateCardOrder', listOrder);
   });
-  socket.on('updateListOrder', listOrder => {
-    socket.broadcast
-      .to(listOrder.boardId)
-      .emit('updateListOrder', listOrder.lists);
+  socket.on('updateListOrder', lists => {
+    socket.broadcast.to(lists[0].boardId).emit('updateListOrder', lists);
   });
 };

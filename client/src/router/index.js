@@ -9,9 +9,14 @@ const router = new VueRouter({
 router.beforeEach((to, from, next) => {
   const publicPages = ['/login', '/', '/register'];
   const authRequired = !publicPages.includes(to.path);
-  const token = JSON.parse(localStorage.getItem('vuex')).token;
+  let token;
+  if (localStorage.getItem('vuex')) {
+    token = JSON.parse(localStorage.getItem('vuex')).token;
+  } else {
+    token = false;
+  }
 
-  var current_time = Date.now().valueOf() / 1000;
+  const current_time = Date.now().valueOf() / 1000;
   const tokenExpired = !token ? true : jwtDecode(token).exp < current_time;
 
   // try to access a restricted page + not logged in
