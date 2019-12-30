@@ -12,7 +12,7 @@ import router from './router';
 Vue.use(VueRouter);
 Vue.use(PortalVue);
 
-const SocketInstance = io.connect('http://192.168.1.14:8000', {
+const SocketInstance = io.connect('http://localhost:8000', {
   query: {
     token: store.state.token
   }
