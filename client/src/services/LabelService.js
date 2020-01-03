@@ -4,12 +4,11 @@ export default {
   //Payload contains title,color and boardId
   post(payload) {
     return Api().post('/label', payload);
+  },
+  delete(boardId, labelId) {
+    return Api().delete(`/label/${boardId}&${labelId}`);
   }
-  // delete(listId) {
-  //   return Api().delete(`/list/${listId}`);
-  // },
   // put(payload) {
-  //   //Payload contains listId and cards, which is an array of the cards
 
   //   return Api().put(`/list/`, payload);
   // }

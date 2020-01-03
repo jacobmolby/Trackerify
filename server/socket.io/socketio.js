@@ -29,7 +29,7 @@ module.exports = io => {
     //Add, Delete, update, add user, remove user
     require('./cardEvents')(socket);
     //Add
-    require('./labelEvents')(socket);
+    require('./listEvents')(socket);
     //Add
     require('./labelEvents')(socket);
 

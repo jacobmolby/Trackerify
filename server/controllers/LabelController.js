@@ -19,28 +19,23 @@ module.exports = {
       res.status(403).send(error);
     }
   },
-  // async show(req, res) {
-  //   const list = await List.findById(req.params.id);
-  //   if (!list) {
-  //     return res.status(403).send({ error: "List doesn't exist" });
-  //   }
-  //   res.send(board.populate('cards'));
-  // },
   async destroy(req, res) {
-    const id = req.params.id;
-    const label = await Label.findById(id);
-    if (!label) {
-      return res.status(403).send({ error: "Label doesn't exist" });
-    }
-    try {
-      const result = await Label.findByIdAndDelete(id);
+    const { boardId, labelId } = req.params;
 
-      if (result) {
-        return res.send(`Label: "${result.title}" deleted`);
+    try {
+      const label = await Label.findByIdAndDelete(labelId);
+      const board = await Board.findById(boardId);
+      board.labels.pull(labelId);
+      await board.save();
+
+      if (label) {
+        return res.send(`Label: "${label.title}" deleted`);
       } else {
         return res.status(403).send({ error: 'Something went wrong' });
       }
     } catch (error) {
+      console.log(error);
+
       res.send({ error: error });
     }
   }

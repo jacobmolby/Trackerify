@@ -78,12 +78,11 @@ export default {
         };
         try {
           const label = (await LabelService.post(payload)).data;
-          console.log(label);
 
           this.$store.dispatch('addLabelToBoard', label);
           this.$socket.emit('addLabelToBoard', {
             ...label,
-            boardId: this.$store.state.boardId
+            boardId: this.$store.state.board._id
           });
           this.label.title = null;
           this.pickingColor = false;

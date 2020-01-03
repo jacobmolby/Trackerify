@@ -62,9 +62,10 @@ export default {
       commit('removeUserFromCard', payload, { root: true });
     },
     SOCKET_addLabelToBoard({ commit }, payload) {
-      console.log('SOCKET_addLabelToBoard');
-
       commit('addLabelToBoard', payload, { root: true });
+    },
+    SOCKET_removeLabelFromBoard({ commit }, labelId) {
+      commit('removeLabelFromBoard', labelId, { root: true });
     }
   }
 };

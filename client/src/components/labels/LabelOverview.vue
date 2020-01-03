@@ -24,14 +24,13 @@
         </div>
 
         <ul class="flex-col">
-          <li
-            class="mr-1 mt-2 pb-2 flex items-center justify-between border-b"
-            v-for="label in labels"
-            :key="label._id"
-          >
-            <Label :color="label.color">{{label.title}}</Label>
+          <li class="mt-2 pb-2 border-b flex" v-for="label in labels" :key="label._id">
+            <delete-popup :id="label._id" @deleteFunction="deleteLabel">{{label.title}}</delete-popup>
+            <div class="ml-3 w-full flex items-center justify-between">
+              <Label :color="label.color">{{label.title}}</Label>
 
-            <button class="hover:text-gray-900">Edit</button>
+              <button class="hover:text-gray-900">Edit</button>
+            </div>
           </li>
         </ul>
         <div class="mt-6 w-full flex justify-end">
@@ -45,11 +44,15 @@
 <script>
 import { mapState } from 'vuex';
 import Label from '@/components/labels/Label';
-import createLabel from '@/components/labels/CreateLabel';
+import CreateLabel from '@/components/labels/CreateLabel';
+import DeletePopup from '@/components/reusables/DeletePopup';
+import LabelService from '@/services/LabelService';
+
 export default {
   components: {
     Label,
-    createLabel
+    CreateLabel,
+    DeletePopup
   },
   data() {
     return {
@@ -62,6 +65,21 @@ export default {
   computed: {
     labels() {
       return this.$store.state.board.labels;
+    }
+  },
+  methods: {
+    async deleteLabel(labelId) {
+      try {
+        const boardId = this.$store.state.board._id;
+        await LabelService.delete(boardId, labelId);
+        this.$store.dispatch('removeLabelFromBoard', labelId);
+        this.$socket.emit('removeLabelFromBoard', { labelId, boardId });
+        // this.$router.push({
+        //   name: 'boardOverview'
+        // });
+      } catch (error) {
+        console.log(error.response.data.error);
+      }
     }
   },
   created() {

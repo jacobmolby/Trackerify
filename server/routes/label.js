@@ -4,6 +4,6 @@ const LabelController = require('../controllers/LabelController');
 
 router.post('/', verifyToken, LabelController.create);
 //router.get('/:id', verifyToken, LabelController.show);
-router.delete('/:id', verifyToken, LabelController.destroy);
+router.delete('/:boardId&:labelId', verifyToken, LabelController.destroy);
 
 module.exports = router;
