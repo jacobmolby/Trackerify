@@ -14,6 +14,7 @@ module.exports = io => {
 
     // Makes sure that everyone in the same board is in the same room, so only they will get the messages
     socket.on('setBoard', board => {
+      //Resets the lastBoardId which is determining the socket room
       if (socket.lastBoard) {
         socket.leave(socket.lastBoard);
         socket.lastBoard = null;

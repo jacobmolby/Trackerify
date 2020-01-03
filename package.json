@@ -1,0 +1,16 @@
+{
+  "name": "trackerify",
+  "version": "1.0.0",
+  "description": "Project managment app",
+  "main": "index.js",
+  "scripts": {
+    "start": "concurrently \"npm run start:server\" \"npm run start:client\"",
+    "start:server": "cd ./server && npm run dev",
+    "start:client": "cd ./client && npm run serve"
+  },
+  "author": "Jacob Mølby",
+  "license": "MIT",
+  "dev-dependencies": {
+    "concurrently": "^5.0.2"
+  }
+}
