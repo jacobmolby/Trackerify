@@ -1,7 +1,7 @@
 import Api from '@/services/Api';
 
 export default {
-  //Payload contains title and boardId
+  //Payload contains title,color and boardId
   post(payload) {
     return Api().post('/list', payload);
   },

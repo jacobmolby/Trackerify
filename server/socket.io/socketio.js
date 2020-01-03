@@ -29,7 +29,9 @@ module.exports = io => {
     //Add, Delete, update, add user, remove user
     require('./cardEvents')(socket);
     //Add
-    require('./commentEvents')(socket);
+    require('./labelEvents')(socket);
+    //Add
+    require('./labelEvents')(socket);
 
     socket.on('disconnect', () => {
       socket.emit('DISCONNECT');

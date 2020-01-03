@@ -148,7 +148,7 @@ import CardService from '@/services/CardService';
 import Comment from '@/components/Comment';
 import AddComment from '@/components/AddComment';
 import AddUserToCard from '@/components/AddUserToCard';
-import Label from '@/components/Label';
+import Label from '@/components/labels/Label';
 import UserCardService from '@/services/UserCardService';
 
 export default {

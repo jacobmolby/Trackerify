@@ -2,10 +2,10 @@
   <div>
     <button
       @click="isOpen = !isOpen"
-      class="ml-6 inline-flex items-center text-gray-600 hover:text-gray-900"
+      class="ml-6 inline-flex items-baseline text-gray-600 hover:text-gray-900"
     >
       <span>
-        <svg class="h-4 w-4 fill-current" viewBox="0 0 30 30">
+        <svg class="h-4 w-4 mr-2 fill-current" viewBox="0 0 20 20">
           <path d="M20.64 15.64H15.64V20.64H14V15.64H9V14H14V9H15.64V14H20.64V15.64Z" />
         </svg>
       </span>

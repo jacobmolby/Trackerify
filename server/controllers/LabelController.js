@@ -1,13 +1,18 @@
 const Label = require('../models/Label');
+const Board = require('../models/Board');
 
 module.exports = {
   async create(req, res) {
+    const { title, color, boardId } = req.body;
     const label = new Label({
-      title: req.body.title,
-      color: req.body.color || undefined
+      title,
+      color: color || undefined
     });
-
+    //Maybe boardId should be part of the label model
     try {
+      const board = await Board.findById(boardId);
+      board.labels.push(label);
+      board.save();
       const savedLabel = await label.save();
       res.send(savedLabel.toJSON());
     } catch (error) {

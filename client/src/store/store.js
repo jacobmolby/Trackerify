@@ -2,12 +2,14 @@ import Vue from 'vue';
 import Vuex from 'vuex';
 import createPersistedState from 'vuex-persistedstate';
 import socketio from './socketio';
+import labels from './modules/labels';
 Vue.use(Vuex);
 
 export const store = new Vuex.Store({
   plugins: [createPersistedState()],
   modules: {
-    socketio
+    socketio,
+    labels
   },
   state: {
     token: null,

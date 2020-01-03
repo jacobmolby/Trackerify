@@ -20,6 +20,7 @@
           <delete-board :board="board" class="ml-2"></delete-board>
 
           <add-list></add-list>
+          <label-overview buttonTitle="Edit Labels"></label-overview>
         </div>
         <div class="flex">
           <div
@@ -78,15 +79,19 @@
 </template>
 
 <script>
+//Plugins
 import { mapState } from 'vuex';
+import draggable from 'vuedraggable';
+//Components
 import List from '@/components/List';
 import AddList from '@/components/AddList';
 import AddUserToBoard from '@/components/AddUserToBoard';
 import DeleteBoard from '@/components/DeleteBoard';
+import LabelOverview from '@/components/labels/LabelOverview';
+//Server API
 import BoardService from '@/services/BoardService';
 import UserBoardService from '@/services/UserBoardService';
 import ListOrderService from '@/services/ListOrderService';
-import draggable from 'vuedraggable';
 export default {
   name: 'Board',
   data() {
@@ -102,6 +107,7 @@ export default {
     AddList,
     AddUserToBoard,
     DeleteBoard,
+    LabelOverview,
     draggable
   },
   computed: {
