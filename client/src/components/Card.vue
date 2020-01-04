@@ -1,7 +1,12 @@
 <template>
   <div class="flex flex-col flex-shrink-0 justify-between">
     <div>
-      <Label v-for="label in card.labels" :key="label._id" :color="label.color">{{label.title}}</Label>
+      <Label
+        class="mr-1"
+        v-for="label in card.labels"
+        :key="label._id"
+        :color="label.color"
+      >{{label.title}}</Label>
     </div>
     <span class="text-sm leading-snug text-gray-600">
       <button @click="isOpen = !isOpen" class="text-left">{{card.title}}</button>
@@ -83,8 +88,16 @@
             @click="updateCard"
           >Save</button>
         </div>
-        <div v-if="card.labels.length > 0" class="py-2 border-b border-gray-300">
-          <Label v-for="label in card.labels" :key="label._id" :color="label.color">{{label.title}}</Label>
+        <div class="flex justify-between py-2 border-b border-gray-300">
+          <div>
+            <Label
+              class="mr-1"
+              v-for="label in card.labels"
+              :key="label._id"
+              :color="label.color"
+            >{{label.title}}</Label>
+          </div>
+          <label-overview :cardId="cardId" :usedOnCard="true">Edit Labels</label-overview>
         </div>
         <div class="py-2 flex items-center justify-between border-b border-gray-300">
           <h3 class="text-md font-medium">Assigned to:</h3>
@@ -144,11 +157,13 @@
 
 <script>
 import { mapState } from 'vuex';
-import CardService from '@/services/CardService';
 import Comment from '@/components/Comment';
 import AddComment from '@/components/AddComment';
 import AddUserToCard from '@/components/AddUserToCard';
 import Label from '@/components/labels/Label';
+import LabelOverview from '@/components/labels/LabelOverview';
+
+import CardService from '@/services/CardService';
 import UserCardService from '@/services/UserCardService';
 
 export default {
@@ -157,7 +172,8 @@ export default {
     Comment,
     AddComment,
     AddUserToCard,
-    Label
+    Label,
+    LabelOverview
   },
   props: { cardId: String },
   data() {

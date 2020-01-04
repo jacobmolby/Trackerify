@@ -7,13 +7,15 @@
       <svg class="h-3 w-3 mr-2 fill-current" viewBox="0 0 20 20">
         <path d="M12.3 3.7l4 4L4 20H0v-4L12.3 3.7zm1.4-1.4L16 0l4 4-2.3 2.3-4-4z" />
       </svg>
-      {{buttonTitle}}
+      <slot></slot>
     </button>
-    <portal to="popup-container" v-if="isOpen">
+    <portal to="popup-container-important" v-if="isOpen">
       <button @click="isOpen = false" tabindex="-1" class="popup-bg"></button>
       <div class="popup">
         <div class="flex items-center justify-between">
-          <h2 class="text-left text-lg font-semibold">{{buttonTitle}}</h2>
+          <h2 class="text-left text-lg font-semibold">
+            <slot></slot>
+          </h2>
           <button @click="isOpen = !isOpen">
             <svg class="h-4 w-4 fill-current" viewBox="0 0 20 20">
               <path
@@ -27,7 +29,19 @@
           <li class="mt-2 pb-2 border-b flex" v-for="label in labels" :key="label._id">
             <delete-popup :id="label._id" @deleteFunction="deleteLabel">{{label.title}}</delete-popup>
             <div class="ml-3 w-full flex items-center justify-between">
-              <Label :color="label.color">{{label.title}}</Label>
+              <button
+                v-if="usedOnCard && !labelAlreadOnCard(label._id)"
+                @click="addLabelToCard(label)"
+              >
+                <Label :color="label.color">{{label.title}}</Label>
+              </button>
+              <div v-else class="flex items-center">
+                <svg v-if="usedOnCard" class="w-2 h-2 mr-2" viewBox="0 0 20 20">
+                  <path d="M0 11l2-2 5 5L18 3l2 2L7 18z" />
+                </svg>
+
+                <Label :color="label.color">{{label.title}}</Label>
+              </div>
 
               <button class="hover:text-gray-900">Edit</button>
             </div>
@@ -47,6 +61,8 @@ import Label from '@/components/labels/Label';
 import CreateLabel from '@/components/labels/CreateLabel';
 import DeletePopup from '@/components/reusables/DeletePopup';
 import LabelService from '@/services/LabelService';
+import LabelCardService from '@/services/LabelCardService';
+import { fireAction } from '@/services/ActionService';
 
 export default {
   components: {
@@ -60,25 +76,87 @@ export default {
     };
   },
   props: {
-    buttonTitle: String
+    usedOnCard: { type: Boolean, default: false },
+    cardId: String
   },
   computed: {
     labels() {
       return this.$store.state.board.labels;
+    },
+    boardId() {
+      return this.$store.state.board._id;
+    },
+    card() {
+      if (this.usedOnCard) {
+        return this.$store.getters.getCardById(this.cardId);
+      } else {
+        return null;
+      }
     }
   },
   methods: {
+    labelAlreadOnCard(labelId) {
+      const inCard = this.card.labels.some(label => label._id === labelId);
+      if (inCard) {
+        return true;
+      } else {
+        return false;
+      }
+    },
     async deleteLabel(labelId) {
+      if (!this.usedOnCard) {
+        try {
+          await LabelService.delete(this.boardId, labelId);
+          fireAction(
+            'removeLabelFromBoard',
+            this.$store,
+            this.$socket,
+            { labelId },
+            this.boardId
+          );
+        } catch (error) {
+          console.log(error.response.data.error);
+        }
+      } else {
+        try {
+          await LabelCardService.delete(this.cardId, labelId);
+          const payload = {
+            cardId: this.cardId,
+            labelId
+          };
+          fireAction(
+            'removeLabelFromCard',
+            this.$store,
+            this.$socket,
+            payload,
+            this.boardId
+          );
+        } catch (error) {
+          console.log(error);
+
+          // console.log(error.response.data.error);
+        }
+      }
+    },
+    async addLabelToCard(label) {
+      //TODO Check if card already has label
       try {
-        const boardId = this.$store.state.board._id;
-        await LabelService.delete(boardId, labelId);
-        this.$store.dispatch('removeLabelFromBoard', labelId);
-        this.$socket.emit('removeLabelFromBoard', { labelId, boardId });
-        // this.$router.push({
-        //   name: 'boardOverview'
-        // });
+        await LabelCardService.post(this.cardId, label._id);
+        const payload = {
+          cardId: this.cardId,
+          newLabel: label
+        };
+        fireAction(
+          'addLabelToCard',
+          this.$store,
+          this.$socket,
+          payload,
+          this.boardId
+        );
       } catch (error) {
-        console.log(error.response.data.error);
+        console.log(error);
+
+        // console.log(error.response.data.error);
       }
     }
   },

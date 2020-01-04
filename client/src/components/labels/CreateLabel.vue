@@ -3,11 +3,11 @@
     <button
       @click="isOpen = !isOpen"
       class="px-2 bg-green-400 font-semibold text-sm text-white rounded hover:bg-green-600"
-    >Add New Label</button>
-    <portal to="popup-container-important" v-if="isOpen">
+    >Create New Label</button>
+    <portal to="popup-container-more-important" v-if="isOpen">
       <div class="popup">
         <div class="flex items-center justify-between">
-          <h2 class="text-left text-lg font-semibold">Add New Label</h2>
+          <h2 class="text-left text-lg font-semibold">Create New Label</h2>
           <button @click="isOpen = !isOpen">
             <svg class="h-4 w-4 fill-current" viewBox="0 0 20 20">
               <path
@@ -25,7 +25,7 @@
           />
           <button
             :style="{'background-color':label.color.hex}"
-            class="mt-2 p-2 rounded border border-gray-400 font-extrabold"
+            class="mt-2 p-2 rounded border border-gray-400 font-extrabold text-white text-shadow"
             @click="pickingColor = !pickingColor"
           >{{this.label.color.hex}}</button>
           <chrome v-if="!pickingColor" class="mx-auto my-2 shadow-none" v-model="label.color"></chrome>
@@ -33,7 +33,7 @@
           <button
             type="submit"
             class="mt-2 py-2 text-white font-semibold bg-green-400 rounded shadow hover:bg-green-500"
-          >Add New Label</button>
+          >Create New Label</button>
         </form>
       </div>
     </portal>

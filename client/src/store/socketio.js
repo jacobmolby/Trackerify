@@ -66,6 +66,12 @@ export default {
     },
     SOCKET_removeLabelFromBoard({ commit }, labelId) {
       commit('removeLabelFromBoard', labelId, { root: true });
+    },
+    SOCKET_addLabelToCard({ commit }, payload) {
+      commit('addLabelToCard', payload, { root: true });
+    },
+    SOCKET_removeLabelFromCard({ commit }, payload) {
+      commit('removeLabelFromCard', payload, { root: true });
     }
   }
 };

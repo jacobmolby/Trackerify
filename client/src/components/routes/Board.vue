@@ -20,7 +20,7 @@
           <delete-board :board="board" class="ml-2"></delete-board>
 
           <add-list></add-list>
-          <label-overview buttonTitle="Edit Labels"></label-overview>
+          <label-overview>Edit Labels</label-overview>
         </div>
         <div class="flex">
           <div

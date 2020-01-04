@@ -1,5 +1,6 @@
 const Label = require('../models/Label');
 const Board = require('../models/Board');
+const Card = require('../models/Card');
 
 module.exports = {
   async create(req, res) {
@@ -24,9 +25,14 @@ module.exports = {
 
     try {
       const label = await Label.findByIdAndDelete(labelId);
-      const board = await Board.findById(boardId);
-      board.labels.pull(labelId);
-      await board.save();
+      const board = await Board.updateMany(
+        { labels: { _id: labelId } },
+        { $pull: { labels: { _id: labelId } } }
+      );
+      const cards = await Card.updateMany(
+        { labels: { _id: labelId } },
+        { $pull: { labels: { _id: labelId } } }
+      );
 
       if (label) {
         return res.send(`Label: "${label.title}" deleted`);
