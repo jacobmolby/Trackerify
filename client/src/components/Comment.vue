@@ -4,17 +4,48 @@
       <h3 class="font-semibold text-sm">{{comment.user.name}}</h3>
       <time :datetime="this.date" class="text-xs">{{date}}</time>
     </div>
-    <p>{{comment.content}}</p>
+    <div class="flex justify-between">
+      <p>{{comment.content}}</p>
+      <delete-popup @deleteFunction="deleteComment">{{comment.user.name}}'s comment</delete-popup>
+    </div>
   </div>
 </template>
 
 <script>
 import moment from 'moment';
+import DeletePopup from '@/components/reusables/DeletePopup';
+import CommentService from '@/services/CommentService';
 
 export default {
   name: 'comment',
+  components: {
+    DeletePopup
+  },
   props: {
     comment: Object
+  },
+  methods: {
+    async deleteComment() {
+      try {
+        // console.log(this.comment);
+
+        const result = await CommentService.delete(this.comment._id);
+        this.$store.dispatch('removeCommentFromCard', {
+          cardId: this.comment.cardId,
+          listId: this.comment.listId,
+          commentId: this.comment._id
+        });
+        // this.$socket.emit('deleteBoard', this.board._id);
+        // this.$router.push({
+        //   name: 'boardOverview'
+        // });
+        // console.log(result);
+      } catch (error) {
+        console.log('error occured');
+        console.log(error);
+        // console.log(error.response.data.error);
+      }
+    }
   },
   computed: {
     date() {

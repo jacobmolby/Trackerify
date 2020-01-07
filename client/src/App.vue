@@ -13,6 +13,7 @@
     <portal-target name="popup-container-important"></portal-target>
     <portal-target name="popup-container-more-important"></portal-target>
     <portal-target name="delete-popup"></portal-target>
+    <portal-target name="connection-lost"></portal-target>
   </div>
 </template>
 

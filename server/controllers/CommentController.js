@@ -26,17 +26,23 @@ module.exports = {
     }
   },
   async destroy(req, res) {
-    const userid = req.user._id;
-    const { id } = req.params;
-    const comment = await Comment.findById(id);
+    console.log('Delete comment');
 
-    if (!comment) {
-      return res.status(400).send({ error: "Comment doesn't exist" });
-    } else if (comment.user != userid) {
-      return res.status(403).send({ error: 'Access Denied' });
-    }
+    const userid = req.user._id;
+    const { commentId } = req.params;
+
     try {
-      const result = await Comment.findByIdAndDelete(id);
+      const comment = await Comment.findById(commentId);
+
+      if (!comment) {
+        return res.status(400).send({ error: "Comment doesn't exist" });
+      } else if (comment.user != userid) {
+        return res.status(403).send({ error: 'Access Denied' });
+      }
+      const card = await Card.findById(comment.cardId);
+      card.comments.pull(commentId);
+      card.save();
+      const result = await Comment.findByIdAndDelete(commentId);
 
       if (result) {
         return res.send(`Comment with content: "${result.content}" deleted`);
@@ -44,7 +50,9 @@ module.exports = {
         return res.status(403).send({ error: 'Something went wrong' });
       }
     } catch (error) {
-      res.send({ error: error });
+      console.log(error);
+
+      res.status(403).send({ error: error });
     }
   }
 };

@@ -4,9 +4,8 @@ export default {
   //Payload contains content and cardId
   post(payload) {
     return Api().post('/comment', payload);
+  },
+  delete(commentId) {
+    return Api().delete(`/comment/${commentId}`);
   }
-  // ,
-  // delete(cardId) {
-  //   return Api().delete(`/card/${cardId}`);
-  // }
 };

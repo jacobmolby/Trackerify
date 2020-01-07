@@ -44,7 +44,8 @@ export default {
   },
   computed: {
     ...mapState(['user'])
-  }
+  },
+  mounted() {}
 };
 </script>
 

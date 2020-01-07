@@ -29,10 +29,10 @@ module.exports = {
         password: hashPassword,
         profileImage
       });
+      const savedUser = await user.save();
       user.password = undefined;
       user.created = undefined;
 
-      const savedUser = await user.save();
       const savedUserJson = savedUser.toJSON();
       //Respond with the user id
       res.send({

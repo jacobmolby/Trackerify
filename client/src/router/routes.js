@@ -1,9 +1,9 @@
-import Home from '@/components/routes/Home';
-import Settings from '@/components/routes/Settings';
-import Login from '@/components/routes/Login';
-import Register from '@/components/routes/Register';
-import Board from '@/components/routes/Board';
-import BoardOverview from '@/components/routes/BoardOverview';
+import Home from '@/views/Home';
+import Settings from '@/views/Settings';
+import Login from '@/views/Login';
+import Register from '@/views/Register';
+import Board from '@/views/Board';
+import BoardOverview from '@/views/BoardOverview';
 
 const routes = [
   {

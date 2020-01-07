@@ -1,5 +1,7 @@
 module.exports = socket => {
   socket.on('addList', list => {
+    console.log(list);
+
     socket.broadcast.to(list.boardId).emit('addList', list);
   });
 

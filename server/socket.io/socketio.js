@@ -29,9 +29,19 @@ module.exports = io => {
     //Add, Delete, update, add user, remove user
     require('./cardEvents')(socket);
     //Add
-    require('./listEvents')(socket);
+    require('./commentEvents')(socket);
     //Add
     require('./labelEvents')(socket);
+
+    socket.on('vuexEvent', payload => {
+      //The payload is an object with
+      //{boardId: "5as4d65a4sd4asdasd",
+      // actionName: "deleteBoard",
+      // actionPayload:{Action payload}}
+      const { boardId, actionName, actionPayload } = payload;
+
+      socket.broadcast.to(boardId).emit(actionName, actionPayload);
+    });
 
     socket.on('disconnect', () => {
       socket.emit('DISCONNECT');

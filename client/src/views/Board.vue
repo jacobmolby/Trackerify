@@ -2,7 +2,10 @@
   <!-- <div style="height: calc(100% - 4em);" class="bg-white flex min-w-screen"> -->
 
   <div>
-    <main v-if="board" class="px-10">
+    <div v-if="!board || board._id !== boardId" class="mt-10 flex items-center justify-center">
+      <h1 class="font-bold text-4xl">Loading</h1>
+    </div>
+    <main v-if="board && board._id === boardId" class="px-10">
       <!-- OVER THE lists -->
       <div class="ml-2 pt-6 flex justify-between items-center">
         <div class="inline-flex items-baseline">
@@ -74,8 +77,8 @@
         </div>
       </div>
     </main>
+    <connection-lost></connection-lost>
   </div>
-  <!-- </div> -->
 </template>
 
 <script>
@@ -88,6 +91,7 @@ import AddList from '@/components/AddList';
 import AddUserToBoard from '@/components/AddUserToBoard';
 import DeleteBoard from '@/components/DeleteBoard';
 import LabelOverview from '@/components/labels/LabelOverview';
+import ConnectionLost from '@/components/reusables/ConnectionLost';
 //Server API
 import BoardService from '@/services/BoardService';
 import UserBoardService from '@/services/UserBoardService';
@@ -108,7 +112,8 @@ export default {
     AddUserToBoard,
     DeleteBoard,
     LabelOverview,
-    draggable
+    draggable,
+    ConnectionLost
   },
   computed: {
     ...mapState(['board']),

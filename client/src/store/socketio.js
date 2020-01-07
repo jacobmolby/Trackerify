@@ -72,6 +72,9 @@ export default {
     },
     SOCKET_removeLabelFromCard({ commit }, payload) {
       commit('removeLabelFromCard', payload, { root: true });
+    },
+    SOCKET_removeCommentFromCard({ commit }, payload) {
+      commit('removeCommentFromCard', payload, { root: true });
     }
   }
 };
