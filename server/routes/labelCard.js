@@ -1,5 +1,5 @@
 const router = require('express').Router();
-const verifyToken = require('../policies/verifyToken');
+const verifyToken = require('../middleware/verifyToken');
 const LabelCardController = require('../controllers/LabelCardController');
 
 router.post('/', verifyToken, LabelCardController.create);

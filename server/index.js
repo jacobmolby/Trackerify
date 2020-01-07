@@ -17,6 +17,17 @@ const DB_COLLECTION =
   process.env.DB_COLLECTION || 'test?retryWrites=true&w=majority';
 const connectionString = `mongodb+srv://${DB_USER}:${DB_PASS}@${DB_URL}${DB_COLLECTION}`;
 
+console.log = (function(log, inspect) {
+  return function() {
+    return log.apply(
+      this,
+      Array.prototype.map.call(arguments, function(arg) {
+        return inspect(arg, { depth: 1, colors: true });
+      })
+    );
+  };
+})(console.log, require('util').inspect);
+
 // Connect to DB
 mongoose.connect(
   connectionString,

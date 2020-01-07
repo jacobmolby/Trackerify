@@ -1,3 +1,4 @@
+import Vue from 'vue';
 export default {
   mutations: {
     addLabelToBoard(localState, label) {
@@ -56,7 +57,7 @@ export default {
       let labelIndex = this.state.board.labels.findIndex(
         label => label._id === _id
       );
-      this.state.board.labels[labelIndex] = updatedLabel;
+      Vue.set(this.state.board.labels, labelIndex, updatedLabel);
 
       this.state.board.lists.forEach(list => {
         list.cards.forEach(card => {
