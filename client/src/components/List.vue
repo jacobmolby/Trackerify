@@ -15,7 +15,15 @@
     <!-- List CONTENT -->
 
     <!-- <ul> -->
-    <draggable group="card" tag="ul" v-model="cards" @start="drag=true" @end="drag=false">
+    <draggable
+      animation="50"
+      ghost-class="bg-blue-200"
+      group="card"
+      tag="ul"
+      v-model="cards"
+      @start="drag=true"
+      @end="drag=false"
+    >
       <li v-for="card in cards" :key="card._id" class="my-2 px-3 py-3 bg-white shadow rounded">
         <!-- {{card.title}} -->
         <card :cardId="card._id"></card>
