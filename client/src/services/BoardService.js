@@ -1,6 +1,10 @@
 import Api from '@/services/Api';
 
 export default {
+  index() {
+    return Api().get('board');
+  },
+
   show(boardId) {
     return Api().get(`board/${boardId}`);
   },

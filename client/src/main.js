@@ -2,7 +2,7 @@ import Vue from 'vue';
 import App from './App.vue';
 import VueRouter from 'vue-router';
 import { store } from '@/store/store';
-import * as io from 'socket.io-client';
+import SocketInstance from '@/socketInstance';
 import VueSocketIO from 'vue-socket.io';
 import PortalVue from 'portal-vue';
 import '@/assets/css/tailwind.css';
@@ -12,11 +12,6 @@ import router from './router';
 Vue.use(VueRouter);
 Vue.use(PortalVue);
 
-const SocketInstance = io.connect('http://localhost:8000', {
-  query: {
-    token: store.state.token
-  }
-});
 Vue.use(
   new VueSocketIO({
     debug: true,

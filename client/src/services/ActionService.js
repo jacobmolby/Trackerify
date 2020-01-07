@@ -1,4 +1,8 @@
-export function fireAction(actionName, store, socket, actionPayload, boardId) {
+import { store } from '@/store/store';
+import socket from '@/socketInstance';
+
+export function fireAction(actionName, actionPayload) {
+  const boardId = store.state.board._id;
   if (typeof actionName !== 'string') {
     return console.error('The action must be of type string.');
   }
@@ -16,8 +20,7 @@ export function fireAction(actionName, store, socket, actionPayload, boardId) {
     //TODO Make all store actions depend on objects, to be consistent
     // store.dispatch(actionName, Object.values(actionPayload)[0]);
   }
-  //Adds the boardId to the payload and sends it to the websocket server
-  // payload.boardId = boardId;
-  // socket.emit(action, payload);
+  //Sends it to the websocket server
+
   socket.emit('vuexEvent', { boardId, actionName, actionPayload });
 }

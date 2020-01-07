@@ -5,6 +5,14 @@ const defaultLabels = require('../util/DefaultLabels');
 
 const mongoose = require('mongoose');
 module.exports = {
+  async index(req, res) {
+    const userId = req.user._id;
+
+    try {
+      const boards = await Board.find({ users: userId }).populate();
+      res.send(boards);
+    } catch (error) {}
+  },
   async create(req, res) {
     //Creates 5 default labels
     const labels = await Label.create(defaultLabels);

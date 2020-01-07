@@ -7,9 +7,8 @@ export default {
   },
   delete(boardId, labelId) {
     return Api().delete(`/label/${boardId}&${labelId}`);
+  },
+  put(payload) {
+    return Api().put(`/label/`, payload);
   }
-  // put(payload) {
-
-  //   return Api().put(`/list/`, payload);
-  // }
 };

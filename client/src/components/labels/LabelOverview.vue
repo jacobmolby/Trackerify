@@ -27,7 +27,12 @@
 
         <ul class="flex-col">
           <li class="mt-2 pb-2 border-b flex" v-for="label in labels" :key="label._id">
-            <delete-popup :id="label._id" @deleteFunction="deleteLabel">{{label.title}}</delete-popup>
+            <delete-popup
+              v-if="!usedOnCard || labelAlreadOnCard(label._id)"
+              :deleteText="usedOnCard ? 'remove':'delete'"
+              :id="label._id"
+              @deleteFunction="deleteLabel"
+            >{{label.title}}</delete-popup>
             <div class="ml-3 w-full flex items-center justify-between">
               <button
                 v-if="usedOnCard && !labelAlreadOnCard(label._id)"
@@ -43,7 +48,8 @@
                 <Label :color="label.color">{{label.title}}</Label>
               </div>
 
-              <button class="hover:text-gray-900">Edit</button>
+              <!-- <button class="hover:text-gray-900">Edit</button> -->
+              <edit-label :label="label"></edit-label>
             </div>
           </li>
         </ul>
@@ -58,6 +64,7 @@
 <script>
 import { mapState } from 'vuex';
 import Label from '@/components/labels/Label';
+import EditLabel from '@/components/labels/EditLabel';
 import CreateLabel from '@/components/labels/CreateLabel';
 import DeletePopup from '@/components/reusables/DeletePopup';
 import LabelService from '@/services/LabelService';
@@ -68,6 +75,7 @@ export default {
   components: {
     Label,
     CreateLabel,
+    EditLabel,
     DeletePopup
   },
   data() {
@@ -80,12 +88,11 @@ export default {
     cardId: String
   },
   computed: {
-    labels() {
-      return this.$store.state.board.labels;
-    },
-    boardId() {
-      return this.$store.state.board._id;
-    },
+    ...mapState({
+      boardId: state => state.board._id,
+      labels: state => state.board.labels
+    }),
+
     card() {
       if (this.usedOnCard) {
         return this.$store.getters.getCardById(this.cardId);
@@ -107,30 +114,17 @@ export default {
       if (!this.usedOnCard) {
         try {
           await LabelService.delete(this.boardId, labelId);
-          fireAction(
-            'removeLabelFromBoard',
-            this.$store,
-            this.$socket,
-            { labelId },
-            this.boardId
-          );
+          fireAction('removeLabelFromBoard', { labelId });
         } catch (error) {
           console.log(error.response.data.error);
         }
       } else {
         try {
           await LabelCardService.delete(this.cardId, labelId);
-          const payload = {
+          fireAction('removeLabelFromCard', {
             cardId: this.cardId,
             labelId
-          };
-          fireAction(
-            'removeLabelFromCard',
-            this.$store,
-            this.$socket,
-            payload,
-            this.boardId
-          );
+          });
         } catch (error) {
           console.log(error);
 
@@ -139,24 +133,14 @@ export default {
       }
     },
     async addLabelToCard(label) {
-      //TODO Check if card already has label
       try {
         await LabelCardService.post(this.cardId, label._id);
-        const payload = {
+        fireAction('addLabelToCard', {
           cardId: this.cardId,
           newLabel: label
-        };
-        fireAction(
-          'addLabelToCard',
-          this.$store,
-          this.$socket,
-          payload,
-          this.boardId
-        );
+        });
       } catch (error) {
         console.log(error);
-
-        // console.log(error.response.data.error);
       }
     }
   },

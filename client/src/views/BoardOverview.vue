@@ -36,7 +36,7 @@
 <script>
 import { mapState } from 'vuex';
 import CreateBoard from '@/components/CreateBoard';
-
+import BoardService from '@/services/BoardService';
 export default {
   name: 'boardOverview',
   components: {
@@ -45,7 +45,19 @@ export default {
   computed: {
     ...mapState(['user'])
   },
-  mounted() {}
+  methods: {
+    async loadBoards() {
+      try {
+        const boards = (await BoardService.index()).data;
+        this.$store.dispatch('setBoardOverview', boards);
+      } catch (error) {
+        console.error(error);
+      }
+    }
+  },
+  mounted() {
+    this.loadBoards();
+  }
 };
 </script>
 

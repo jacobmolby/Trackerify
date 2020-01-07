@@ -49,9 +49,8 @@ module.exports = {
   },
   async update(req, res) {
     const { title, description, cardId } = req.body;
-    let response;
     try {
-      response = await Card.findByIdAndUpdate(
+      const response = await Card.findByIdAndUpdate(
         { _id: cardId },
         { title, description },
         { new: true, useFindAndModify: false }

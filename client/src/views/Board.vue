@@ -61,6 +61,8 @@
       <div class="overflow-x-auto">
         <div v-if="lists">
           <draggable
+            animation="50"
+            ghost-class="bg-blue-200"
             class="py-6 h-full inline-flex flex-shrink-0 items-start"
             group="list"
             tag="div"
@@ -68,7 +70,7 @@
             @start="drag=true"
             @end="drag=false"
           >
-            <div v-for="list in lists" :key="list._id">
+            <div class="rounded-lg" v-for="list in lists" :key="list._id">
               <div v-if="list.cards">
                 <List :listId="list._id" :title="list.title" :listColor="list.color"></List>
               </div>
@@ -103,7 +105,8 @@ export default {
       boardId: this.$route.params.boardId,
       removeUserError: null,
       editingTitle: false,
-      title: ''
+      title: '',
+      drag: false
     };
   },
   components: {

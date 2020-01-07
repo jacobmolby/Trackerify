@@ -47,6 +47,27 @@ export default {
       cardWithLabel.labels = cardWithLabel.labels.filter(label => {
         return label._id !== labelId;
       });
+    },
+    updateLabel(localState, updatedLabel) {
+      const { _id, color, title } = updatedLabel;
+
+      //Using this.state to access the store
+
+      let labelIndex = this.state.board.labels.findIndex(
+        label => label._id === _id
+      );
+      this.state.board.labels[labelIndex] = updatedLabel;
+
+      this.state.board.lists.forEach(list => {
+        list.cards.forEach(card => {
+          card.labels.forEach(label => {
+            if (label._id === _id) {
+              label.color = color;
+              label.title = title;
+            }
+          });
+        });
+      });
     }
   },
   actions: {
@@ -61,6 +82,9 @@ export default {
     },
     removeLabelFromCard({ commit }, payload) {
       commit('removeLabelFromCard', payload);
+    },
+    updateLabel({ commit }, payload) {
+      commit('updateLabel', payload);
     }
   }
 };

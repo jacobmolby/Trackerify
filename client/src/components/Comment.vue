@@ -15,6 +15,7 @@
 import moment from 'moment';
 import DeletePopup from '@/components/reusables/DeletePopup';
 import CommentService from '@/services/CommentService';
+import { fireAction } from '@/services/ActionService';
 
 export default {
   name: 'comment',
@@ -30,16 +31,11 @@ export default {
         // console.log(this.comment);
 
         const result = await CommentService.delete(this.comment._id);
-        this.$store.dispatch('removeCommentFromCard', {
+        fireAction('removeCommentFromCard', {
           cardId: this.comment.cardId,
           listId: this.comment.listId,
           commentId: this.comment._id
         });
-        // this.$socket.emit('deleteBoard', this.board._id);
-        // this.$router.push({
-        //   name: 'boardOverview'
-        // });
-        // console.log(result);
       } catch (error) {
         console.log('error occured');
         console.log(error);

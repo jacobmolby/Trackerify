@@ -1,7 +1,7 @@
 <template>
   <div>
-    <button @click="isOpen = !isOpen">
-      <svg class="h-3 w-3 fill-current text-red-600" viewBox="0 0 20 20">
+    <button class="focus:outline-none" @click="isOpen = !isOpen">
+      <svg class="h-3 w-3 fill-current text-red-600 hover:text-red-800" viewBox="0 0 20 20">
         <path d="M6 2l2-2h4l2 2h4v2H2V2h4zM3 6h14l-1 14H4L3 6zm5 2v10h1V8H8zm3 0v10h1V8h-1z" />
       </svg>
     </button>
@@ -9,7 +9,7 @@
       <button @click="isOpen = false" tabindex="-1" class="popup-bg"></button>
       <div class="popup">
         <h2 class="text-left text-lg font-semibold">
-          Are you sure you want to delete:
+          Are you sure you want to {{deleteText}}:
           <span class="font-bold text-gray-800">
             <slot></slot>
           </span>
@@ -38,6 +38,8 @@ export default {
   },
   props: {
     //Maybe needs to be an object later
+    deleteText: { type: String, default: 'delete' },
+
     id: String
   },
   methods: {

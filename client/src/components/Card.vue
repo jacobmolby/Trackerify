@@ -61,14 +61,24 @@
     <portal to="popup-container" v-if="isOpen">
       <button @click="isOpen = false" tabindex="-1" class="popup-bg"></button>
       <div class="popup">
-        <div class="flex items-center">
-          <h2 v-if="!isEditing" class="text-lg font-bold">{{title}}</h2>
-          <input
-            v-else-if="isEditing"
-            class="px-1 text-lg w-full font-bold bg-gray-100 border rounded focus:outline-none"
-            type="text"
-            v-model="title"
-          />
+        <div class="flex items-center justify-between">
+          <div class="flex items-baseline w-full">
+            <h2 v-if="!isEditing" class="text-lg font-bold">{{title}}</h2>
+            <input
+              v-else-if="isEditing"
+              class="px-1 text-lg w-full font-bold bg-gray-100 border rounded focus:outline-none"
+              type="text"
+              v-model="title"
+            />
+            <delete-popup class="ml-4" @deleteFunction="deleteCard">{{title}}</delete-popup>
+          </div>
+          <button class="ml-4" @click="isOpen = false">
+            <svg class="h-4 w-4 fill-current" viewBox="0 0 20 20">
+              <path
+                d="M10 8.586L2.929 1.515 1.515 2.929 8.586 10l-7.071 7.071 1.414 1.414L10 11.414l7.071 7.071 1.414-1.414L11.414 10l7.071-7.071-1.414-1.414L10 8.586z"
+              />
+            </svg>
+          </button>
         </div>
         <div class="py-2 flex items-center justify-between text-sm border-b border-gray-300">
           <textarea
@@ -162,9 +172,11 @@ import AddComment from '@/components/AddComment';
 import AddUserToCard from '@/components/AddUserToCard';
 import Label from '@/components/labels/Label';
 import LabelOverview from '@/components/labels/LabelOverview';
+import DeletePopup from '@/components/reusables/DeletePopup';
 
 import CardService from '@/services/CardService';
 import UserCardService from '@/services/UserCardService';
+import { fireAction } from '@/services/ActionService';
 
 export default {
   name: 'Card',
@@ -173,7 +185,8 @@ export default {
     AddComment,
     AddUserToCard,
     Label,
-    LabelOverview
+    LabelOverview,
+    DeletePopup
   },
   props: { cardId: String },
   data() {
@@ -207,9 +220,8 @@ export default {
       try {
         let deletedCard = (await CardService.delete(cardId)).data;
         //Add boardId for sockets
-        deletedCard.boardId = this.$store.state.board._id;
-        this.$store.dispatch('removeCard', deletedCard);
-        this.$socket.emit('removeCard', deletedCard);
+        const boardId = this.$store.state.board._id;
+        fireAction('removeCard', deletedCard);
         this.isOpen = false;
       } catch (error) {
         console.log(error);
@@ -260,6 +272,7 @@ export default {
       }
     }
   },
+
   mounted() {
     //FIXME Titlen ændre sig ikke når der opdateres
     this.description = this.card.description

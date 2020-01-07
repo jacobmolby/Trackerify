@@ -39,6 +39,7 @@ module.exports = io => {
       // actionName: "deleteBoard",
       // actionPayload:{Action payload}}
       const { boardId, actionName, actionPayload } = payload;
+      console.log('Vuex Event');
 
       socket.broadcast.to(boardId).emit(actionName, actionPayload);
     });

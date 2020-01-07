@@ -33,8 +33,6 @@ module.exports = {
           cardId: cardId,
           listId: card.list
         };
-        console.log(response);
-
         res.send(response);
       }
     } catch (error) {

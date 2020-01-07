@@ -2,8 +2,9 @@ import Vue from 'vue';
 import Vuex from 'vuex';
 import createPersistedState from 'vuex-persistedstate';
 import socketio from './socketio';
-import labels from './modules/labels.store.';
+import labels from './modules/labels.store';
 import comments from './modules/comments.store';
+import board from './modules/board.store';
 Vue.use(Vuex);
 
 export const store = new Vuex.Store({
@@ -11,7 +12,8 @@ export const store = new Vuex.Store({
   modules: {
     socketio,
     labels,
-    comments
+    comments,
+    board
   },
   state: {
     token: null,
@@ -62,8 +64,11 @@ export const store = new Vuex.Store({
     },
     addList(state, list) {
       state.board.lists.push(list);
-      state.user.boards
-        .find(board => board._id === list.boardId)
+
+      let boards = state.user.boards
+        .find(board => {
+          return board._id === list.boardId;
+        })
         .lists.push(list._id);
     },
     addCard(state, card) {
@@ -95,13 +100,15 @@ export const store = new Vuex.Store({
         .comments.push(comment);
     },
     updateCard(state, card) {
-      const listIndex = state.board.lists.findIndex(
-        list => list._id === card.list
+      const cardIndex = state.board.lists
+        .find(list => list._id === card.list)
+        .cards.findIndex(cardIterator => cardIterator._id === card._id);
+      //Using Vue.set to change a value on an array, Vue.set(array, indexOfItem, newValue)
+      Vue.set(
+        state.board.lists.find(list => list._id === card.list).cards,
+        cardIndex,
+        card
       );
-      const cardIndex = state.board.lists[listIndex].cards.findIndex(
-        cardIterator => cardIterator._id === card._id
-      );
-      state.board.lists[listIndex].cards[cardIndex] = card;
     },
     addUserToBoard(state, payload) {
       state.board.users.push(payload.user);

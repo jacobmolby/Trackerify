@@ -20,6 +20,22 @@ module.exports = {
       res.status(403).send(error);
     }
   },
+  async update(req, res) {
+    const { labelId, color, title } = req.body;
+
+    try {
+      const label = await Label.findByIdAndUpdate(
+        labelId,
+        { $set: { title, color } },
+        { new: true }
+      );
+
+      res.send(label);
+    } catch (error) {
+      console.log(error);
+      res.status(403).send({ error });
+    }
+  },
   async destroy(req, res) {
     const { boardId, labelId } = req.params;
 
