@@ -35,7 +35,7 @@
 
 <script>
 import { mapState } from 'vuex';
-import CreateBoard from '@/components/CreateBoard';
+import CreateBoard from '@/components/board/CreateBoard';
 import BoardService from '@/services/BoardService';
 export default {
   name: 'boardOverview',

@@ -167,9 +167,9 @@
 
 <script>
 import { mapState } from 'vuex';
-import Comment from '@/components/Comment';
-import AddComment from '@/components/AddComment';
-import AddUserToCard from '@/components/AddUserToCard';
+import Comment from '@/components/comment/Comment';
+import AddComment from '@/components/comment/AddComment';
+import AddUserToCard from '@/components/card/AddUserToCard';
 import Label from '@/components/labels/Label';
 import LabelOverview from '@/components/labels/LabelOverview';
 import DeletePopup from '@/components/reusables/DeletePopup';

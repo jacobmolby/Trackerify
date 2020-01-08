@@ -3,7 +3,7 @@
 
   <div>
     <div v-if="!board || board._id !== boardId" class="mt-10 flex items-center justify-center">
-      <h1 class="font-bold text-4xl">Loading</h1>
+      <loading-spinner></loading-spinner>
     </div>
     <main v-if="board && board._id === boardId" class="px-10">
       <!-- OVER THE lists -->
@@ -72,7 +72,7 @@
           >
             <div class="rounded-lg" v-for="list in lists" :key="list._id">
               <div v-if="list.cards">
-                <List :listId="list._id" :title="list.title" :listColor="list.color"></List>
+                <List :listId="list._id" :listTitle="list.title" :listColor="list.color"></List>
               </div>
             </div>
           </draggable>
@@ -88,12 +88,13 @@
 import { mapState } from 'vuex';
 import draggable from 'vuedraggable';
 //Components
-import List from '@/components/List';
-import AddList from '@/components/AddList';
-import AddUserToBoard from '@/components/AddUserToBoard';
-import DeleteBoard from '@/components/DeleteBoard';
+import List from '@/components/list/List';
+import AddList from '@/components/list/AddList';
+import AddUserToBoard from '@/components/board/AddUserToBoard';
+import DeleteBoard from '@/components/board/DeleteBoard';
 import LabelOverview from '@/components/labels/LabelOverview';
 import ConnectionLost from '@/components/reusables/ConnectionLost';
+import LoadingSpinner from '@/components/reusables/LoadingSpinner';
 //Server API
 import BoardService from '@/services/BoardService';
 import UserBoardService from '@/services/UserBoardService';
@@ -116,7 +117,8 @@ export default {
     DeleteBoard,
     LabelOverview,
     draggable,
-    ConnectionLost
+    ConnectionLost,
+    LoadingSpinner
   },
   computed: {
     ...mapState(['board']),

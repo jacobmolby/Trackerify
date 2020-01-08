@@ -9,6 +9,7 @@ const attachmentRoutes = require('./routes/attachment');
 const userBoardRoutes = require('./routes/userBoard');
 const userCardRoutes = require('./routes/userCard');
 const listOrderRoutes = require('./routes/listOrder');
+const cardOrderRoutes = require('./routes/cardOrder');
 
 module.exports = app => {
   app.use('/api/auth', authRoutes);
@@ -22,4 +23,5 @@ module.exports = app => {
   app.use('/api/board/user', userBoardRoutes);
   app.use('/api/card/user', userCardRoutes);
   app.use('/api/list/order', listOrderRoutes);
+  app.use('/api/card/order', cardOrderRoutes);
 };

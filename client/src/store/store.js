@@ -5,6 +5,7 @@ import socketio from './socketio';
 import labels from './modules/labels.store';
 import comments from './modules/comments.store';
 import board from './modules/board.store';
+import list from './modules/list.store';
 Vue.use(Vuex);
 
 export const store = new Vuex.Store({
@@ -13,7 +14,8 @@ export const store = new Vuex.Store({
     socketio,
     labels,
     comments,
-    board
+    board,
+    list
   },
   state: {
     token: null,
