@@ -44,28 +44,34 @@ module.exports = {
     }
   },
   async login(req, res) {
-    //Check if email exists
-    const user = await User.findOne({ email: req.body.email }).populate({
-      path: 'boards',
-      select: ['_id', 'title', 'users', 'lists']
-    });
-    if (!user) return res.status(403).send({ error: "Email doesn't exist." });
+    try {
+      //Check if email exists
+      const user = await User.findOne({ email: req.body.email }).populate({
+        path: 'boards',
+        select: ['_id', 'title', 'users', 'lists']
+      });
+      if (!user) return res.status(403).send({ error: "Email doesn't exist." });
 
-    //Check correct password
-    const validPass = await bcrypt.compare(req.body.password, user.password);
-    if (!validPass)
-      return res.status(403).send({ error: 'Password is wrong.' });
+      //Check correct password
+      const validPass = await bcrypt.compare(req.body.password, user.password);
+      if (!validPass)
+        return res.status(403).send({ error: 'Password is wrong.' });
 
-    user.password = undefined;
-    user.created = undefined;
+      user.password = undefined;
+      user.created = undefined;
 
-    const userJson = user.toJSON();
+      const userJson = user.toJSON();
 
-    //Create and assign JWT
-    const token = jwtSignUser(userJson);
-    res.header('auth-token', token).send({
-      user: userJson,
-      token
-    });
+      //Create and assign JWT
+      const token = jwtSignUser(userJson);
+      res.header('auth-token', token).send({
+        user: userJson,
+        token
+      });
+    } catch (error) {
+      console.log(error);
+
+      res.status(403).send({ error });
+    }
   }
 };

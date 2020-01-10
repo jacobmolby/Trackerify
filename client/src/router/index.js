@@ -1,7 +1,7 @@
-import routes from './routes';
 import VueRouter from 'vue-router';
-import { store } from '../store/store';
 import jwtDecode from 'jwt-decode';
+import routes from './routes';
+import { store } from '../store';
 const router = new VueRouter({
   routes
 });

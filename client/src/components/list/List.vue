@@ -131,7 +131,7 @@ export default {
 
           this.updateCardOrder(payload);
           this.$store.dispatch('updateCardOrder', payload);
-          this.$socket.emit('updateCardOrder', payload);
+          // this.$socket.emit('updateCardOrder', payload);
         } catch (error) {
           console.log(error);
         }

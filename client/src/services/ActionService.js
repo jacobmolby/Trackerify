@@ -1,4 +1,4 @@
-import { store } from '@/store/store';
+import { store } from '@/store';
 import socket from '@/socketInstance';
 
 export function fireAction(actionName, actionPayload) {
@@ -22,5 +22,5 @@ export function fireAction(actionName, actionPayload) {
   }
   //Sends it to the websocket server
 
-  socket.emit('vuexEvent', { boardId, actionName, actionPayload });
+  // socket.emit('vuexEvent', { boardId, actionName, actionPayload });
 }

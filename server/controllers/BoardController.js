@@ -11,7 +11,9 @@ module.exports = {
     try {
       const boards = await Board.find({ users: userId }).populate();
       res.send(boards);
-    } catch (error) {}
+    } catch (error) {
+      res.status(400).send({ error });
+    }
   },
   async create(req, res) {
     //Creates 5 default labels

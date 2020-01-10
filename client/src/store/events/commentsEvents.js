@@ -1,10 +1,11 @@
+import CommentService from '../../services/CommentService';
+
 export default {
   mutations: {
-    removeCommentFromCard(localState, payload) {
+    removeCommentFromCard(state, payload) {
       const { cardId, commentId, listId } = payload;
-      //Using this.state to access the store
 
-      let card = this.state.board.lists
+      let card = state.board.lists
         .find(list => {
           return list._id === listId;
         })
@@ -18,7 +19,9 @@ export default {
     }
   },
   actions: {
-    removeCommentFromCard({ commit }, payload) {
+    async removeCommentFromCard({ commit }, payload) {
+      await CommentService.delete(payload.commentId);
+
       commit('removeCommentFromCard', payload);
     }
   }

@@ -41,7 +41,6 @@
 </template>
 
 <script>
-import LabelService from '@/services/LabelService';
 import { Chrome } from 'vue-color';
 
 export default {
@@ -71,17 +70,10 @@ export default {
         this.error = 'Please choose a name.';
       }
       if (this.label.title && this.label.color) {
-        const payload = {
-          title: this.label.title,
-          color: this.label.color.hex,
-          boardId: this.$store.state.board._id
-        };
         try {
-          const label = (await LabelService.post(payload)).data;
-
-          this.$store.dispatch('addLabelToBoard', label);
-          this.$socket.emit('addLabelToBoard', {
-            ...label,
+          await this.$store.dispatch('addLabelToBoard', {
+            title: this.label.title,
+            color: this.label.color.hex,
             boardId: this.$store.state.board._id
           });
           this.label.title = null;

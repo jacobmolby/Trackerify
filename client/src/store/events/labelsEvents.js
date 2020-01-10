@@ -1,4 +1,7 @@
 import Vue from 'vue';
+import LabelService from '../../services/LabelService';
+import LabelCardService from '../../services/LabelCardService';
+
 export default {
   mutations: {
     addLabelToBoard(localState, label) {
@@ -19,17 +22,16 @@ export default {
         });
       });
     },
-    addLabelToCard(localState, payload) {
+    addLabelToCard(state, payload) {
       const { cardId, newLabel } = payload;
 
       //Using this.state to access the store
       this.state.board.lists.forEach(list => {
         if (list.cards.length > 0) {
-          list.cards
-            .find(card => {
-              return card._id == cardId;
-            })
-            .labels.push(newLabel);
+          const card = list.cards.find(card => {
+            return card._id == cardId;
+          });
+          if (card) card.labels.push(newLabel);
         }
       });
     },
@@ -37,16 +39,16 @@ export default {
       const { cardId, labelId } = payload;
       //Using this.state to access the store
 
-      let cardWithLabel;
       this.state.board.lists.forEach(list => {
         if (list.cards.length > 0) {
-          cardWithLabel = list.cards.find(card => {
+          const cardWithLabel = list.cards.find(card => {
             return card._id === cardId;
           });
+          if (cardWithLabel)
+            cardWithLabel.labels = cardWithLabel.labels.filter(label => {
+              return label._id !== labelId;
+            });
         }
-      });
-      cardWithLabel.labels = cardWithLabel.labels.filter(label => {
-        return label._id !== labelId;
       });
     },
     updateLabel(localState, updatedLabel) {
@@ -72,16 +74,21 @@ export default {
     }
   },
   actions: {
-    addLabelToBoard({ commit }, label) {
+    async addLabelToBoard({ commit }, payload) {
+      const label = (await LabelService.post(payload)).data;
       commit('addLabelToBoard', label);
     },
-    removeLabelFromBoard({ commit }, labelId) {
-      commit('removeLabelFromBoard', labelId);
+    async removeLabelFromBoard({ commit }, payload) {
+      await LabelService.delete(payload);
+      commit('removeLabelFromBoard', { labelId: payload.labelId });
     },
-    addLabelToCard({ commit }, payload) {
+    async addLabelToCard({ commit }, payload) {
+      await LabelCardService.post(payload);
       commit('addLabelToCard', payload);
     },
-    removeLabelFromCard({ commit }, payload) {
+    async removeLabelFromCard({ commit }, payload) {
+      await LabelCardService.delete(payload);
+
       commit('removeLabelFromCard', payload);
     },
     updateLabel({ commit }, payload) {

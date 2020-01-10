@@ -5,7 +5,7 @@ export default {
   post(payload) {
     return Api().post('/label', payload);
   },
-  delete(boardId, labelId) {
+  delete({ boardId, labelId }) {
     return Api().delete(`/label/${boardId}&${labelId}`);
   },
   put(payload) {

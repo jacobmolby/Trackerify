@@ -44,7 +44,7 @@ export default {
             boardId: this.$store.state.board._id
           };
           this.$store.dispatch('addComment', response);
-          this.$socket.emit('addComment', response);
+          // this.$socket.emit('addComment', response);
           this.comment = '';
         } catch (error) {
           console.log(error);

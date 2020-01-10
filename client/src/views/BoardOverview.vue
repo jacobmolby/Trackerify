@@ -1,11 +1,5 @@
 <template>
   <div class="m-6">
-    <!-- <button
-      class="px-2 py-2 font-semibold bg-green-400 rounded-lg text-white focus:outline-none shadow hover:bg-green-600"
-    >-->
-    <!-- <button
-      class="bg-green-500 hover:bg-green-700 text-white font-bold py-2 px-4 rounded"
-    >Create New Board</button>-->
     <create-board></create-board>
     <div v-if="user.boards" class="my-10 flex flex-row flex-wrap justify-start">
       <router-link
@@ -30,15 +24,21 @@
       </router-link>
     </div>
     <div v-else>There are no boards</div>
+    <div v-if="error">{{error}}</div>
   </div>
 </template>
 
 <script>
-import { mapState } from 'vuex';
-import CreateBoard from '@/components/board/CreateBoard';
-import BoardService from '@/services/BoardService';
+import { mapState, mapActions } from 'vuex';
+import CreateBoard from '../components/board/CreateBoard';
+import BoardService from '../services/BoardService';
 export default {
   name: 'boardOverview',
+  data() {
+    return {
+      error: null
+    };
+  },
   components: {
     CreateBoard
   },
@@ -46,17 +46,15 @@ export default {
     ...mapState(['user'])
   },
   methods: {
-    async loadBoards() {
-      try {
-        const boards = (await BoardService.index()).data;
-        this.$store.dispatch('setBoardOverview', boards);
-      } catch (error) {
-        console.error(error);
-      }
-    }
+    ...mapActions(['setBoardOverview'])
   },
-  mounted() {
-    this.loadBoards();
+  async mounted() {
+    this.error = null;
+    try {
+      await this.setBoardOverview();
+    } catch (error) {
+      this.error = error.response.data.error;
+    }
   }
 };
 </script>

@@ -1,27 +1,38 @@
 import Vue from 'vue';
 import Vuex from 'vuex';
 import createPersistedState from 'vuex-persistedstate';
+import webSocketPlugin from './plugins/websocketPlugin';
+// import Router from '../router';
 import socketio from './socketio';
-import labels from './modules/labels.store';
-import comments from './modules/comments.store';
-import board from './modules/board.store';
-import list from './modules/list.store';
+import labels from './events/labelsEvents';
+import comments from './events/commentsEvents';
+import board from './events/boardEvents';
+import list from './events/listEvents';
+
+import AuthenticationService from '../services/AuthenticationService';
+
 Vue.use(Vuex);
 
 export const store = new Vuex.Store({
-  plugins: [createPersistedState()],
+  plugins: [
+    createPersistedState({
+      reducer: ({ token, user, isUserLoggedIn }) => ({
+        token,
+        user,
+        isUserLoggedIn
+      })
+    }),
+    webSocketPlugin
+  ],
   modules: {
     socketio,
-    labels,
-    comments,
-    board,
-    list
+    labels
   },
   state: {
     token: null,
-    user: null,
+    user: { boards: null },
     isUserLoggedIn: false,
-    board: null
+    board: { _id: null }
   },
   getters: {
     getCardsByListId: state => listId => {
@@ -40,6 +51,9 @@ export const store = new Vuex.Store({
     }
   },
   mutations: {
+    ...comments.mutations,
+    ...board.mutations,
+    ...list.mutations,
     setToken(state, token) {
       state.token = token;
       state.isUserLoggedIn = !!token;
@@ -169,6 +183,15 @@ export const store = new Vuex.Store({
     }
   },
   actions: {
+    ...comments.actions,
+    ...board.actions,
+    ...list.actions,
+    async login({ commit }, loginPayload) {
+      const response = await AuthenticationService.login(loginPayload);
+
+      commit('setToken', response.data.token);
+      commit('setUser', response.data.user);
+    },
     logout({ commit }) {
       commit('setToken', null);
       commit('setUser', null);
@@ -190,6 +213,7 @@ export const store = new Vuex.Store({
       commit('updateBoard', board);
     },
     deleteBoard({ commit }, boardId) {
+      //Do routing in here
       commit('deleteBoard', boardId);
     },
     addList({ commit }, list) {

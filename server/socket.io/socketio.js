@@ -2,6 +2,7 @@ module.exports = io => {
   io.use((socket, next) => {
     //TODO verify token
     let token = socket.handshake.query.token;
+
     if (token) {
       return next();
     }
@@ -39,6 +40,7 @@ module.exports = io => {
       // actionName: "deleteBoard",
       // actionPayload:{Action payload}}
       const { boardId, actionName, actionPayload } = payload;
+      actionPayload.socket = true;
       console.log('Vuex Event');
 
       socket.broadcast.to(boardId).emit(actionName, actionPayload);

@@ -13,6 +13,7 @@
 
 <script>
 import moment from 'moment';
+import { mapActions } from 'vuex';
 import DeletePopup from '@/components/reusables/DeletePopup';
 import CommentService from '@/services/CommentService';
 import { fireAction } from '@/services/ActionService';
@@ -28,10 +29,7 @@ export default {
   methods: {
     async deleteComment() {
       try {
-        // console.log(this.comment);
-
-        const result = await CommentService.delete(this.comment._id);
-        fireAction('removeCommentFromCard', {
+        await this.$store.dispatch('removeCommentFromCard', {
           cardId: this.comment.cardId,
           listId: this.comment.listId,
           commentId: this.comment._id

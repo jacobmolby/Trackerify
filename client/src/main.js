@@ -1,7 +1,7 @@
 import Vue from 'vue';
 import App from './App.vue';
 import VueRouter from 'vue-router';
-import { store } from '@/store/store';
+import { store } from '@/store/';
 import SocketInstance from '@/socketInstance';
 import VueSocketIO from 'vue-socket.io';
 import PortalVue from 'portal-vue';

@@ -1,11 +1,9 @@
 export default {
   mutations: {
-    updateListTitle(localState, list) {
+    updateListTitle(state, list) {
       const { listTitle, listId } = list;
       //Using this.state to access the store
-      this.state.board.lists.find(
-        list => list._id === listId
-      ).title = listTitle;
+      state.board.lists.find(list => list._id === listId).title = listTitle;
     }
   },
   actions: {

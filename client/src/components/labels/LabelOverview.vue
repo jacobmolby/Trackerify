@@ -103,25 +103,21 @@ export default {
   },
   methods: {
     labelAlreadOnCard(labelId) {
-      const inCard = this.card.labels.some(label => label._id === labelId);
-      if (inCard) {
-        return true;
-      } else {
-        return false;
-      }
+      return !!this.card.labels.some(label => label._id === labelId);
     },
     async deleteLabel(labelId) {
       if (!this.usedOnCard) {
         try {
-          await LabelService.delete(this.boardId, labelId);
-          fireAction('removeLabelFromBoard', { labelId });
+          await this.$store.dispatch('removeLabelFromBoard', {
+            boardId: this.boardId,
+            labelId
+          });
         } catch (error) {
           console.log(error.response.data.error);
         }
       } else {
         try {
-          await LabelCardService.delete(this.cardId, labelId);
-          fireAction('removeLabelFromCard', {
+          await this.$store.dispatch('removeLabelFromCard', {
             cardId: this.cardId,
             labelId
           });
@@ -134,8 +130,7 @@ export default {
     },
     async addLabelToCard(label) {
       try {
-        await LabelCardService.post(this.cardId, label._id);
-        fireAction('addLabelToCard', {
+        this.$store.dispatch('addLabelToCard', {
           cardId: this.cardId,
           newLabel: label
         });

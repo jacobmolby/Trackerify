@@ -82,13 +82,10 @@ export default {
     },
     async login() {
       try {
-        const response = await AuthenticationService.login({
+        await this.$store.dispatch('login', {
           email: this.email.toLowerCase(),
           password: this.password
         });
-
-        this.$store.dispatch('setToken', response.data.token);
-        this.$store.dispatch('setUser', response.data.user);
         this.$router.push({
           name: 'boardOverview'
         });

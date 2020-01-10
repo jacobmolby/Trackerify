@@ -26,8 +26,6 @@ module.exports = {
     }
   },
   async destroy(req, res) {
-    console.log('Delete comment');
-
     const userid = req.user._id;
     const { commentId } = req.params;
 
