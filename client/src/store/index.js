@@ -3,9 +3,9 @@ import Vuex from 'vuex';
 import createPersistedState from 'vuex-persistedstate';
 import webSocketPlugin from './plugins/websocketPlugin';
 // import Router from '../router';
-import socketio from './socketio';
-import labels from './events/labelsEvents';
-import comments from './events/commentsEvents';
+import socketio from './modules/socketio';
+import label from './events/labelEvents';
+import comment from './events/commentEvents';
 import board from './events/boardEvents';
 import list from './events/listEvents';
 
@@ -25,8 +25,7 @@ export const store = new Vuex.Store({
     webSocketPlugin
   ],
   modules: {
-    socketio,
-    labels
+    socketio
   },
   state: {
     token: null,
@@ -51,7 +50,8 @@ export const store = new Vuex.Store({
     }
   },
   mutations: {
-    ...comments.mutations,
+    ...label.mutations,
+    ...comment.mutations,
     ...board.mutations,
     ...list.mutations,
     setToken(state, token) {
@@ -72,7 +72,7 @@ export const store = new Vuex.Store({
       state.user.boards.find(stateBoard => stateBoard._id === board._id).title =
         board.title;
     },
-    deleteBoard(state, boardId) {
+    deleteBoard(state, { boardId }) {
       state.board = null;
       state.user.boards = state.user.boards.filter(
         board => board._id !== boardId
@@ -183,7 +183,8 @@ export const store = new Vuex.Store({
     }
   },
   actions: {
-    ...comments.actions,
+    ...label.actions,
+    ...comment.actions,
     ...board.actions,
     ...list.actions,
     async login({ commit }, loginPayload) {
@@ -203,19 +204,7 @@ export const store = new Vuex.Store({
     setUser({ commit }, user) {
       commit('setUser', user);
     },
-    setBoard({ commit }, board) {
-      commit('setBoard', board);
-    },
-    createBoard({ commit }, board) {
-      commit('createBoard', board);
-    },
-    updateBoard({ commit }, board) {
-      commit('updateBoard', board);
-    },
-    deleteBoard({ commit }, boardId) {
-      //Do routing in here
-      commit('deleteBoard', boardId);
-    },
+
     addList({ commit }, list) {
       commit('addList', list);
     },

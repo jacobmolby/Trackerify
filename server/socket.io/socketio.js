@@ -15,6 +15,8 @@ module.exports = io => {
 
     // Makes sure that everyone in the same board is in the same room, so only they will get the messages
     socket.on('setBoard', board => {
+      console.log('Switched room');
+
       //Resets the lastBoardId which is determining the socket room
       if (socket.lastBoard) {
         socket.leave(socket.lastBoard);
@@ -40,8 +42,11 @@ module.exports = io => {
       // actionName: "deleteBoard",
       // actionPayload:{Action payload}}
       const { boardId, actionName, actionPayload } = payload;
-      actionPayload.socket = true;
-      console.log('Vuex Event');
+      if (actionPayload) {
+        actionPayload.socket = true;
+      }
+
+      console.log('Vuex Event:', actionName, 'to', boardId);
 
       socket.broadcast.to(boardId).emit(actionName, actionPayload);
     });

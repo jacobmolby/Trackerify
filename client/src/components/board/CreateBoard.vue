@@ -42,10 +42,7 @@ export default {
         return (this.error = 'Please choose a title.');
       }
       try {
-        const board = (await BoardService.post({ title: this.title })).data;
-
-        this.$store.dispatch('createBoard', board);
-
+        await this.$store.dispatch('createBoard', { title: this.title });
         //reset component
         this.isOpen = false;
         this.title = null;

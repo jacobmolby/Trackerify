@@ -81,21 +81,12 @@ export default {
           this.componentLabel.color.hex !== this.label.color) &&
         this.label._id
       ) {
-        const updatedComponentLabel = {
-          title: this.componentLabel.title,
-          color: this.componentLabel.color.hex,
-          labelId: this.label._id
-        };
         try {
-          const updatedLabel = (await LabelService.put(updatedComponentLabel))
-            .data;
-          fireAction('updateLabel', updatedLabel);
-          //     this.$store.dispatch('addLabelToBoard', label);
-          //     this.$socket.emit('addLabelToBoard', {
-          //       ...label,
-          //       boardId: this.$store.state.board._id
-          //     });
-          // this.componentLabel.title = null;
+          await this.$store.dispatch('updateLabel', {
+            title: this.componentLabel.title,
+            color: this.componentLabel.color.hex,
+            labelId: this.label._id
+          });
           this.pickingColor = false;
           this.isOpen = false;
         } catch (error) {

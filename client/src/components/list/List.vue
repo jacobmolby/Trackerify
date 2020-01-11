@@ -70,14 +70,11 @@ export default {
   methods: {
     async updateTitle() {
       if (this.title === '') return;
-      const payload = {
-        listId: this.listId,
-        listTitle: this.title
-      };
-
       try {
-        await ListService.put(payload);
-        fireAction('updateListTitle', payload);
+        await this.$store.dispatch('updateListTitle', {
+          listId: this.listId,
+          listTitle: this.title
+        });
         this.editingTitle = false;
       } catch (error) {
         console.log(error);

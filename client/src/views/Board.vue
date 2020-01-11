@@ -2,7 +2,7 @@
   <!-- <div style="height: calc(100% - 4em);" class="bg-white flex min-w-screen"> -->
 
   <div>
-    <div v-if="!board || board._id !== boardId" class="mt-10 flex items-center justify-center">
+    <div v-if="isLoading" class="mt-10 flex items-center justify-center">
       <loading-spinner></loading-spinner>
     </div>
     <main v-if="board && board._id === boardId" class="px-10">
@@ -79,6 +79,7 @@
         </div>
       </div>
     </main>
+    <div v-else>Board has been deleted</div>
     <connection-lost></connection-lost>
   </div>
 </template>
@@ -107,7 +108,8 @@ export default {
       removeUserError: null,
       editingTitle: false,
       title: '',
-      drag: false
+      drag: false,
+      isLoading: true
     };
   },
   components: {
@@ -144,12 +146,13 @@ export default {
   },
   async mounted() {
     try {
-      const board = (await BoardService.show(this.boardId)).data;
-
-      this.$store.dispatch('setBoard', board);
+      await this.$store.dispatch('setBoard', { boardId: this.boardId });
       this.title = this.board.title;
-      this.$socket.emit('setBoard', board);
+      this.isLoading = false;
     } catch (error) {
+      if (error.response.data.error === "Board doesn't exist") {
+        this.$router.push({ name: 'boardOverview' });
+      }
       console.log(error.response.data.error);
     }
   },
@@ -195,10 +198,13 @@ export default {
         boardId: this.boardId
       };
       try {
-        const board = (await BoardService.update(payload)).data;
-        //Dipatch action
-        this.$socket.emit('updateBoard', board);
-        this.$store.dispatch('updateBoard', board);
+        // const board = (await BoardService.update(payload)).data;
+        // Dipatch action
+        await this.$store.dispatch('updateBoard', {
+          title: this.title,
+          boardId: this.boardId
+        });
+        // this.$store.dispatch('updateBoard', board);
 
         this.editingTitle = false;
       } catch (error) {

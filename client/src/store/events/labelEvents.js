@@ -4,17 +4,17 @@ import LabelCardService from '../../services/LabelCardService';
 
 export default {
   mutations: {
-    addLabelToBoard(localState, label) {
-      //Using this.state to access the store
-      this.state.board.labels.push(label);
+    addLabelToBoard(state, label) {
+      //Using state to access the store
+      state.board.labels.push(label);
     },
-    removeLabelFromBoard(localState, { labelId }) {
-      //Using this.state to access the store
-      this.state.board.labels = this.state.board.labels.filter(
+    removeLabelFromBoard(state, { labelId }) {
+      //Using state to access the store
+      state.board.labels = state.board.labels.filter(
         label => label._id !== labelId
       );
 
-      this.state.board.lists.forEach(list => {
+      state.board.lists.forEach(list => {
         list.cards.forEach(card => {
           card.labels = card.labels.filter(label => {
             return label._id !== labelId;
@@ -25,8 +25,8 @@ export default {
     addLabelToCard(state, payload) {
       const { cardId, newLabel } = payload;
 
-      //Using this.state to access the store
-      this.state.board.lists.forEach(list => {
+      //Using state to access the store
+      state.board.lists.forEach(list => {
         if (list.cards.length > 0) {
           const card = list.cards.find(card => {
             return card._id == cardId;
@@ -35,11 +35,11 @@ export default {
         }
       });
     },
-    removeLabelFromCard(localState, payload) {
+    removeLabelFromCard(state, payload) {
       const { cardId, labelId } = payload;
-      //Using this.state to access the store
+      //Using state to access the store
 
-      this.state.board.lists.forEach(list => {
+      state.board.lists.forEach(list => {
         if (list.cards.length > 0) {
           const cardWithLabel = list.cards.find(card => {
             return card._id === cardId;
@@ -51,17 +51,15 @@ export default {
         }
       });
     },
-    updateLabel(localState, updatedLabel) {
+    updateLabel(state, updatedLabel) {
       const { _id, color, title } = updatedLabel;
 
-      //Using this.state to access the store
+      //Using state to access the store
 
-      let labelIndex = this.state.board.labels.findIndex(
-        label => label._id === _id
-      );
-      Vue.set(this.state.board.labels, labelIndex, updatedLabel);
+      let labelIndex = state.board.labels.findIndex(label => label._id === _id);
+      Vue.set(state.board.labels, labelIndex, updatedLabel);
 
-      this.state.board.lists.forEach(list => {
+      state.board.lists.forEach(list => {
         list.cards.forEach(card => {
           card.labels.forEach(label => {
             if (label._id === _id) {
@@ -88,11 +86,11 @@ export default {
     },
     async removeLabelFromCard({ commit }, payload) {
       await LabelCardService.delete(payload);
-
       commit('removeLabelFromCard', payload);
     },
-    updateLabel({ commit }, payload) {
-      commit('updateLabel', payload);
+    async updateLabel({ commit }, payload) {
+      const updatedLabel = (await LabelService.put(payload)).data;
+      commit('updateLabel', updatedLabel);
     }
   }
 };

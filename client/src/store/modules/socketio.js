@@ -1,3 +1,5 @@
+import Router from '../../router';
+
 export default {
   state: {
     isConnected: false
@@ -28,8 +30,8 @@ export default {
     SOCKET_updateListOrder({ commit }, lists) {
       commit('updateListOrder', lists, { root: true });
     },
-    SOCKET_deleteBoard({ commit }, boardId) {
-      commit('deleteBoard', boardId, { root: true });
+    SOCKET_deleteBoard({ commit }, payload) {
+      commit('deleteBoard', payload, { root: true });
     },
     SOCKET_addList({ commit }, list) {
       commit('addList', list, { root: true });

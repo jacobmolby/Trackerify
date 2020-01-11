@@ -20,12 +20,15 @@ export default {
   methods: {
     async deleteBoard() {
       try {
-        await BoardService.delete(this.board._id);
-        this.$store.dispatch('deleteBoard', this.board._id);
-        this.$socket.emit('deleteBoard', this.board._id);
-        this.$router.push({
-          name: 'boardOverview'
-        });
+        console.log(this.board);
+
+        await this.$store.dispatch('deleteBoard', { boardId: this.board._id });
+        // await BoardService.delete(this.board._id);
+        // this.$store.dispatch('deleteBoard', this.board._id);
+        // this.$socket.emit('deleteBoard', this.board._id);
+        // this.$router.push({
+        //   name: 'boardOverview'
+        // });
       } catch (error) {
         console.log('error occured');
         console.log(error);
