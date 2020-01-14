@@ -64,9 +64,6 @@ export default {
     DeletePopup
   },
   props: ['listTitle', 'listId', 'listColor'],
-  mounted() {
-    // this.title = this.listTitle;
-  },
   methods: {
     async updateTitle() {
       if (this.title === '') return;
@@ -82,19 +79,9 @@ export default {
     },
     async deleteList() {
       try {
-        const response = (await ListService.delete(this.listId)).data;
-
-        this.$store.dispatch('removeList', response);
-        this.$socket.emit('removeList', response);
+        await this.$store.dispatch('removeList', { listId: this.listId });
       } catch (error) {
         console.log(error);
-      }
-    },
-    async updateCardOrder(payload) {
-      try {
-        const response = (await CardOrderService.put(payload)).data;
-      } catch (error) {
-        console.log(error.response.data.error);
       }
     }
   },
@@ -118,17 +105,12 @@ export default {
       get() {
         return this.$store.getters.getCardsByListId(this.listId);
       },
-      set(cards) {
+      async set(cards) {
         try {
-          const payload = {
+          await this.$store.dispatch('updateCardOrder', {
             cards,
-            listId: this.listId,
-            boardId: this.boardId
-          };
-
-          this.updateCardOrder(payload);
-          this.$store.dispatch('updateCardOrder', payload);
-          // this.$socket.emit('updateCardOrder', payload);
+            listId: this.listId
+          });
         } catch (error) {
           console.log(error);
         }

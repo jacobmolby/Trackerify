@@ -167,16 +167,15 @@
 
 <script>
 import { mapState } from 'vuex';
-import Comment from '@/components/comment/Comment';
-import AddComment from '@/components/comment/AddComment';
-import AddUserToCard from '@/components/card/AddUserToCard';
-import Label from '@/components/labels/Label';
-import LabelOverview from '@/components/labels/LabelOverview';
-import DeletePopup from '@/components/reusables/DeletePopup';
+import Comment from '../comment/Comment';
+import AddComment from '../comment/AddComment';
+import AddUserToCard from '../card/AddUserToCard';
+import Label from '../labels/Label';
+import LabelOverview from '../labels/LabelOverview';
+import DeletePopup from '../reusables/DeletePopup';
 
 import CardService from '@/services/CardService';
 import UserCardService from '@/services/UserCardService';
-import { fireAction } from '@/services/ActionService';
 
 export default {
   name: 'Card',
@@ -218,10 +217,7 @@ export default {
       const cardId = this.card._id;
 
       try {
-        let deletedCard = (await CardService.delete(cardId)).data;
-        //Add boardId for sockets
-        const boardId = this.$store.state.board._id;
-        fireAction('removeCard', deletedCard);
+        await this.$store.dispatch('removeCard', { cardId });
         this.isOpen = false;
       } catch (error) {
         console.log(error);
@@ -234,37 +230,26 @@ export default {
       ) {
         return (this.isEditing = false);
       }
-      const payload = {
-        cardId: this.card._id,
-        title: this.title,
-        description: this.description
-      };
 
       try {
-        const card = (await CardService.updateCard(payload)).data;
-        //Add boardId for socket.io
-        card.boardId = this.$store.state.board._id;
-
-        this.$store.dispatch('updateCard', card);
-        this.$socket.emit('updateCard', card);
+        await this.$store.dispatch('updateCard', {
+          cardId: this.card._id,
+          title: this.title,
+          description: this.description
+        });
         this.isEditing = false;
-        // FIXME titlen bliver ikke opdateret
       } catch (error) {
         console.log(error);
       }
     },
     async removeUser(userId) {
       try {
-        await UserCardService.delete(userId, this.card._id);
-        const payload = {
+        await this.$store.dispatch('removeUserFromCard', {
           userId,
           cardId: this.card._id,
           listId: this.card.list,
           boardId: this.$store.state.board._id
-        };
-
-        this.$store.dispatch('removeUserFromCard', payload);
-        this.$socket.emit('removeUserFromCard', payload);
+        });
       } catch (error) {
         console.log('error occured');
 
@@ -274,7 +259,6 @@ export default {
   },
 
   mounted() {
-    //FIXME Titlen ændre sig ikke når der opdateres
     this.description = this.card.description
       ? this.card.description
       : 'No description';

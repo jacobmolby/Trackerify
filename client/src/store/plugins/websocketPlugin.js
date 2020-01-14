@@ -1,8 +1,11 @@
+/* eslint-disable no-debugger */
+import { get } from 'lodash';
 import socket from '../../socketInstance';
+
 export default store => {
   if (!store.state.token) return;
   store.subscribe(({ type, payload }) => {
-    console.log('Mutation: ', type);
+    console.log('Mutation:', type);
 
     // The mutation comes in the format of `{ type, payload }`.
     const blackListedMutations = [
@@ -11,22 +14,20 @@ export default store => {
       'setBoard',
       'setBoardOverview',
       'createBoard',
-      //deleteBoard is Temporary
-      // 'deleteBoard',
+
       'DISCONNECT',
       'CONNECT'
     ];
 
     const isBlacklisted = blackListedMutations.includes(type);
-    const boardId = store.state.board
-      ? store.state.board._id
-      : payload
-      ? payload.boardId
-      : false;
+    const boardIdFromPayload = get(payload, 'boardId', false);
+    //virker ikke? boardId bliver null hvis state.board._id er undefined
+    const boardId = get(store, 'state.board._id', boardIdFromPayload);
 
-    const fromSocket = payload ? payload.socket : false;
+    const fromSocket = get(payload, 'socket', false);
+
     if (!isBlacklisted && boardId && !fromSocket) {
-      console.log('emitting', type);
+      console.log('Emitting:', type);
 
       socket.emit('vuexEvent', {
         boardId,

@@ -39,7 +39,6 @@
 </template>
 
 <script>
-import CardService from '@/services/CardService';
 export default {
   name: 'AddCard',
   props: ['listId'],
@@ -73,17 +72,12 @@ export default {
         return (this.error = 'Please enter a title.');
       }
       if (this.title) {
-        const payload = {
-          title: this.title,
-          description: this.description,
-          listId: this.listId
-        };
         try {
-          let card = (await CardService.post(payload)).data;
-          //BoardId used for socket io
-          card.boardId = this.$store.state.board._id;
-          this.$store.dispatch('addCard', card);
-          this.$socket.emit('addCard', card);
+          await this.$store.dispatch('addCard', {
+            title: this.title,
+            description: this.description,
+            listId: this.listId
+          });
           //reset component
           this.isOpen = false;
           this.title = null;

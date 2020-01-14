@@ -31,6 +31,9 @@ export default {
 
       await BoardService.delete(boardId);
       //Do routing in here
+      Router.push({
+        name: 'boardOverview'
+      });
       commit('deleteBoard', { boardId });
     }
   }

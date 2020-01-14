@@ -79,7 +79,7 @@
         </div>
       </div>
     </main>
-    <div v-else>Board has been deleted</div>
+    <div v-else-if="!isLoading">Board has been deleted :(</div>
     <connection-lost></connection-lost>
   </div>
 </template>
@@ -128,16 +128,19 @@ export default {
       get() {
         return this.$store.state.board.lists;
       },
-      set(lists) {
+      async set(lists) {
         try {
-          const payload = {
+          // const payload = {
+          //   lists,
+          //   boardId: this.boardId
+          // };
+
+          // this.updateListOrder(payload);
+          await this.$store.dispatch('updateListOrder', {
             lists,
             boardId: this.boardId
-          };
-
-          this.updateListOrder(payload);
-          this.$store.dispatch('updateListOrder', lists);
-          this.$socket.emit('updateListOrder', lists);
+          });
+          // this.$socket.emit('updateListOrder', lists);
         } catch (error) {
           console.log(error);
         }
@@ -157,14 +160,14 @@ export default {
     }
   },
   methods: {
-    async updateListOrder(payload) {
-      payload.lists = payload.lists.map(list => list._id);
-      try {
-        const response = (await ListOrderService.put(payload)).data;
-      } catch (error) {
-        console.log(error.response.data.error);
-      }
-    },
+    // async updateListOrder(payload) {
+    //   payload.lists = payload.lists.map(list => list._id);
+    //   try {
+    //     const response = (await ListOrderService.put(payload)).data;
+    //   } catch (error) {
+    //     console.log(error.response.data.error);
+    //   }
+    // },
     async removeUser(userId) {
       this.removeUserError = null;
       if (userId === this.$store.state.user._id) {

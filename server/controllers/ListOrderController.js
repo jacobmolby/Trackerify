@@ -4,11 +4,11 @@ const Card = require('../models/Card');
 
 module.exports = {
   async update(req, res) {
-    const { lists, boardId } = req.body;
+    const { listIds, boardId } = req.body;
     try {
       const board = await Board.findOneAndUpdate(
         { _id: boardId },
-        { $set: { lists: lists } }
+        { $set: { lists: listIds } }
       );
       res.send(board);
     } catch (error) {

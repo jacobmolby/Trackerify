@@ -1,5 +1,6 @@
 <template>
   <div id="app" class="h-screen">
+    <DesignV2 />
     <div class="bg-white flex">
       <NavBar />
 
@@ -19,10 +20,12 @@
 
 <script>
 import NavBar from '@/components/NavBar.vue';
+import DesignV2 from './views/DesignV2.vue';
 import TopBar from '@/components/TopBar.vue';
 export default {
   name: 'app',
   components: {
+    DesignV2,
     NavBar,
     TopBar
   }

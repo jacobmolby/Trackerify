@@ -12,8 +12,6 @@
 </template>
 
 <script>
-import CommentService from '@/services/CommentService';
-
 export default {
   props: {
     cardId: String,
@@ -32,19 +30,12 @@ export default {
         this.error = 'Please fill out the field.';
       }
       if (this.comment) {
-        const payload = {
-          content: this.comment,
-          cardId: this.cardId
-        };
         try {
-          let response = (await CommentService.post(payload)).data;
-          response = {
-            ...response,
-            listId: this.listId,
-            boardId: this.$store.state.board._id
-          };
-          this.$store.dispatch('addComment', response);
-          // this.$socket.emit('addComment', response);
+          await this.$store.dispatch('addComment', {
+            content: this.comment,
+            cardId: this.cardId,
+            listId: this.listId
+          });
           this.comment = '';
         } catch (error) {
           console.log(error);

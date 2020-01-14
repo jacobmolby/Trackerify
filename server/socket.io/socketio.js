@@ -25,16 +25,16 @@ module.exports = io => {
       socket.join(board._id);
       socket.lastBoard = board._id;
     });
-    //Update, Delete, Add user, remove user
-    require('./boardEvents')(socket);
-    //Add, Delete, update list order
-    require('./listEvents')(socket);
-    //Add, Delete, update, add user, remove user
-    require('./cardEvents')(socket);
-    //Add
-    require('./commentEvents')(socket);
-    //Add
-    require('./labelEvents')(socket);
+    // //Update, Delete, Add user, remove user
+    // require('./boardEvents')(socket);
+    // //Add, Delete, update list order
+    // require('./listEvents')(socket);
+    // //Add, Delete, update, add user, remove user
+    // require('./cardEvents')(socket);
+    // //Add
+    // require('./commentEvents')(socket);
+    // //Add
+    // require('./labelEvents')(socket);
 
     socket.on('vuexEvent', payload => {
       //The payload is an object with

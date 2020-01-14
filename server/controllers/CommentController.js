@@ -16,11 +16,17 @@ module.exports = {
 
     try {
       let savedComment = await comment.save();
-      savedComment = await savedComment.populate('user').execPopulate();
+      savedComment = await savedComment
+        .populate({
+          path: 'user',
+          select: ['name', '_id']
+        })
+        .execPopulate();
       const commentId = savedComment._id;
       card.comments.addToSet(commentId);
       await card.save();
-      res.send(savedComment.populate('user'));
+
+      res.send(savedComment);
     } catch (error) {
       res.status(403).send({ error });
     }

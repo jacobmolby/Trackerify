@@ -31,6 +31,9 @@ export default {
       commit('updateListOrder', lists, { root: true });
     },
     SOCKET_deleteBoard({ commit }, payload) {
+      Router.push({
+        name: 'boardOverview'
+      });
       commit('deleteBoard', payload, { root: true });
     },
     SOCKET_addList({ commit }, list) {

@@ -43,10 +43,8 @@ export default {
     card() {
       return this.$store.getters.getCardById(this.cardId);
     },
-    // ...mapState({
-    //   users: state => state.board.users
-    // }),
     notAssignedUsers() {
+      //Finds all the users in the board that is not already assigned to the card
       let allUsers = [...this.$store.state.board.users];
       for (let i = allUsers.length - 1; i >= 0; i--) {
         for (let j = 0; j < this.card.assignedUsers.length; j++) {
@@ -66,25 +64,14 @@ export default {
   methods: {
     async addUserToCard() {
       this.error = null;
-
       if (!this.userId) {
         return (this.error = 'Please choose a user');
       }
-
-      const payload = {
-        cardId: this.cardId,
-        userId: this.userId
-      };
       try {
-        let response = (await UserCardService.post(payload)).data;
-        //TODO check om det stadig bliver brugt
-        if (response.error) {
-          return (this.error = response.error);
-        }
-        //Add board id for socket.io
-        response.boardId = this.$store.state.board._id;
-        this.$store.dispatch('addUserToCard', response);
-        this.$socket.emit('addUserToCard', response);
+        await this.$store.dispatch('addUserToCard', {
+          cardId: this.cardId,
+          userId: this.userId
+        });
         this.userId = '';
         this.isOpen = false;
       } catch (error) {

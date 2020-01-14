@@ -4,7 +4,7 @@
   "description": "Project managment app",
   "main": "index.js",
   "scripts": {
-    "start": "concurrently \"npm run start:server\" \"npm run start:client\"",
+    "start": "concurrently -p \"[{name}]\" -n \"SERVER,CLIENT\" -c \"blue.bold,green.bold\"  \"npm run start:server\" \"npm run start:client\"",
     "start:server": "cd ./server && npm run dev",
     "start:client": "cd ./client && npm run serve"
   },

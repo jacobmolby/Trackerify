@@ -34,7 +34,7 @@ module.exports = {
     res.send(list.toJSON());
   },
   async destroy(req, res) {
-    const id = req.params.id;
+    const { id } = req.params;
     const list = await List.findById(id);
     if (!list) {
       return res.status(403).send({ error: "List doesn't exist" });

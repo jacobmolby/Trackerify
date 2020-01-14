@@ -2,12 +2,13 @@ import Vue from 'vue';
 import Vuex from 'vuex';
 import createPersistedState from 'vuex-persistedstate';
 import webSocketPlugin from './plugins/websocketPlugin';
-// import Router from '../router';
+
 import socketio from './modules/socketio';
 import label from './events/labelEvents';
 import comment from './events/commentEvents';
 import board from './events/boardEvents';
 import list from './events/listEvents';
+import card from './events/cardEvents';
 
 import AuthenticationService from '../services/AuthenticationService';
 
@@ -160,10 +161,10 @@ export const store = new Vuex.Store({
         .find(board => board._id === payload.boardId)
         .users.filter(user => user !== payload.userId);
     },
-    removeUserFromCard(state, payload) {
+    removeUserFromCard(state, { userId, cardId, listId }) {
       //Payload has userId, cardId and listId on it.
 
-      const { userId, cardId, listId } = payload;
+      // const { userId, cardId, listId } = payload;
 
       state.board.lists
         .find(list => list._id === listId)
@@ -178,7 +179,7 @@ export const store = new Vuex.Store({
       const { cards, listId } = payload;
       state.board.lists.find(list => list._id === listId).cards = cards;
     },
-    updateListOrder(state, lists) {
+    updateListOrder(state, { lists }) {
       state.board.lists = lists;
     }
   },
@@ -187,6 +188,7 @@ export const store = new Vuex.Store({
     ...comment.actions,
     ...board.actions,
     ...list.actions,
+    ...card.actions,
     async login({ commit }, loginPayload) {
       const response = await AuthenticationService.login(loginPayload);
 
@@ -204,42 +206,11 @@ export const store = new Vuex.Store({
     setUser({ commit }, user) {
       commit('setUser', user);
     },
-
-    addList({ commit }, list) {
-      commit('addList', list);
-    },
-    addCard({ commit }, card) {
-      commit('addCard', card);
-    },
-    removeCard({ commit }, deletedCard) {
-      commit('removeCard', deletedCard);
-    },
-    removeList({ commit }, deletedList) {
-      commit('removeList', deletedList);
-    },
-    addComment({ commit }, comment) {
-      commit('addComment', comment);
-    },
-    updateCard({ commit }, card) {
-      commit('updateCard', card);
-    },
     addUserToBoard({ commit }, payload) {
       commit('addUserToBoard', payload);
     },
-    addUserToCard({ commit }, payload) {
-      commit('addUserToCard', payload);
-    },
     removeUserFromBoard({ commit }, userId) {
       commit('removeUserFromBoard', userId);
-    },
-    removeUserFromCard({ commit }, payload) {
-      commit('removeUserFromCard', payload);
-    },
-    updateCardOrder({ commit }, value) {
-      commit('updateCardOrder', value);
-    },
-    updateListOrder({ commit }, lists) {
-      commit('updateListOrder', lists);
     }
   }
 });

@@ -22,7 +22,7 @@ const userSchema = new mongoose.Schema({
     type: String,
     default: 'https://img.icons8.com/officel/48/000000/user.png'
   },
-  boards: [{ type: mongoose.Schema.Types.ObjectId, ref: 'Board' }],
+  // boards: [{ type: mongoose.Schema.Types.ObjectId, ref: 'Board' }],
   created: {
     type: Date,
     default: Date.now

@@ -23,6 +23,21 @@ export default {
       await CommentService.delete(payload.commentId);
 
       commit('removeCommentFromCard', payload);
+    },
+    async addComment({ commit }, payload) {
+      const { listId, content, cardId } = payload;
+      const boardId = this.state.board._id;
+
+      const commentResponse = (await CommentService.post({ content, cardId }))
+        .data;
+
+      const comment = {
+        ...commentResponse,
+        listId,
+        boardId
+      };
+
+      commit('addComment', comment);
     }
   }
 };
