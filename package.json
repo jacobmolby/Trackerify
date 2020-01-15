@@ -10,7 +10,7 @@
   },
   "author": "Jacob Mølby",
   "license": "MIT",
-  "dev-dependencies": {
+  "devDependencies": {
     "concurrently": "^5.0.2"
   }
 }

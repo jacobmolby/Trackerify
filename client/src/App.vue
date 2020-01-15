@@ -1,7 +1,7 @@
 <template>
   <div id="app" class="h-screen">
     <DesignV2 />
-    <div class="bg-white flex">
+    <!-- <div class="bg-white flex">
       <NavBar />
 
       <div class="overflow-x-hidden flex flex-col flex-1">
@@ -9,7 +9,7 @@
 
         <router-view />
       </div>
-    </div>
+    </div>-->
     <portal-target name="popup-container"></portal-target>
     <portal-target name="popup-container-important"></portal-target>
     <portal-target name="popup-container-more-important"></portal-target>
@@ -25,9 +25,9 @@ import TopBar from '@/components/TopBar.vue';
 export default {
   name: 'app',
   components: {
-    DesignV2,
-    NavBar,
-    TopBar
+    DesignV2
+    // NavBar,
+    // TopBar
   }
 };
 </script>

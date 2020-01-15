@@ -1,6 +1,15 @@
 module.exports = {
   theme: {
     extend: {
+      translate: {
+        // defaults to {}
+        '0': '0%',
+        '1/2': '50%',
+        full: '100%',
+        '-full': '-100%',
+        'right-up': ['100%', '-100%'],
+        '3d': ['40px', '-60px', '-130px']
+      },
       flex: {
         '2': '0 45%'
       },
@@ -31,7 +40,10 @@ module.exports = {
     }
   },
   variants: {
-    margin: ['responsive', 'odd', 'hover', 'focus']
+    margin: ['responsive', 'first', 'odd', 'hover', 'focus']
   },
-  plugins: []
+  plugins: [
+    require('tailwindcss-transforms')({ '3d': false }),
+    require('tailwindcss-transitions')()
+  ]
 };
