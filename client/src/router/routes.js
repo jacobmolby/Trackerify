@@ -2,9 +2,9 @@ import Home from '@/views/Home';
 import Settings from '@/views/Settings';
 import Login from '@/views/Login';
 import Register from '@/views/Register';
-import Board from '@/views/Board';
+// import Board from '@/views/Board';
 import BoardOverview from '@/views/BoardOverview';
-import DesignV2 from '@/views/DesignV2';
+import Board from '../views/Board';
 
 const routes = [
   {
@@ -38,9 +38,9 @@ const routes = [
     component: Board
   },
   {
-    path: '/test',
-    name: 'test',
-    component: DesignV2
+    path: '/team',
+    name: 'team',
+    component: Login
   }
 ];
 

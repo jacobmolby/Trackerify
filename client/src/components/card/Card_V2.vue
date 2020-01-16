@@ -10,7 +10,7 @@
     </div>
     <div class="flex justify-between">
       <span class="text-sm text-gray-700 leading-snug">
-        <button class="font-medium text-left" @click="isOpen = true">{{card.title}}</button>
+        <button class="text-left" @click="isOpen = true">{{card.title}}</button>
       </span>
     </div>
     <div class="mt-2 flex justify-between items-baseline">
@@ -42,45 +42,6 @@
         </div>
       </div>
     </div>
-    <!-- <div class="flex flex-col flex-shrink-0 justify-between"> -->
-    <!-- <div>
-      <Label
-        class="mr-1"
-        v-for="label in card.labels"
-        :key="label._id"
-        :color="label.color"
-      >{{label.title}}</Label>
-    </div>
-    <span class="text-sm leading-snug text-gray-600">
-      <button @click="isOpen = !isOpen" class="text-left">{{card.title}}</button>
-    </span>
-    <div class="pt-4 flex justify-between items-end">
-      <div class="w-1/2 flex justify-start items-center">
-        <div class="flex items-center">
-          <svg class="h-4 w-4 fill-current text-gray-500" viewBox="0 0 20 20">
-            <path
-              d="M10 15l-4 4v-4H2a2 2 0 0 1-2-2V3c0-1.1.9-2 2-2h16a2 2 0 0 1 2 2v10a2 2 0 0 1-2 2h-8zM5 7v2h2V7H5zm4 0v2h2V7H9zm4 0v2h2V7h-2z"
-            />
-          </svg>
-          <span v-if="card.comments" class="text-xs pl-1">{{card.comments.length}}</span>
-        </div>
-
-        <div class="pl-2 flex items-center">
-          <svg class="h-4 w-4 fill-current text-gray-500" viewBox="0 0 20 20">
-            <path
-              d="M15 3H7a7 7 0 1 0 0 14h8v-2H7A5 5 0 0 1 7 5h8a3 3 0 0 1 0 6H7a1 1 0 0 1 0-2h8V7H7a3 3 0 1 0 0 6h8a5 5 0 0 0 0-10z"
-            />
-          </svg>
-          <span v-if="card.attachments" class="text-xs pl-1">{{card.attachments.length}}</span>
-        </div>
-      </div>
-      <div class="w-1/2 flex justify-end">
-        <AddUserToCard :assignedUsers="card.assignedUsers" :cardId="card._id" class="mr-3 flex"></AddUserToCard>
-        <div class="flex flex-row-reverse">
-          
-        </div>
-      </div>
-    </div>-->
 
     <!-- CARD POPUP -->
 

@@ -1,107 +1,244 @@
 <template>
-  <!-- <div style="height: calc(100% - 4em);" class="bg-white flex min-w-screen"> -->
-
-  <div>
-    <div v-if="isLoading" class="mt-10 flex items-center justify-center">
-      <loading-spinner></loading-spinner>
-    </div>
-    <main v-if="board && board._id === boardId" class="px-10">
-      <!-- OVER THE lists -->
-      <div class="ml-2 pt-6 flex justify-between items-center">
-        <div class="inline-flex items-baseline">
-          <h1
-            v-if="!editingTitle"
-            @click="editingTitle = !editingTitle"
-            class="font-semibold text-2xl text-gray-700"
-          >{{board.title}}</h1>
-          <input
-            v-else
-            v-model="title"
-            type="text"
-            class="font-semibold text-2xl bg-gray-300 text-gray-700 focus:outline-none"
-          />
-          <delete-board :board="board" class="ml-2"></delete-board>
-
-          <add-list></add-list>
-          <label-overview>Edit Labels</label-overview>
+  <div class="h-screen flex overflow-hidden">
+    <!-- Sidebar -->
+    <TheSidebar @closeSidebar="isOpen=false" :isOpen="isOpen">
+      <h2 class="text-xs font-semibold text-gray-600 uppercase tracking-wide">Issues</h2>
+      <div class="mt-2 -mx-3">
+        <a
+          href="#"
+          class="px-3 py-1 flex justify-between text-gray-700 text-sm font-medium bg-gray-200 rounded-lg"
+        >
+          <span>All</span>
+          <span class="text-sm font-semibold text-gray-700">36</span>
+        </a>
+        <a
+          href="#"
+          class="mt-1 px-3 py-1 flex justify-between text-gray-700 text-sm font-medium hover:bg-gray-200 rounded-lg"
+        >
+          <span>Created by me</span>
+          <span class="text-sm font-semibold text-gray-700">2</span>
+        </a>
+        <a
+          href="#"
+          class="mt-1 px-3 py-1 flex justify-between text-gray-700 text-sm font-medium hover:bg-gray-200 rounded-lg"
+        >
+          <span>Archived</span>
+          <span class="text-sm font-semibold text-gray-700">1</span>
+        </a>
+        <a
+          href="#"
+          class="mt-1 px-3 py-1 flex justify-between text-gray-700 text-sm font-medium hover:bg-gray-200 rounded-lg"
+        >
+          <span>Assigned to me</span>
+          <span class="text-sm font-semibold text-gray-700"></span>
+        </a>
+      </div>
+      <h2 class="mt-8 text-xs font-semibold text-gray-600 uppercase tracking-wide">Labels</h2>
+      <div class="mt-2 -mx-3">
+        <a
+          v-for="label in board.labels"
+          :key="label._id"
+          href="#"
+          class="mt-1 px-3 py-1 flex justify-between text-gray-700 text-sm font-medium hover:bg-gray-200 rounded-lg items-center"
+        >
+          <span>{{label.title}}</span>
+          <svg
+            class="h-2 w-2"
+            :style="{'color':label.color}"
+            viewBox="0 0 8 8"
+            fill="currentColor"
+          >
+            <circle cx="4" cy="4" r="3" />
+          </svg>
+        </a>
+      </div>
+    </TheSidebar>
+    <!-- <section
+      :class="isOpen ? 'translate-x-0 ease-out transition-250' : '-translate-x-full ease-in transition-250'"
+      class="lg:block z-10 fixed inset-y-0 left-0 w-64 px-8 py-4 bg-gray-100 border-r overflow-y-auto lg:translate-x-0 lg:static lg:inset-auto"
+    >
+      <div class="flex items-center justify-between">
+        <div class="font-extrabold text-xl text-orange-500 border-b border-orange-500">
+          <router-link :to="{name: 'boardOverview'}" exact>TRACKERIFY</router-link>
         </div>
-        <div class="flex">
-          <div
-            class="py-2 text-xs align-text-middle text-red-500 font-semibold"
-            v-if="removeUserError"
-          >{{removeUserError}}</div>
-          <addUserToBoard class="mr-4" />
-          <div class="flex flex-row-reverse">
-            <div v-for="user in board.users" :key="user._id" class="relative -ml-2 h-8 w-8 z-0">
-              <img
-                class="rounded-full block border-white border-2"
-                :src="user.profileImage"
-                alt="Profile Image"
-              />
-              <div
-                v-if="user._id !== $store.state.user._id"
-                class="absolute inset-0 flex opacity-0 bg-red-400 rounded-full hover:opacity-75"
-              >
-                <button
-                  class="flex justify-center w-full items-center focus:outline-none"
-                  @click="removeUser(user._id)"
-                >
-                  <svg class="h-3 w-3 fill-current text-gray-800 opacity-100" viewBox="0 0 20 20">
-                    <path
-                      d="M10 8.586L2.929 1.515 1.515 2.929 8.586 10l-7.071 7.071 1.414 1.414L10 11.414l7.071 7.071 1.414-1.414L11.414 10l7.071-7.071-1.414-1.414L10 8.586z"
+        <button class="lg:hidden" @click="isOpen = false">Close</button>
+      </div>
+      <nav class="mt-8">
+        <h2 class="text-xs font-semibold text-gray-600 uppercase tracking-wide">Issues</h2>
+        <div class="mt-2 -mx-3">
+          <a
+            href="#"
+            class="px-3 py-1 flex justify-between text-gray-700 text-sm font-medium bg-gray-200 rounded-lg"
+          >
+            <span>All</span>
+            <span class="text-sm font-semibold text-gray-700">36</span>
+          </a>
+          <a
+            href="#"
+            class="mt-1 px-3 py-1 flex justify-between text-gray-700 text-sm font-medium hover:bg-gray-200 rounded-lg"
+          >
+            <span>Created by me</span>
+            <span class="text-sm font-semibold text-gray-700">2</span>
+          </a>
+          <a
+            href="#"
+            class="mt-1 px-3 py-1 flex justify-between text-gray-700 text-sm font-medium hover:bg-gray-200 rounded-lg"
+          >
+            <span>Archived</span>
+            <span class="text-sm font-semibold text-gray-700">1</span>
+          </a>
+          <a
+            href="#"
+            class="mt-1 px-3 py-1 flex justify-between text-gray-700 text-sm font-medium hover:bg-gray-200 rounded-lg"
+          >
+            <span>Assigned to me</span>
+            <span class="text-sm font-semibold text-gray-700"></span>
+          </a>
+        </div>
+        <h2 class="mt-8 text-xs font-semibold text-gray-600 uppercase tracking-wide">Labels</h2>
+        <div class="mt-2 -mx-3">
+          <a
+            v-for="label in board.labels"
+            :key="label._id"
+            href="#"
+            class="mt-1 px-3 py-1 flex justify-between text-gray-700 text-sm font-medium hover:bg-gray-200 rounded-lg items-center"
+          >
+            <span>{{label.title}}</span>
+            <svg
+              class="h-2 w-2"
+              :style="{'color':label.color}"
+              viewBox="0 0 8 8"
+              fill="currentColor"
+            >
+              <circle cx="4" cy="4" r="3" />
+            </svg>
+          </a>
+        </div>
+
+        <TheNavigation />
+      </nav>
+    </section>-->
+    <!-- Main content -->
+    <div v-if="!isLoading" class="flex-1 flex flex-col min-w-0 bg-white">
+      <div class="flex-shrink-0 border-b border-gray-200">
+        <header class>
+          <div class="px-6">
+            <Topbar @openSidebar="isOpen = true" />
+            <div class="py-2 sm:flex items-center justify-between">
+              <div class="flex justify-between sm:justify-start">
+                <div class="flex items-baseline">
+                  <h1
+                    v-if="!editingTitle"
+                    @click="editingTitle = !editingTitle"
+                    class="font-semibold text-2xl text-gray-800"
+                  >{{board.title}}</h1>
+                  <input
+                    v-else
+                    v-model="title"
+                    type="text"
+                    class="font-semibold text-2xl bg-gray-300 text-gray-800"
+                  />
+                  <DeleteBoard :board="board" class="ml-2"></DeleteBoard>
+                </div>
+                <div class="flex items-center ml-4">
+                  <div
+                    v-for="user in board.users"
+                    :key="user._id"
+                    class="relative -ml-2 h-8 w-8 z-0"
+                  >
+                    <img
+                      class="rounded-full block border-white border-2"
+                      :src="user.profileImage"
+                      alt="Profile Image"
                     />
-                  </svg>
-                </button>
+                    <div
+                      v-if="user._id !== $store.state.user._id"
+                      class="absolute inset-0 flex opacity-0 bg-red-600 rounded-full hover:opacity-100"
+                    >
+                      <button
+                        class="flex justify-center w-full items-center"
+                        @click="removeUser(user._id)"
+                      >
+                        <svg
+                          class="h-3 w-3 fill-current text-gray-200 opacity-100"
+                          viewBox="0 0 20 20"
+                        >
+                          <path
+                            d="M10 8.586L2.929 1.515 1.515 2.929 8.586 10l-7.071 7.071 1.414 1.414L10 11.414l7.071 7.071 1.414-1.414L11.414 10l7.071-7.071-1.414-1.414L10 8.586z"
+                          />
+                        </svg>
+                      </button>
+                    </div>
+                  </div>
+
+                  <AddUserToBoard class="ml-2 hidden xl:block" />
+                </div>
+              </div>
+
+              <div class="py-1 flex items-center">
+                <span class="p-1 hidden bg-gray-200 border rounded sm:inline-flex">
+                  <button class="leading-tight px-2 py-1">List View</button>
+                  <button class="leading-tight px-2 py-1 bg-white rounded shadow">Board View</button>
+                </span>
+                <LabelOverview class="w-1/2 sm:w-auto mr-1 sm:mr-0 sm:ml-2">Edit Labels</LabelOverview>
+                <AddList class="w-1/2 sm:w-auto ml-1" />
               </div>
             </div>
           </div>
-        </div>
+          <div class="flex p-1 bg-gray-200 border-t sm:hidden">
+            <button class="w-1/2 leading-tight px-2 py-1 mr-1">List</button>
+            <button class="w-1/2 leading-tight px-2 py-1 ml-1 bg-white rounded shadow">Board</button>
+          </div>
+        </header>
       </div>
-      <!-- BOARD AREA -->
-      <div class="overflow-x-auto">
-        <div v-if="lists">
-          <draggable
-            animation="50"
-            ghost-class="bg-blue-200"
-            class="py-6 h-full inline-flex flex-shrink-0 items-start"
-            group="list"
-            tag="div"
-            v-model="lists"
-            @start="drag=true"
-            @end="drag=false"
-          >
-            <div class="rounded-lg" v-for="list in lists" :key="list._id">
-              <div v-if="list.cards">
-                <List :listId="list._id" :listTitle="list.title" :listColor="list.color"></List>
-              </div>
-            </div>
-          </draggable>
-        </div>
+      <div class="flex-1 overflow-auto">
+        <draggable
+          class="inline-flex h-full p-3 overflow-hidden"
+          animation="50"
+          ghost-class="bg-blue-200"
+          group="list"
+          tag="main"
+          v-model="lists"
+          @start="drag=true"
+          @end="drag=false"
+        >
+          <List
+            v-for="list in lists"
+            :key="list._id"
+            :listId="list._id"
+            :listTitle="list.title"
+            :listColor="list.color"
+          />
+        </draggable>
       </div>
-    </main>
-    <div v-else-if="!isLoading">Board has been deleted :(</div>
-    <connection-lost></connection-lost>
+    </div>
+    <button
+      @click="isOpen = false"
+      :class="isOpen ? 'block' : 'hidden'"
+      class="absolute w-full h-full inset-0 bg-black opacity-50 lg:hidden cursor-default"
+    ></button>
+    <LoadingSpinner v-if="isLoading" class="mt-10 flex items-center justify-center" />
+    <ConnectionLost />
   </div>
 </template>
 
 <script>
-//Plugins
 import { mapState } from 'vuex';
 import draggable from 'vuedraggable';
-//Components
-import List from '@/components/list/List';
-import AddList from '@/components/list/AddList';
-import AddUserToBoard from '@/components/board/AddUserToBoard';
-import DeleteBoard from '@/components/board/DeleteBoard';
-import LabelOverview from '@/components/labels/LabelOverview';
-import ConnectionLost from '@/components/reusables/ConnectionLost';
-import LoadingSpinner from '@/components/reusables/LoadingSpinner';
-//Server API
-import BoardService from '@/services/BoardService';
-import UserBoardService from '@/services/UserBoardService';
-import ListOrderService from '@/services/ListOrderService';
+import UserBoardService from '../services/UserBoardService';
+import List from '../components/list/List_V2';
+import Topbar from '../components_v2/TheTopbar';
+import TheSidebar from '../components_v2/TheSidebar';
+
+import AddList from '../components/list/AddList';
+import DeleteBoard from '../components/board/DeleteBoard';
+import AddUserToBoard from '../components/board/AddUserToBoard';
+import LabelOverview from '../components/labels/LabelOverview';
+import LoadingSpinner from '../components/reusables/LoadingSpinner';
+import ConnectionLost from '../components/reusables/ConnectionLost';
+
 export default {
-  name: 'Board',
+  name: 'board',
   data() {
     return {
       boardId: this.$route.params.boardId,
@@ -109,18 +246,21 @@ export default {
       editingTitle: false,
       title: '',
       drag: false,
-      isLoading: true
+      isLoading: true,
+      isOpen: false
     };
   },
   components: {
     List,
+    Topbar,
     AddList,
     AddUserToBoard,
     DeleteBoard,
     LabelOverview,
     draggable,
     ConnectionLost,
-    LoadingSpinner
+    LoadingSpinner,
+    TheSidebar
   },
   computed: {
     ...mapState(['board']),
@@ -218,4 +358,38 @@ export default {
 </script>
 
 <style>
+:focus {
+  outline: 0;
+}
+::-webkit-scrollbar {
+  width: 8px;
+  height: 8px;
+  background-color: rgba(0, 0, 0, 0);
+  -webkit-border-radius: 100px;
+  border-radius: 100px;
+}
+
+::-webkit-scrollbar:hover {
+  background-color: rgba(0, 0, 0, 0.09);
+}
+
+::-webkit-scrollbar-thumb {
+  background: rgba(0, 0, 0, 0.3);
+  -webkit-border-radius: 100px;
+  border-radius: 100px;
+}
+::-webkit-scrollbar-thumb:active {
+  background: rgba(0, 0, 0, 0.5);
+  /*Some darker color when you click it */
+  -webkit-border-radius: 100px;
+  border-radius: 100px;
+}
+
+/* add vertical min-height & horizontal min-width */
+::-webkit-scrollbar-thumb:vertical {
+  min-height: 10px;
+}
+::-webkit-scrollbar-thumb:horizontal {
+  min-width: 10px;
+}
 </style>
