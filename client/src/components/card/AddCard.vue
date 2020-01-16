@@ -85,7 +85,8 @@ export default {
           this.title = null;
           this.description = null;
         } catch (error) {
-          console.log(error);
+          this.error = error.response.data.error;
+          console.log(error.response.data.error);
         }
       }
     }

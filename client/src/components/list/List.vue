@@ -1,14 +1,13 @@
 <template>
   <div
-    class="overflow-hidden mx-2 my-2 px-3 py-2 w-72 flex-shrink-0 flex flex-col bg-gray-100 rounded shadow-md border-t-4"
+    class="ml-3 lg:first:ml-0 flex-shrink-0 overflow-hidden flex flex-col py-3 w-72 bg-gray-100 rounded border-t-2 border-b-2"
     :style="borderColor"
   >
     <!-- List Title -->
-    <div class="flex justify-between items-center">
-      <!-- <h2 class="py-4 font-semibold text-gray-700 text-xl">{{title}}</h2> -->
+    <div class="px-3 pb-3 flex-shrink-0 flex justify-between items-center">
       <h2
         v-if="!editingTitle"
-        class="w-full font-semibold text-gray-700 text-xl"
+        class="w-full text-gray-700 text-sm font-medium"
         :class="`_${listId}`"
       >{{listTitle}}</h2>
       <input
@@ -16,33 +15,28 @@
         @change="updateTitle"
         v-model="title"
         type="text"
-        class="font-semibold text-xl bg-gray-300 text-gray-700 focus:outline-none"
+        class="w-full text-gray-700 text-sm font-medium bg-gray-300"
         :class="`_${listId}`"
       />
-      <delete-popup @deleteFunction="deleteList">{{title}}</delete-popup>
+      <delete-popup class="ml-2" @deleteFunction="deleteList">{{listTitle}}</delete-popup>
     </div>
-    <!-- Scrollable area -->
-    <!-- List CONTENT -->
-
-    <!-- <ul> -->
-    <draggable
-      animation="50"
-      ghost-class="bg-blue-200"
-      group="card"
-      tag="ul"
-      v-model="cards"
-      @start="drag=true"
-      @end="drag=false"
-    >
-      <li v-for="card in cards" :key="card._id" class="my-2 px-3 py-3 bg-white shadow rounded">
-        <!-- {{card.title}} -->
-        <card :cardId="card._id"></card>
-      </li>
-    </draggable>
-    <!-- </ul> -->
-
+    <div class="flex-1 min-h-0">
+      <draggable
+        ghost-class="bg-blue-200"
+        group="card"
+        tag="ul"
+        v-model="cards"
+        class="px-3 h-full overflow-y-auto"
+        @start="drag=true"
+        @end="drag=false"
+      >
+        <li v-for="card in cards" :key="card._id" class="mb-2 p-3 rounded shadow bg-white">
+          <card :cardId="card._id"></card>
+        </li>
+      </draggable>
+    </div>
     <!-- ADD LIST BUTTON -->
-    <add-card :listId="listId"></add-card>
+    <add-card class="mt-1" :listId="listId"></add-card>
   </div>
 </template>
 
@@ -66,6 +60,8 @@ export default {
   props: ['listTitle', 'listId', 'listColor'],
   methods: {
     async updateTitle() {
+      console.log('update');
+
       if (this.title === '') return;
       try {
         await this.$store.dispatch('updateListTitle', {
@@ -127,6 +123,8 @@ export default {
     });
   },
   created() {
+    this.title = this.listTitle;
+
     const handleTitleKeyPresses = e => {
       if (this.editingTitle === false) {
         return;

@@ -14,9 +14,9 @@ export default store => {
       'setBoard',
       'setBoardOverview',
       'createBoard',
-
-      'DISCONNECT',
-      'CONNECT'
+      'isLoading',
+      'SOCKET_DISCONNECT',
+      'SOCKET_CONNECT'
     ];
 
     const isBlacklisted = blackListedMutations.includes(type);

@@ -8,7 +8,7 @@ module.exports = {
 
     const parentBoard = await Board.findById(boardId);
     if (!parentBoard) {
-      return res.status(403).send('A list needs a parent board');
+      return res.status(403).send({ error: 'A list needs a parent board' });
     }
     const list = new List({
       boardId,
@@ -73,7 +73,6 @@ module.exports = {
         { title: listTitle },
         { new: true }
       );
-      console.log(list);
 
       res.send(list);
     } catch (error) {

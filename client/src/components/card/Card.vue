@@ -1,5 +1,5 @@
 <template>
-  <div class="flex flex-col flex-shrink-0 justify-between">
+  <div>
     <div>
       <Label
         class="mr-1"
@@ -8,11 +8,13 @@
         :color="label.color"
       >{{label.title}}</Label>
     </div>
-    <span class="text-sm leading-snug text-gray-600">
-      <button @click="isOpen = !isOpen" class="text-left">{{card.title}}</button>
-    </span>
-    <div class="pt-4 flex justify-between items-end">
-      <div class="w-1/2 flex justify-start items-center">
+    <div class="flex justify-between">
+      <span class="text-sm text-gray-700 leading-snug">
+        <button class="text-left" @click="isOpen = true">{{card.title}}</button>
+      </span>
+    </div>
+    <div class="mt-2 flex justify-between items-baseline">
+      <div class="flex">
         <div class="flex items-center">
           <svg class="h-4 w-4 fill-current text-gray-500" viewBox="0 0 20 20">
             <path
@@ -30,28 +32,13 @@
           <span v-if="card.attachments" class="text-xs pl-1">{{card.attachments.length}}</span>
         </div>
       </div>
-      <div class="w-1/2 flex justify-end">
-        <AddUserToCard :assignedUsers="card.assignedUsers" :cardId="card._id" class="mr-3 flex"></AddUserToCard>
-        <div class="flex flex-row-reverse">
-          <div v-for="user in card.assignedUsers" :key="user._id" class="relative -ml-2 h-8 w-8">
-            <img
-              class="rounded-full border-white border-2"
-              :src="user.profileImage"
-              alt="Profile Image"
-            />
-            <div class="absolute inset-0 flex opacity-0 bg-red-400 rounded-full hover:opacity-75">
-              <button
-                class="flex justify-center w-full items-center focus:outline-none"
-                @click="removeUser(user._id)"
-              >
-                <svg class="h-3 w-3 fill-current text-gray-800 opacity-100" viewBox="0 0 20 20">
-                  <path
-                    d="M10 8.586L2.929 1.515 1.515 2.929 8.586 10l-7.071 7.071 1.414 1.414L10 11.414l7.071 7.071 1.414-1.414L11.414 10l7.071-7.071-1.414-1.414L10 8.586z"
-                  />
-                </svg>
-              </button>
-            </div>
-          </div>
+      <div class="flex flex-shrink-0">
+        <div v-for="user in card.assignedUsers" :key="user._id" class="-ml-2 h-6 w-6">
+          <img
+            class="rounded-full border-white border-2 object-cover"
+            :src="user.profileImage"
+            alt="Profile Image"
+          />
         </div>
       </div>
     </div>
@@ -70,7 +57,7 @@
               type="text"
               v-model="title"
             />
-            <delete-popup class="ml-4" @deleteFunction="deleteCard">{{title}}</delete-popup>
+            <DeletePopup class="ml-4" @deleteFunction="deleteCard">{{title}}</DeletePopup>
           </div>
           <button class="ml-4" @click="isOpen = false">
             <svg class="h-4 w-4 fill-current" viewBox="0 0 20 20">
@@ -146,7 +133,12 @@
           </div>
         </div>
         <div class="my-1 max-h-72 overflow-y-auto">
-          <comment v-for="comment in card.comments" :key="comment._id" :comment="comment"></comment>
+          <comment
+            v-for="comment in card.comments"
+            :key="comment._id"
+            :listId="card.list"
+            :comment="comment"
+          ></comment>
         </div>
         <add-comment :cardId="card._id" :listId="card.list"></add-comment>
         <div class="py-2 border-t-2 border-gray-200">Attachments:</div>

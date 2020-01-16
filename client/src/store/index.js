@@ -32,7 +32,8 @@ export const store = new Vuex.Store({
     token: null,
     user: { boards: null },
     isUserLoggedIn: false,
-    board: { _id: null }
+    board: { _id: null, lists: [{ cards: [{}] }] },
+    isLoading: false
   },
   getters: {
     getCardsByListId: state => listId => {
@@ -48,6 +49,55 @@ export const store = new Vuex.Store({
         })
       );
       return cardById;
+    },
+    numberOfAllCards(state) {
+      if (state.isLoading) return 0;
+      let numberOfCards = 0;
+      state.board.lists.forEach(list => {
+        list.cards.forEach(() => {
+          numberOfCards++;
+        });
+      });
+      return numberOfCards;
+    },
+    numberOfCardsCreatedByMe(state) {
+      if (state.isLoading) return 0;
+      let numberOfCards = 0;
+      state.board.lists.forEach(list => {
+        list.cards.forEach(card => {
+          if (card.owner === state.user._id) {
+            numberOfCards++;
+          }
+        });
+      });
+      return numberOfCards;
+    },
+    numberOfArchivedCards(state) {
+      if (state.isLoading) return 0;
+      let numberOfCards = 0;
+      state.board.lists.forEach(list => {
+        list.cards.forEach(card => {
+          if (card.archived) {
+            numberOfCards++;
+          }
+        });
+      });
+      return numberOfCards;
+    },
+    numberOfCardsAssignedToMe(state) {
+      if (state.isLoading) return 0;
+      let numberOfCards = 0;
+      state.board.lists.forEach(list => {
+        list.cards.forEach(card => {
+          if (!card.assignedUsers) return;
+          card.assignedUsers.forEach(user => {
+            if (user._id === state.user._id) {
+              numberOfCards++;
+            }
+          });
+        });
+      });
+      return numberOfCards;
     }
   },
   mutations: {
@@ -55,6 +105,9 @@ export const store = new Vuex.Store({
     ...comment.mutations,
     ...board.mutations,
     ...list.mutations,
+    isLoading(state, bool) {
+      state.isLoading = bool;
+    },
     setToken(state, token) {
       state.token = token;
       state.isUserLoggedIn = !!token;
@@ -70,23 +123,17 @@ export const store = new Vuex.Store({
     },
     updateBoard(state, board) {
       state.board.title = board.title;
-      state.user.boards.find(stateBoard => stateBoard._id === board._id).title =
-        board.title;
+      //   state.user.boards.find(stateBoard => stateBoard._id === board._id).title =
+      //     board.title;
     },
     deleteBoard(state, { boardId }) {
       state.board = null;
-      state.user.boards = state.user.boards.filter(
-        board => board._id !== boardId
-      );
+      // state.user.boards = state.user.boards.filter(
+      //   board => board._id !== boardId
+      // );
     },
     addList(state, list) {
       state.board.lists.push(list);
-
-      let boards = state.user.boards
-        .find(board => {
-          return board._id === list.boardId;
-        })
-        .lists.push(list._id);
     },
     addCard(state, card) {
       state.board.lists.find(list => list._id === card.list).cards.push(card);
@@ -104,11 +151,11 @@ export const store = new Vuex.Store({
       });
 
       //For boardOverview
-      state.user.boards.find(
-        board => board._id === deletedList.boardId
-      ).lists = state.user.boards
-        .find(board => board._id === deletedList.boardId)
-        .lists.filter(list => list !== deletedList._id);
+      // state.user.boards.find(
+      //   board => board._id === deletedList.boardId
+      // ).lists = state.user.boards
+      //   .find(board => board._id === deletedList.boardId)
+      //   .lists.filter(list => list !== deletedList._id);
     },
     addComment(state, comment) {
       state.board.lists.forEach(list => {
@@ -133,9 +180,9 @@ export const store = new Vuex.Store({
     },
     addUserToBoard(state, payload) {
       state.board.users.push(payload.user);
-      state.user.boards
-        .find(board => board._id === payload.boardId)
-        .users.push(payload.userId);
+      // state.user.boards
+      //   .find(board => board._id === payload.boardId)
+      //   .users.push(payload.userId);
     },
     addUserToCard(state, payload) {
       const { user, listId, cardId } = payload;
@@ -159,11 +206,11 @@ export const store = new Vuex.Store({
         });
       });
       //For boardOverview
-      state.user.boards.find(
-        board => board._id === payload.boardId
-      ).users = state.user.boards
-        .find(board => board._id === payload.boardId)
-        .users.filter(user => user !== payload.userId);
+      // state.user.boards.find(
+      //   board => board._id === payload.boardId
+      // ).users = state.user.boards
+      //   .find(board => board._id === payload.boardId)
+      //   .users.filter(user => user !== payload.userId);
     },
     removeUserFromCard(state, { userId, cardId, listId }) {
       //Payload has userId, cardId and listId on it.
@@ -198,6 +245,9 @@ export const store = new Vuex.Store({
 
       commit('setToken', response.data.token);
       commit('setUser', response.data.user);
+    },
+    isLoading({ commit }, bool) {
+      commit('isLoading', bool);
     },
     logout({ commit }) {
       commit('setToken', null);

@@ -18,7 +18,7 @@
 </template>
 
 <script>
-import TheNavigation from '../components_v2/TheNavigation';
+import TheNavigation from '../components/TheNavigation';
 
 export default {
   components: {

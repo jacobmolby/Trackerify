@@ -4,6 +4,7 @@ module.exports = {
       translate: {
         // defaults to {}
         '0': '0%',
+        '1px': '1px',
         '1/2': '50%',
         full: '100%',
         '-full': '-100%',
@@ -11,7 +12,7 @@ module.exports = {
         '3d': ['40px', '-60px', '-130px']
       },
       flex: {
-        '2': '0 45%'
+        '2': '0 49%'
       },
       colors: {
         deepblue: {

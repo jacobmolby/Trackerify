@@ -2,6 +2,15 @@
 @tailwind components;
 @tailwind utilities;
 
+.primary-btn {
+  @apply w-full inline-flex items-center justify-center px-2 py-2 text-sm font-medium text-white bg-gray-800 rounded;
+}
+
+.primary-btn:hover {
+  @apply bg-gray-700;
+  @apply translate-y-1px;
+}
+
 .text-shadow {
   text-shadow: 0 0px 2px rgba(0, 0, 0, 0.2);
 }

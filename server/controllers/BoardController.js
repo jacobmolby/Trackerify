@@ -22,13 +22,11 @@ module.exports = {
       const board = new Board({
         title: req.body.title,
         users: req.user._id,
+        owner: req.user._id,
         labels
       });
 
       const savedBoard = await board.save();
-      const user = await User.findById(req.user._id);
-      user.boards.addToSet(savedBoard);
-      await user.save();
       res.send(savedBoard.toJSON());
     } catch (error) {
       console.log(error);
@@ -72,6 +70,7 @@ module.exports = {
           .populate({
             path: 'labels'
           });
+
         if (!board) {
           return res.status(400).send({ error: "Board doesn't exist" });
         }

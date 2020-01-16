@@ -1,7 +1,7 @@
 <template>
-  <div class="h-screen flex overflow-hidden">
+  <div class="flex overflow-hidden h-screen">
     <!-- Sidebar -->
-    <TheSidebar @closeSidebar="isOpen=false" :isOpen="isOpen">
+    <Sidebar @closeSidebar="isOpen=false" :isOpen="isOpen">
       <h2 class="text-xs font-semibold text-gray-600 uppercase tracking-wide">Issues</h2>
       <div class="mt-2 -mx-3">
         <a
@@ -9,37 +9,36 @@
           class="px-3 py-1 flex justify-between text-gray-700 text-sm font-medium bg-gray-200 rounded-lg"
         >
           <span>All</span>
-          <span class="text-sm font-semibold text-gray-700">36</span>
+          <span class="text-sm font-semibold text-gray-700">{{numberOfAllCards}}</span>
         </a>
         <a
           href="#"
           class="mt-1 px-3 py-1 flex justify-between text-gray-700 text-sm font-medium hover:bg-gray-200 rounded-lg"
         >
           <span>Created by me</span>
-          <span class="text-sm font-semibold text-gray-700">2</span>
+          <span class="text-sm font-semibold text-gray-700">{{numberOfCardsCreatedByMe}}</span>
         </a>
         <a
           href="#"
           class="mt-1 px-3 py-1 flex justify-between text-gray-700 text-sm font-medium hover:bg-gray-200 rounded-lg"
         >
           <span>Archived</span>
-          <span class="text-sm font-semibold text-gray-700">1</span>
+          <span class="text-sm font-semibold text-gray-700">{{numberOfArchivedCards}}</span>
         </a>
         <a
           href="#"
           class="mt-1 px-3 py-1 flex justify-between text-gray-700 text-sm font-medium hover:bg-gray-200 rounded-lg"
         >
           <span>Assigned to me</span>
-          <span class="text-sm font-semibold text-gray-700"></span>
+          <span class="text-sm font-semibold text-gray-700">{{numberOfCardsAssignedToMe}}</span>
         </a>
       </div>
       <h2 class="mt-8 text-xs font-semibold text-gray-600 uppercase tracking-wide">Labels</h2>
       <div class="mt-2 -mx-3">
-        <a
+        <button
           v-for="label in board.labels"
           :key="label._id"
-          href="#"
-          class="mt-1 px-3 py-1 flex justify-between text-gray-700 text-sm font-medium hover:bg-gray-200 rounded-lg items-center"
+          class="mt-1 px-3 py-1 flex w-full justify-between text-gray-700 text-sm font-medium hover:bg-gray-200 rounded-lg items-center"
         >
           <span>{{label.title}}</span>
           <svg
@@ -50,74 +49,10 @@
           >
             <circle cx="4" cy="4" r="3" />
           </svg>
-        </a>
+        </button>
       </div>
-    </TheSidebar>
-    <!-- <section
-      :class="isOpen ? 'translate-x-0 ease-out transition-250' : '-translate-x-full ease-in transition-250'"
-      class="lg:block z-10 fixed inset-y-0 left-0 w-64 px-8 py-4 bg-gray-100 border-r overflow-y-auto lg:translate-x-0 lg:static lg:inset-auto"
-    >
-      <div class="flex items-center justify-between">
-        <div class="font-extrabold text-xl text-orange-500 border-b border-orange-500">
-          <router-link :to="{name: 'boardOverview'}" exact>TRACKERIFY</router-link>
-        </div>
-        <button class="lg:hidden" @click="isOpen = false">Close</button>
-      </div>
-      <nav class="mt-8">
-        <h2 class="text-xs font-semibold text-gray-600 uppercase tracking-wide">Issues</h2>
-        <div class="mt-2 -mx-3">
-          <a
-            href="#"
-            class="px-3 py-1 flex justify-between text-gray-700 text-sm font-medium bg-gray-200 rounded-lg"
-          >
-            <span>All</span>
-            <span class="text-sm font-semibold text-gray-700">36</span>
-          </a>
-          <a
-            href="#"
-            class="mt-1 px-3 py-1 flex justify-between text-gray-700 text-sm font-medium hover:bg-gray-200 rounded-lg"
-          >
-            <span>Created by me</span>
-            <span class="text-sm font-semibold text-gray-700">2</span>
-          </a>
-          <a
-            href="#"
-            class="mt-1 px-3 py-1 flex justify-between text-gray-700 text-sm font-medium hover:bg-gray-200 rounded-lg"
-          >
-            <span>Archived</span>
-            <span class="text-sm font-semibold text-gray-700">1</span>
-          </a>
-          <a
-            href="#"
-            class="mt-1 px-3 py-1 flex justify-between text-gray-700 text-sm font-medium hover:bg-gray-200 rounded-lg"
-          >
-            <span>Assigned to me</span>
-            <span class="text-sm font-semibold text-gray-700"></span>
-          </a>
-        </div>
-        <h2 class="mt-8 text-xs font-semibold text-gray-600 uppercase tracking-wide">Labels</h2>
-        <div class="mt-2 -mx-3">
-          <a
-            v-for="label in board.labels"
-            :key="label._id"
-            href="#"
-            class="mt-1 px-3 py-1 flex justify-between text-gray-700 text-sm font-medium hover:bg-gray-200 rounded-lg items-center"
-          >
-            <span>{{label.title}}</span>
-            <svg
-              class="h-2 w-2"
-              :style="{'color':label.color}"
-              viewBox="0 0 8 8"
-              fill="currentColor"
-            >
-              <circle cx="4" cy="4" r="3" />
-            </svg>
-          </a>
-        </div>
+    </Sidebar>
 
-        <TheNavigation />
-      </nav>
-    </section>-->
     <!-- Main content -->
     <div v-if="!isLoading" class="flex-1 flex flex-col min-w-0 bg-white">
       <div class="flex-shrink-0 border-b border-gray-200">
@@ -223,12 +158,12 @@
 </template>
 
 <script>
-import { mapState } from 'vuex';
+import { mapState, mapGetters } from 'vuex';
 import draggable from 'vuedraggable';
 import UserBoardService from '../services/UserBoardService';
-import List from '../components/list/List_V2';
-import Topbar from '../components_v2/TheTopbar';
-import TheSidebar from '../components_v2/TheSidebar';
+import List from '../components/list/List';
+import Topbar from '../components/TheTopbar';
+import Sidebar from '../components/Sidebar';
 
 import AddList from '../components/list/AddList';
 import DeleteBoard from '../components/board/DeleteBoard';
@@ -246,8 +181,8 @@ export default {
       editingTitle: false,
       title: '',
       drag: false,
-      isLoading: true,
-      isOpen: false
+      isOpen: false,
+      numberOfCards: 0
     };
   },
   components: {
@@ -260,10 +195,16 @@ export default {
     draggable,
     ConnectionLost,
     LoadingSpinner,
-    TheSidebar
+    Sidebar
   },
   computed: {
-    ...mapState(['board']),
+    ...mapState(['board', 'isLoading']),
+    ...mapGetters([
+      'numberOfAllCards',
+      'numberOfCardsCreatedByMe',
+      'numberOfArchivedCards',
+      'numberOfCardsAssignedToMe'
+    ]),
     lists: {
       get() {
         return this.$store.state.board.lists;
@@ -274,7 +215,6 @@ export default {
             lists,
             boardId: this.boardId
           });
-          // this.$socket.emit('updateListOrder', lists);
         } catch (error) {
           console.log(error);
         }
@@ -283,9 +223,10 @@ export default {
   },
   async mounted() {
     try {
+      this.$store.dispatch('isLoading', true);
       await this.$store.dispatch('setBoard', { boardId: this.boardId });
       this.title = this.board.title;
-      this.isLoading = false;
+      this.$store.dispatch('isLoading', false);
     } catch (error) {
       if (error.response.data.error === "Board doesn't exist") {
         this.$router.push({ name: 'boardOverview' });
@@ -338,6 +279,18 @@ export default {
     }
   },
   created() {
+    // VIRKER MEN ER IKKE EN GOD LØSNING
+    // this.$store.subscribe((mutation, state) => {
+    //   if (mutation.type === 'setBoard') {
+    //     let numOfCards = 0;
+    //     state.board.lists.forEach(list => {
+    //       list.cards.forEach(() => {
+    //         numOfCards++;
+    //       });
+    //     });
+    //     this.numberOfCards = numOfCards;
+    //   }
+    // });
     const handleTitleKeyPresses = e => {
       if (this.editingTitle === false) {
         return;

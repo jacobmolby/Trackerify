@@ -1,9 +1,11 @@
 <template>
   <div>
-    <button
-      class="bg-green-500 hover:bg-green-700 text-white font-bold py-2 px-4 rounded focus:outline-none focus:bg-green-600"
-      @click="isOpen = !isOpen"
-    >Create New Board</button>
+    <button @click="isOpen = !isOpen" class="primary-btn">
+      <svg class="h-4 w-4 fill-current" viewBox="0 0 20 20">
+        <path d="M12 4H8v12h4V4zm2 0v12h4V4h-4zM6 4H2v12h4V4zM0 2h20v16H0V2z" />
+      </svg>
+      <span class="ml-1">New Board</span>
+    </button>
     <portal to="popup-container" v-if="isOpen">
       <button @click="isOpen = false" tabindex="-1" class="popup-bg"></button>
       <div class="popup">

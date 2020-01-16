@@ -1,9 +1,6 @@
 <template>
   <div>
-    <button
-      @click="isOpen = !isOpen"
-      class="w-full inline-flex items-center justify-center px-2 py-2 text-sm font-medium text-white bg-gray-800 rounded hover:bg-gray-700"
-    >
+    <button @click="isOpen = !isOpen" class="primary-btn">
       <svg class="h-4 w-4 fill-current" viewBox="0 0 20 20">
         <path
           d="M11 9h4v2h-4v4H9v-4H5V9h4V5h2v4zm-1 11a10 10 0 110-20 10 10 0 010 20zm0-2a8 8 0 100-16 8 8 0 000 16z"
@@ -87,7 +84,7 @@ export default {
           this.pickingColor = false;
           this.isOpen = false;
         } catch (error) {
-          console.log(error);
+          console.log(error.response.data.error);
         }
       }
     }
