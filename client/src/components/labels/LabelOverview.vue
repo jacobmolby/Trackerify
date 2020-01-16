@@ -1,13 +1,15 @@
 <template>
   <div>
     <button
-      class="ml-6 inline-flex items-center text-gray-600 hover:text-gray-900"
+      class="w-full inline-flex items-center justify-center px-2 py-2 text-sm font-medium text-white bg-gray-800 rounded hover:bg-gray-700"
       @click="isOpen = !isOpen"
     >
-      <svg class="h-3 w-3 mr-2 fill-current" viewBox="0 0 20 20">
+      <svg class="h-3 w-3 fill-current" viewBox="0 0 20 20">
         <path d="M12.3 3.7l4 4L4 20H0v-4L12.3 3.7zm1.4-1.4L16 0l4 4-2.3 2.3-4-4z" />
       </svg>
-      <slot></slot>
+      <span class="ml-1">
+        <slot></slot>
+      </span>
     </button>
     <portal to="popup-container-important" v-if="isOpen">
       <button @click="isOpen = false" tabindex="-1" class="popup-bg"></button>

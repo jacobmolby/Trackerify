@@ -111,10 +111,14 @@ export const store = new Vuex.Store({
         .lists.filter(list => list !== deletedList._id);
     },
     addComment(state, comment) {
-      state.board.lists
-        .find(list => list._id === comment.listId)
-        .cards.find(card => card._id === comment.cardId)
-        .comments.push(comment);
+      state.board.lists.forEach(list => {
+        let cardToAddCommment = list.cards.find(
+          card => card._id === comment.cardId
+        );
+        if (cardToAddCommment) {
+          cardToAddCommment.comments.push(comment);
+        }
+      });
     },
     updateCard(state, card) {
       const cardIndex = state.board.lists

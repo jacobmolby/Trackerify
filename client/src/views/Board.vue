@@ -130,12 +130,6 @@ export default {
       },
       async set(lists) {
         try {
-          // const payload = {
-          //   lists,
-          //   boardId: this.boardId
-          // };
-
-          // this.updateListOrder(payload);
           await this.$store.dispatch('updateListOrder', {
             lists,
             boardId: this.boardId
@@ -160,14 +154,6 @@ export default {
     }
   },
   methods: {
-    // async updateListOrder(payload) {
-    //   payload.lists = payload.lists.map(list => list._id);
-    //   try {
-    //     const response = (await ListOrderService.put(payload)).data;
-    //   } catch (error) {
-    //     console.log(error.response.data.error);
-    //   }
-    // },
     async removeUser(userId) {
       this.removeUserError = null;
       if (userId === this.$store.state.user._id) {
@@ -201,14 +187,10 @@ export default {
         boardId: this.boardId
       };
       try {
-        // const board = (await BoardService.update(payload)).data;
-        // Dipatch action
         await this.$store.dispatch('updateBoard', {
           title: this.title,
           boardId: this.boardId
         });
-        // this.$store.dispatch('updateBoard', board);
-
         this.editingTitle = false;
       } catch (error) {
         console.log(error.response.data.error);

@@ -4,6 +4,7 @@ import Login from '@/views/Login';
 import Register from '@/views/Register';
 import Board from '@/views/Board';
 import BoardOverview from '@/views/BoardOverview';
+import DesignV2 from '@/views/DesignV2';
 
 const routes = [
   {
@@ -35,6 +36,11 @@ const routes = [
     path: '/board/:boardId',
     name: 'board',
     component: Board
+  },
+  {
+    path: '/test',
+    name: 'test',
+    component: DesignV2
   }
 ];
 
