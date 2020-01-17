@@ -1,10 +1,9 @@
-import Home from '@/views/Home';
-import Settings from '@/views/Settings';
-import Login from '@/views/Login';
-import Register from '@/views/Register';
-// import Board from '@/views/Board';
-import BoardOverview from '@/views/BoardOverview';
-import Board from '../views/Board';
+const Home = () => import('../views/Home');
+const Settings = () => import('../views/Settings');
+const Login = () => import('../views/Login');
+const Register = () => import('../views/Register');
+const BoardOverview = () => import('../views/BoardOverview');
+const Board = () => import('../views/Board');
 
 const routes = [
   {

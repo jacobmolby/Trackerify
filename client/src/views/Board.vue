@@ -112,8 +112,16 @@
 
               <div class="py-1 flex items-center">
                 <span class="p-1 hidden bg-gray-200 border rounded sm:inline-flex">
-                  <button class="leading-tight px-2 py-1">List View</button>
-                  <button class="leading-tight px-2 py-1 bg-white rounded shadow">Board View</button>
+                  <button
+                    @click="changeViewStyle('listView')"
+                    class="leading-tight px-2 py-1 mr-1 rounded"
+                    :class="listView ? 'bg-white  shadow': 'transition-bg ease-out transition-500'"
+                  >List View</button>
+                  <button
+                    @click="changeViewStyle('boardView')"
+                    class="leading-tight px-2 py-1 ml-1 rounded"
+                    :class="!listView ? 'bg-white  shadow': 'transition-bg ease-out transition-500'"
+                  >Board View</button>
                 </span>
                 <LabelOverview class="w-1/2 sm:w-auto mr-1 sm:mr-0 sm:ml-2">Edit Labels</LabelOverview>
                 <AddList class="w-1/2 sm:w-auto ml-1" />
@@ -121,12 +129,21 @@
             </div>
           </div>
           <div class="flex p-1 bg-gray-200 border-t sm:hidden">
-            <button class="w-1/2 leading-tight px-2 py-1 mr-1">List</button>
-            <button class="w-1/2 leading-tight px-2 py-1 ml-1 bg-white rounded shadow">Board</button>
+            <button
+              @click="changeViewStyle('listView')"
+              class="w-1/2 leading-tight px-2 py-1 mr-1"
+              :class="listView ? 'bg-white rounded shadow transition-bg ease-in transition-500': 'transition-bg ease-out transition-500'"
+            >List</button>
+            <button
+              @click="changeViewStyle('boardView')"
+              class="w-1/2 leading-tight px-2 py-1 ml-1"
+              :class="!listView ? 'bg-white rounded shadow transition-bg ease-in transition-500': 'transition-bg ease-out transition-500'"
+            >Board</button>
           </div>
         </header>
       </div>
-      <div class="flex-1 overflow-auto">
+      <!-- START MAIN BOARD AREA -->
+      <div v-if="!listView" class="flex-1 overflow-auto">
         <draggable
           class="inline-flex h-full p-3 overflow-hidden"
           animation="50"
@@ -146,6 +163,27 @@
           />
         </draggable>
       </div>
+      <!-- END MAIN BOARD AREA -->
+      <!-- START LIST VIEW -->
+      <div v-if="listView" class="overflow-hidden">
+        <main class="flex flex-col items-center h-full p-3 overflow-auto">
+          <div v-for="list in lists" :key="list._id" class="mt-2 w-full bg-gray-200 rounded">
+            <div class="px-3 py-3 flex-shrink-0 justify-between items-center">
+              <h2 class="pb-2 w-full text-gray-700 text-sm font-medium">{{list.title}}</h2>
+              <ol>
+                <li
+                  v-for="card in $store.getters.getCardsByListId(list._id)"
+                  :key="card._id"
+                  class="mb-2 p-3 rounded shadow bg-white"
+                >
+                  <Card :cardId="card._id"></Card>
+                </li>
+              </ol>
+            </div>
+          </div>
+        </main>
+      </div>
+      <!-- END LIST VIEW -->
     </div>
     <button
       @click="isOpen = false"
@@ -168,6 +206,7 @@ import Sidebar from '../components/Sidebar';
 import AddList from '../components/list/AddList';
 import DeleteBoard from '../components/board/DeleteBoard';
 import AddUserToBoard from '../components/board/AddUserToBoard';
+import Card from '../components/card/Card';
 import LabelOverview from '../components/labels/LabelOverview';
 import LoadingSpinner from '../components/reusables/LoadingSpinner';
 import ConnectionLost from '../components/reusables/ConnectionLost';
@@ -195,10 +234,11 @@ export default {
     draggable,
     ConnectionLost,
     LoadingSpinner,
-    Sidebar
+    Sidebar,
+    Card
   },
   computed: {
-    ...mapState(['board', 'isLoading']),
+    ...mapState(['board', 'isLoading', 'listView']),
     ...mapGetters([
       'numberOfAllCards',
       'numberOfCardsCreatedByMe',
@@ -235,6 +275,9 @@ export default {
     }
   },
   methods: {
+    changeViewStyle(style) {
+      this.$store.dispatch('changeViewStyle', style);
+    },
     async removeUser(userId) {
       this.removeUserError = null;
       if (userId === this.$store.state.user._id) {

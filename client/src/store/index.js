@@ -33,7 +33,8 @@ export const store = new Vuex.Store({
     user: { boards: null },
     isUserLoggedIn: false,
     board: { _id: null, lists: [{ cards: [{}] }] },
-    isLoading: false
+    isLoading: false,
+    listView: false
   },
   getters: {
     getCardsByListId: state => listId => {
@@ -232,6 +233,13 @@ export const store = new Vuex.Store({
     },
     updateListOrder(state, { lists }) {
       state.board.lists = lists;
+    },
+    changeViewStyle(state, viewStyle) {
+      if (viewStyle === 'boardView') {
+        state.listView = false;
+      } else if (viewStyle === 'listView') {
+        state.listView = true;
+      }
     }
   },
   actions: {
@@ -265,6 +273,9 @@ export const store = new Vuex.Store({
     },
     removeUserFromBoard({ commit }, userId) {
       commit('removeUserFromBoard', userId);
+    },
+    changeViewStyle({ commit }, viewStyle) {
+      commit('changeViewStyle', viewStyle);
     }
   }
 });

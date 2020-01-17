@@ -141,16 +141,9 @@
           ></comment>
         </div>
         <add-comment :cardId="card._id" :listId="card.list"></add-comment>
-        <div class="py-2 border-t-2 border-gray-200">Attachments:</div>
-        <div class="flex items-center justify-between">
-          <button
-            @click="deleteCard"
-            class="px-2 py-1 font-semibold text-white bg-red-500 rounded shadow hover:bg-red-800"
-          >Delete Card</button>
-          <button
-            @click="isOpen = false"
-            class="px-2 py-1 font-semibold text-white bg-indigo-400 rounded shadow hover:bg-indigo-800"
-          >Close Card</button>
+        <div class="py-2 border-t-2 border-gray-200">
+          Attachments:
+          <span class="font-bold text-red-500">NOT IMPLEMENTED YET.</span>
         </div>
       </div>
     </portal>

@@ -15,6 +15,7 @@ export default store => {
       'setBoardOverview',
       'createBoard',
       'isLoading',
+      'changeViewStyle',
       'SOCKET_DISCONNECT',
       'SOCKET_CONNECT'
     ];
