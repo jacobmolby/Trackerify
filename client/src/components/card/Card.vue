@@ -85,7 +85,7 @@
             @click="updateCard"
           >Save</button>
         </div>
-        <div class="flex justify-between py-2 border-b border-gray-300">
+        <div class="flex items-center justify-between py-2 border-b border-gray-300">
           <div>
             <Label
               class="mr-1"
@@ -94,7 +94,7 @@
               :color="label.color"
             >{{label.title}}</Label>
           </div>
-          <label-overview :cardId="cardId" :usedOnCard="true">Edit Labels</label-overview>
+          <LabelOverview :cardId="cardId" :usedOnCard="true">Edit Labels</LabelOverview>
         </div>
         <div class="py-2 flex items-center justify-between border-b border-gray-300">
           <h3 class="text-md font-medium">Assigned to:</h3>

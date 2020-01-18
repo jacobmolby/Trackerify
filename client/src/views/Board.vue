@@ -116,12 +116,20 @@
                     @click="changeViewStyle('listView')"
                     class="leading-tight px-2 py-1 mr-1 rounded"
                     :class="listView ? 'bg-white  shadow': 'transition-bg ease-out transition-500'"
-                  >List View</button>
+                  >
+                    <svg class="h-4 w-4 fill-current text-gray-700" viewBox="0 0 20 20">
+                      <path d="M0 3h20v2H0V3zm0 4h20v2H0V7zm0 4h20v2H0v-2zm0 4h20v2H0v-2z" />
+                    </svg>
+                  </button>
                   <button
                     @click="changeViewStyle('boardView')"
                     class="leading-tight px-2 py-1 ml-1 rounded"
                     :class="!listView ? 'bg-white  shadow': 'transition-bg ease-out transition-500'"
-                  >Board View</button>
+                  >
+                    <svg class="h-4 w-4 fill-current text-gray-700" viewBox="0 0 20 20">
+                      <path d="M12 4H8v12h4V4zm2 0v12h4V4h-4zM6 4H2v12h4V4zM0 2h20v16H0V2z" />
+                    </svg>
+                  </button>
                 </span>
                 <LabelOverview class="w-1/2 sm:w-auto mr-1 sm:mr-0 sm:ml-2">Edit Labels</LabelOverview>
                 <AddList class="w-1/2 sm:w-auto ml-1" />
@@ -131,14 +139,24 @@
           <div class="flex p-1 bg-gray-200 border-t sm:hidden">
             <button
               @click="changeViewStyle('listView')"
-              class="w-1/2 leading-tight px-2 py-1 mr-1"
+              class="w-1/2 leading-tight px-2 py-1 mr-1 flex items-center justify-center"
               :class="listView ? 'bg-white rounded shadow transition-bg ease-in transition-500': 'transition-bg ease-out transition-500'"
-            >List</button>
+            >
+              <svg class="h-4 w-4 fill-current text-gray-700" viewBox="0 0 20 20">
+                <path d="M0 3h20v2H0V3zm0 4h20v2H0V7zm0 4h20v2H0v-2zm0 4h20v2H0v-2z" />
+              </svg>
+              <span class="ml-2">List</span>
+            </button>
             <button
               @click="changeViewStyle('boardView')"
-              class="w-1/2 leading-tight px-2 py-1 ml-1"
+              class="w-1/2 leading-tight px-2 py-1 ml-1 flex items-center justify-center"
               :class="!listView ? 'bg-white rounded shadow transition-bg ease-in transition-500': 'transition-bg ease-out transition-500'"
-            >Board</button>
+            >
+              <svg class="h-4 w-4 fill-current text-gray-700" viewBox="0 0 20 20">
+                <path d="M12 4H8v12h4V4zm2 0v12h4V4h-4zM6 4H2v12h4V4zM0 2h20v16H0V2z" />
+              </svg>
+              <span class="ml-2">Board</span>
+            </button>
           </div>
         </header>
       </div>
@@ -179,6 +197,7 @@
                   <Card :cardId="card._id"></Card>
                 </li>
               </ol>
+              <AddCard :listId="list._id" />
             </div>
           </div>
         </main>
@@ -207,6 +226,7 @@ import AddList from '../components/list/AddList';
 import DeleteBoard from '../components/board/DeleteBoard';
 import AddUserToBoard from '../components/board/AddUserToBoard';
 import Card from '../components/card/Card';
+import AddCard from '../components/card/AddCard';
 import LabelOverview from '../components/labels/LabelOverview';
 import LoadingSpinner from '../components/reusables/LoadingSpinner';
 import ConnectionLost from '../components/reusables/ConnectionLost';
@@ -235,7 +255,8 @@ export default {
     ConnectionLost,
     LoadingSpinner,
     Sidebar,
-    Card
+    Card,
+    AddCard
   },
   computed: {
     ...mapState(['board', 'isLoading', 'listView']),
@@ -266,6 +287,11 @@ export default {
       this.$store.dispatch('isLoading', true);
       await this.$store.dispatch('setBoard', { boardId: this.boardId });
       this.title = this.board.title;
+      if (window.innerWidth < 640) {
+        this.$store.dispatch('changeViewStyle', 'listView');
+      } else {
+        this.$store.dispatch('changeViewStyle', 'boardView');
+      }
       this.$store.dispatch('isLoading', false);
     } catch (error) {
       if (error.response.data.error === "Board doesn't exist") {

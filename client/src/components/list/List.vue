@@ -35,7 +35,7 @@
         </li>
       </draggable>
     </div>
-    <!-- ADD LIST BUTTON -->
+    <!-- ADD CARD BUTTON -->
     <add-card class="mt-1" :listId="listId"></add-card>
   </div>
 </template>
