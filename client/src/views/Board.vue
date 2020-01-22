@@ -65,7 +65,7 @@
             <Topbar @openSidebar="isOpen = true" />
             <div class="py-2 sm:flex items-center justify-between">
               <div class="flex justify-between sm:justify-start">
-                <div class="flex items-baseline">
+                <div class="flex items-center">
                   <h1
                     v-if="!editingTitle"
                     @click="editingTitle = !editingTitle"

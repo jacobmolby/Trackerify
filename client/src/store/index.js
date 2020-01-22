@@ -259,13 +259,9 @@ export const store = new Vuex.Store({
       commit('isLoading', bool);
     },
     logout({ commit }) {
-      Router.push({
-        name: 'home'
-      });
       commit('setToken', null);
       commit('setUser', null);
       commit('setBoard', null);
-      //TODO add route change
     },
     setToken({ commit }, token) {
       commit('setToken', token);

@@ -8,8 +8,7 @@ const router = new VueRouter({
 });
 
 router.beforeEach((to, from, next) => {
-  //TODO TEST NEED TO BE REMOVED
-  const publicPages = ['/login', '/', '/register', '/test'];
+  const publicPages = ['/login', '/', '/register'];
   const authRequired = !publicPages.includes(to.path);
   let token;
   if (localStorage.getItem('vuex')) {

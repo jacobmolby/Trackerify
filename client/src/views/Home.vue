@@ -58,7 +58,14 @@
 
 <script>
 export default {
-  name: 'Home'
+  name: 'home',
+  beforeRouteEnter(to, from, next) {
+    next(vm => {
+      if (to.query.logout) {
+        vm.$store.dispatch('logout');
+      }
+    });
+  }
 };
 </script>
 

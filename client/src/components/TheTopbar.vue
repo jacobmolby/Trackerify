@@ -35,7 +35,7 @@
       <div class="ml-6 relative">
         <button
           @click="isOpen = !isOpen"
-          class="relative z-10 block h-8 w-8 rounded-full overflow-hidden border border-gray-400 hover:border-gray-700"
+          class="relative block h-8 w-8 rounded-full overflow-hidden border border-gray-400 hover:border-gray-700"
         >
           <img class="h-full w-full object-cover" :src="user.profileImage" alt />
         </button>
@@ -52,7 +52,7 @@
             class="block px-4 py-2 text-gray-800 hover:bg-gray-800 hover:text-white"
           >Support</a>
           <button
-            @click="$store.dispatch('logout')"
+            @click="logout"
             class="block w-full text-left px-4 py-2 text-gray-800 hover:bg-gray-800 hover:text-white"
           >Sign out</button>
         </div>
@@ -73,6 +73,14 @@ export default {
   }),
   computed: {
     ...mapState(['user'])
+  },
+  methods: {
+    logout() {
+      this.$router.push({
+        name: 'home',
+        query: { logout: true }
+      });
+    }
   },
   created() {
     const handleEscape = e => {
