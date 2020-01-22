@@ -30,8 +30,8 @@
         @start="drag=true"
         @end="drag=false"
       >
-        <li v-for="card in cards" :key="card._id" class="mb-2 p-3 rounded shadow bg-white">
-          <card :cardId="card._id"></card>
+        <li v-for="card in cards" :key="card._id" class="bg-white rounded">
+          <Card v-if="!card.archived" class="mb-2 p-3 rounded shadow" :cardId="card._id" />
         </li>
       </draggable>
     </div>

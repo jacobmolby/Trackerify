@@ -1,47 +1,52 @@
 <template>
   <div>
-    <div>
-      <Label
-        class="mr-1"
-        v-for="label in card.labels"
-        :key="label._id"
-        :color="label.color"
-      >{{label.title}}</Label>
-    </div>
-    <div class="flex justify-between">
-      <span class="text-sm text-gray-700 leading-snug">
-        <button class="text-left" @click="isOpen = true">{{card.title}}</button>
-      </span>
-    </div>
-    <div class="mt-2 flex justify-between items-baseline">
-      <div class="flex">
-        <div class="flex items-center">
-          <svg class="h-4 w-4 fill-current text-gray-500" viewBox="0 0 20 20">
-            <path
-              d="M10 15l-4 4v-4H2a2 2 0 0 1-2-2V3c0-1.1.9-2 2-2h16a2 2 0 0 1 2 2v10a2 2 0 0 1-2 2h-8zM5 7v2h2V7H5zm4 0v2h2V7H9zm4 0v2h2V7h-2z"
-            />
-          </svg>
-          <span v-if="card.comments" class="text-xs pl-1">{{card.comments.length}}</span>
+    <!-- START CARD -->
+    <div @click="isOpen = !isOpen">
+      <div>
+        <Label
+          class="mr-1"
+          v-for="label in card.labels"
+          :key="label._id"
+          :color="label.color"
+        >{{label.title}}</Label>
+      </div>
+      <div class="flex justify-between items-baseline">
+        <span class="text-sm text-gray-700 leading-snug">
+          <button class="text-left">{{card.title}}</button>
+        </span>
+        <span v-if="card.archived" class="font-bold text-red-600">ARCHIVED</span>
+      </div>
+      <div class="mt-2 flex justify-between items-baseline">
+        <div class="flex">
+          <div class="flex items-center">
+            <svg class="h-4 w-4 fill-current text-gray-500" viewBox="0 0 20 20">
+              <path
+                d="M10 15l-4 4v-4H2a2 2 0 0 1-2-2V3c0-1.1.9-2 2-2h16a2 2 0 0 1 2 2v10a2 2 0 0 1-2 2h-8zM5 7v2h2V7H5zm4 0v2h2V7H9zm4 0v2h2V7h-2z"
+              />
+            </svg>
+            <span v-if="card.comments" class="text-xs pl-1">{{card.comments.length}}</span>
+          </div>
+          <div class="pl-2 flex items-center">
+            <svg class="h-4 w-4 fill-current text-gray-500" viewBox="0 0 20 20">
+              <path
+                d="M15 3H7a7 7 0 1 0 0 14h8v-2H7A5 5 0 0 1 7 5h8a3 3 0 0 1 0 6H7a1 1 0 0 1 0-2h8V7H7a3 3 0 1 0 0 6h8a5 5 0 0 0 0-10z"
+              />
+            </svg>
+            <span v-if="card.attachments" class="text-xs pl-1">{{card.attachments.length}}</span>
+          </div>
         </div>
-        <div class="pl-2 flex items-center">
-          <svg class="h-4 w-4 fill-current text-gray-500" viewBox="0 0 20 20">
-            <path
-              d="M15 3H7a7 7 0 1 0 0 14h8v-2H7A5 5 0 0 1 7 5h8a3 3 0 0 1 0 6H7a1 1 0 0 1 0-2h8V7H7a3 3 0 1 0 0 6h8a5 5 0 0 0 0-10z"
+        <div class="flex flex-shrink-0">
+          <div v-for="user in card.assignedUsers" :key="user._id" class="-ml-2 h-6 w-6">
+            <img
+              class="rounded-full border-white border-2 object-cover"
+              :src="user.profileImage"
+              alt="Profile Image"
             />
-          </svg>
-          <span v-if="card.attachments" class="text-xs pl-1">{{card.attachments.length}}</span>
+          </div>
         </div>
       </div>
-      <div class="flex flex-shrink-0">
-        <div v-for="user in card.assignedUsers" :key="user._id" class="-ml-2 h-6 w-6">
-          <img
-            class="rounded-full border-white border-2 object-cover"
-            :src="user.profileImage"
-            alt="Profile Image"
-          />
-        </div>
-      </div>
     </div>
+    <!-- END CARD -->
 
     <!-- CARD POPUP -->
 
@@ -145,6 +150,26 @@
           Attachments:
           <span class="font-bold text-red-500">NOT IMPLEMENTED YET.</span>
         </div>
+        <button v-if="!card.archived" @click="archiveCard" class="primary-btn">
+          <span>
+            <svg class="h-3 w-3 fill-current text-white" viewBox="0 0 20 20">
+              <path
+                d="M0 2C0 .9.9 0 2 0h16a2 2 0 0 1 2 2v2H0V2zm1 3h18v13a2 2 0 0 1-2 2H3a2 2 0 0 1-2-2V5zm6 2v2h6V7H7z"
+              />
+            </svg>
+          </span>
+          <span class="ml-2">Archive</span>
+        </button>
+        <button v-if="card.archived" @click="restoreCard" class="primary-btn">
+          <span>
+            <svg class="h-3 w-3 fill-current text-white" viewBox="0 0 20 20">
+              <path
+                d="M0 2C0 .9.9 0 2 0h16a2 2 0 0 1 2 2v2H0V2zm1 3h18v13a2 2 0 0 1-2 2H3a2 2 0 0 1-2-2V5zm6 2v2h6V7H7z"
+              />
+            </svg>
+          </span>
+          <span class="ml-2">Restore</span>
+        </button>
       </div>
     </portal>
   </div>
@@ -192,12 +217,29 @@ export default {
         this.isOpen = false;
       }
     };
+
     document.addEventListener('keydown', handleEscape);
     this.$once('hook:beforeDestroy', () => {
       document.removeEventListener('keydown', handleEscape);
     });
   },
   methods: {
+    async archiveCard() {
+      const cardId = this.card._id;
+      try {
+        await this.$store.dispatch('archiveCard', { cardId });
+      } catch (error) {
+        console.log(error.response.data.error);
+      }
+    },
+    async restoreCard() {
+      const cardId = this.card._id;
+      try {
+        await this.$store.dispatch('restoreCard', { cardId });
+      } catch (error) {
+        console.log(error.response.data.error);
+      }
+    },
     async deleteCard() {
       const cardId = this.card._id;
 

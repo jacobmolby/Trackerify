@@ -13,35 +13,26 @@ module.exports = io => {
     console.log(`A user connected with socket id ${socket.id}`);
     socket.emit('CONNECT');
 
-    // Makes sure that everyone in the same board is in the same room, so only they will get the messages
-    socket.on('setBoard', board => {
-      console.log('Switched room');
-
-      //Resets the lastBoardId which is determining the socket room
-      if (socket.lastBoard) {
-        socket.leave(socket.lastBoard);
-        socket.lastBoard = null;
-      }
-      socket.join(board._id);
-      socket.lastBoard = board._id;
-    });
-    // //Update, Delete, Add user, remove user
-    // require('./boardEvents')(socket);
-    // //Add, Delete, update list order
-    // require('./listEvents')(socket);
-    // //Add, Delete, update, add user, remove user
-    // require('./cardEvents')(socket);
-    // //Add
-    // require('./commentEvents')(socket);
-    // //Add
-    // require('./labelEvents')(socket);
-
     socket.on('vuexEvent', payload => {
       //The payload is an object with
       //{boardId: "5as4d65a4sd4asdasd",
       // actionName: "deleteBoard",
       // actionPayload:{Action payload}}
       const { boardId, actionName, actionPayload } = payload;
+
+      if (actionName === 'setBoard') {
+        // Makes sure that everyone in the same board is in the same room, so only they will get the messages
+        console.log('Switched room');
+
+        //Resets the lastBoardId which is determining the socket room
+        if (socket.lastBoard) {
+          socket.leave(socket.lastBoard);
+          socket.lastBoard = null;
+        }
+        socket.join(actionPayload._id);
+        socket.lastBoard = actionPayload._id;
+        return;
+      }
       if (actionPayload) {
         actionPayload.socket = true;
       }

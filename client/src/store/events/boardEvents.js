@@ -15,7 +15,7 @@ export default {
     },
     async setBoard({ commit }, { boardId }) {
       const board = (await BoardService.show(boardId)).data;
-      socket.emit('setBoard', { _id: board._id });
+      // socket.emit('setBoard', { _id: board._id });
       commit('setBoard', board);
     },
     async createBoard({ commit }, { title }) {

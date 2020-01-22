@@ -11,7 +11,7 @@ export default store => {
     const blackListedMutations = [
       'setToken',
       'setUser',
-      'setBoard',
+      // 'setBoard',
       'setBoardOverview',
       'createBoard',
       'isLoading',

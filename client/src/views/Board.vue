@@ -4,34 +4,38 @@
     <Sidebar @closeSidebar="isOpen=false" :isOpen="isOpen">
       <h2 class="text-xs font-semibold text-gray-600 uppercase tracking-wide">Issues</h2>
       <div class="mt-2 -mx-3">
-        <a
-          href="#"
-          class="px-3 py-1 flex justify-between text-gray-700 text-sm font-medium bg-gray-200 rounded-lg"
+        <button
+          @click="changeViewStyle('board')"
+          class="w-full px-3 py-1 flex justify-between text-sm font-medium text-gray-700 rounded-lg hover:bg-gray-200"
+          :class="viewStyle === 'list' || viewStyle === 'board'?'bg-gray-200':''"
         >
           <span>All</span>
           <span class="text-sm font-semibold text-gray-700">{{numberOfAllCards}}</span>
-        </a>
-        <a
-          href="#"
-          class="mt-1 px-3 py-1 flex justify-between text-gray-700 text-sm font-medium hover:bg-gray-200 rounded-lg"
+        </button>
+        <button
+          @click="changeViewStyle('createdByMe')"
+          class="w-full px-3 py-1 mt-1 flex justify-between text-sm font-medium text-gray-700 rounded-lg hover:bg-gray-200"
+          :class="viewStyle === 'createdByMe'?'bg-gray-200':''"
         >
           <span>Created by me</span>
-          <span class="text-sm font-semibold text-gray-700">{{numberOfCardsCreatedByMe}}</span>
-        </a>
-        <a
-          href="#"
-          class="mt-1 px-3 py-1 flex justify-between text-gray-700 text-sm font-medium hover:bg-gray-200 rounded-lg"
+          <span class="text-sm font-semibold text-gray-700">{{cardsCreatedByMe.length}}</span>
+        </button>
+        <button
+          @click="changeViewStyle('archived')"
+          class="w-full px-3 py-1 mt-1 flex justify-between text-sm font-medium text-gray-700 rounded-lg hover:bg-gray-200"
+          :class="viewStyle === 'archived'?'bg-gray-200':''"
         >
           <span>Archived</span>
           <span class="text-sm font-semibold text-gray-700">{{numberOfArchivedCards}}</span>
-        </a>
-        <a
-          href="#"
-          class="mt-1 px-3 py-1 flex justify-between text-gray-700 text-sm font-medium hover:bg-gray-200 rounded-lg"
+        </button>
+        <button
+          @click="changeViewStyle('assignedToMe')"
+          class="w-full px-3 py-1 mt-1 flex justify-between text-sm font-medium text-gray-700 rounded-lg hover:bg-gray-200"
+          :class="viewStyle === 'assignedToMe'?'bg-gray-200':''"
         >
           <span>Assigned to me</span>
           <span class="text-sm font-semibold text-gray-700">{{numberOfCardsAssignedToMe}}</span>
-        </a>
+        </button>
       </div>
       <h2 class="mt-8 text-xs font-semibold text-gray-600 uppercase tracking-wide">Labels</h2>
       <div class="mt-2 -mx-3">
@@ -53,7 +57,7 @@
       </div>
     </Sidebar>
 
-    <!-- Main content -->
+    <!-- START TOPBAR AREA -->
     <div v-if="!isLoading" class="flex-1 flex flex-col min-w-0 bg-white">
       <div class="flex-shrink-0 border-b border-gray-200">
         <header class>
@@ -106,41 +110,42 @@
                     </div>
                   </div>
 
-                  <AddUserToBoard class="ml-2 hidden xl:block" />
+                  <!-- <AddUserToBoard class="ml-2 hidden xl:block" /> -->
                 </div>
               </div>
 
               <div class="py-1 flex items-center">
                 <span class="p-1 hidden bg-gray-200 border rounded sm:inline-flex">
                   <button
-                    @click="changeViewStyle('listView')"
-                    class="leading-tight px-2 py-1 mr-1 rounded"
-                    :class="listView ? 'bg-white  shadow': 'transition-bg ease-out transition-500'"
+                    @click="changeViewStyle('list')"
+                    class="leading-tight px-2 py-1 mr-1 rounded hover:bg-white"
+                    :class="viewStyle === 'list' ? 'bg-white  shadow': 'transition-bg ease-out transition-500'"
                   >
                     <svg class="h-4 w-4 fill-current text-gray-700" viewBox="0 0 20 20">
                       <path d="M0 3h20v2H0V3zm0 4h20v2H0V7zm0 4h20v2H0v-2zm0 4h20v2H0v-2z" />
                     </svg>
                   </button>
                   <button
-                    @click="changeViewStyle('boardView')"
-                    class="leading-tight px-2 py-1 ml-1 rounded"
-                    :class="!listView ? 'bg-white  shadow': 'transition-bg ease-out transition-500'"
+                    @click="changeViewStyle('board')"
+                    class="leading-tight px-2 py-1 ml-1 rounded hover:bg-white"
+                    :class="viewStyle === 'board' ? 'bg-white  shadow': 'transition-bg ease-out transition-500'"
                   >
                     <svg class="h-4 w-4 fill-current text-gray-700" viewBox="0 0 20 20">
                       <path d="M12 4H8v12h4V4zm2 0v12h4V4h-4zM6 4H2v12h4V4zM0 2h20v16H0V2z" />
                     </svg>
                   </button>
                 </span>
-                <LabelOverview class="w-1/2 sm:w-auto mr-1 sm:mr-0 sm:ml-2">Edit Labels</LabelOverview>
-                <AddList class="w-1/2 sm:w-auto ml-1" />
+                <LabelOverview class="w-1/3 sm:w-auto sm:ml-2">Edit Labels</LabelOverview>
+                <AddList class="w-1/3 sm:w-auto ml-1" />
+                <AddUserToBoard class="w-1/3 sm:w-auto ml-1" />
               </div>
             </div>
           </div>
           <div class="flex p-1 bg-gray-200 border-t sm:hidden">
             <button
-              @click="changeViewStyle('listView')"
+              @click="changeViewStyle('list')"
               class="w-1/2 leading-tight px-2 py-1 mr-1 flex items-center justify-center"
-              :class="listView ? 'bg-white rounded shadow transition-bg ease-in transition-500': 'transition-bg ease-out transition-500'"
+              :class="viewStyle === 'list' ? 'bg-white rounded shadow transition-bg ease-in transition-500': 'transition-bg ease-out transition-500'"
             >
               <svg class="h-4 w-4 fill-current text-gray-700" viewBox="0 0 20 20">
                 <path d="M0 3h20v2H0V3zm0 4h20v2H0V7zm0 4h20v2H0v-2zm0 4h20v2H0v-2z" />
@@ -148,9 +153,9 @@
               <span class="ml-2">List</span>
             </button>
             <button
-              @click="changeViewStyle('boardView')"
+              @click="changeViewStyle('board')"
               class="w-1/2 leading-tight px-2 py-1 ml-1 flex items-center justify-center"
-              :class="!listView ? 'bg-white rounded shadow transition-bg ease-in transition-500': 'transition-bg ease-out transition-500'"
+              :class="viewStyle === 'board' ? 'bg-white rounded shadow transition-bg ease-in transition-500': 'transition-bg ease-out transition-500'"
             >
               <svg class="h-4 w-4 fill-current text-gray-700" viewBox="0 0 20 20">
                 <path d="M12 4H8v12h4V4zm2 0v12h4V4h-4zM6 4H2v12h4V4zM0 2h20v16H0V2z" />
@@ -161,7 +166,7 @@
         </header>
       </div>
       <!-- START MAIN BOARD AREA -->
-      <div v-if="!listView" class="flex-1 overflow-auto">
+      <div v-if="viewStyle === 'board'" class="flex-1 overflow-auto">
         <draggable
           class="inline-flex h-full p-3 overflow-hidden"
           animation="50"
@@ -183,26 +188,25 @@
       </div>
       <!-- END MAIN BOARD AREA -->
       <!-- START LIST VIEW -->
-      <div v-if="listView" class="overflow-hidden">
-        <main class="flex flex-col items-center h-full p-3 overflow-auto">
-          <div v-for="list in lists" :key="list._id" class="mt-2 w-full bg-gray-200 rounded">
-            <div class="px-3 py-3 flex-shrink-0 justify-between items-center">
-              <h2 class="pb-2 w-full text-gray-700 text-sm font-medium">{{list.title}}</h2>
-              <ol>
-                <li
-                  v-for="card in $store.getters.getCardsByListId(list._id)"
-                  :key="card._id"
-                  class="mb-2 p-3 rounded shadow bg-white"
-                >
-                  <Card :cardId="card._id"></Card>
-                </li>
-              </ol>
-              <AddCard :listId="list._id" />
-            </div>
-          </div>
-        </main>
+      <div v-if="viewStyle === 'list'" class="overflow-hidden">
+        <ListView :lists="lists" />
       </div>
       <!-- END LIST VIEW -->
+      <!-- START createdByMe VIEW -->
+      <div v-if="viewStyle === 'createdByMe'" class="overflow-hidden">
+        <CreatedByMe :lists="lists" />
+      </div>
+      <!-- END createdByMe VIEW -->
+      <!-- START Archived VIEW -->
+      <div v-if="viewStyle === 'archived'" class="overflow-hidden">
+        <Archived :lists="lists" />
+      </div>
+      <!-- END Archived VIEW -->
+      <!-- START Archived VIEW -->
+      <div v-if="viewStyle === 'assignedToMe'" class="overflow-hidden">
+        <AssignedToMe :lists="lists" />
+      </div>
+      <!-- END Archived VIEW -->
     </div>
     <button
       @click="isOpen = false"
@@ -221,6 +225,12 @@ import UserBoardService from '../services/UserBoardService';
 import List from '../components/list/List';
 import Topbar from '../components/TheTopbar';
 import Sidebar from '../components/Sidebar';
+
+// View Styles
+import CreatedByMe from '../components/viewStyles/CreatedByMe';
+import ListView from '../components/viewStyles/ListView';
+import Archived from '../components/viewStyles/Archived';
+import AssignedToMe from '../components/viewStyles/AssignedToMe';
 
 import AddList from '../components/list/AddList';
 import DeleteBoard from '../components/board/DeleteBoard';
@@ -255,14 +265,18 @@ export default {
     ConnectionLost,
     LoadingSpinner,
     Sidebar,
-    Card,
-    AddCard
+    // Card,
+    // AddCard,
+    CreatedByMe,
+    ListView,
+    Archived,
+    AssignedToMe
   },
   computed: {
-    ...mapState(['board', 'isLoading', 'listView']),
+    ...mapState(['board', 'isLoading', 'viewStyle', 'user']),
     ...mapGetters([
       'numberOfAllCards',
-      'numberOfCardsCreatedByMe',
+      'cardsCreatedByMe',
       'numberOfArchivedCards',
       'numberOfCardsAssignedToMe'
     ]),
@@ -288,21 +302,24 @@ export default {
       await this.$store.dispatch('setBoard', { boardId: this.boardId });
       this.title = this.board.title;
       if (window.innerWidth < 640) {
-        this.$store.dispatch('changeViewStyle', 'listView');
+        this.$store.dispatch('changeViewStyle', 'list');
       } else {
-        this.$store.dispatch('changeViewStyle', 'boardView');
+        this.$store.dispatch('changeViewStyle', 'board');
       }
       this.$store.dispatch('isLoading', false);
     } catch (error) {
       if (error.response.data.error === "Board doesn't exist") {
         this.$router.push({ name: 'boardOverview' });
       }
+      console.log(error);
+
       console.log(error.response.data.error);
     }
   },
   methods: {
     changeViewStyle(style) {
       this.$store.dispatch('changeViewStyle', style);
+      this.isOpen = false;
     },
     async removeUser(userId) {
       this.removeUserError = null;

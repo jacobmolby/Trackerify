@@ -87,6 +87,12 @@ export default {
     },
     SOCKET_updateListTitle({ commit }, payload) {
       commit('updateListTitle', payload, { root: true });
+    },
+    SOCKET_archiveCard({ commit }, payload) {
+      commit('archiveCard', payload, { root: true });
+    },
+    SOCKET_restoreCard({ commit }, payload) {
+      commit('restoreCard', payload, { root: true });
     }
   }
 };

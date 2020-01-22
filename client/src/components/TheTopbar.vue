@@ -32,20 +32,59 @@
         </svg>
       </button>
       <!-- Profile picture -->
-      <button class="ml-6">
-        <img
-          class="h-7 w-7 rounded-full object-cover"
-          :src="'https://i.pravatar.cc/30?img=' + (Math.floor(Math.random() * 50))"
-          alt
-        />
-      </button>
+      <div class="ml-6 relative">
+        <button
+          @click="isOpen = !isOpen"
+          class="relative z-10 block h-8 w-8 rounded-full overflow-hidden border border-gray-400 hover:border-gray-700"
+        >
+          <img class="h-full w-full object-cover" :src="user.profileImage" alt />
+        </button>
+        <div
+          v-if="isOpen"
+          class="z-30 absolute right-0 mt-2 py-2 w-48 bg-white rounded-lg shadow-xl"
+        >
+          <a
+            href="#"
+            class="block px-4 py-2 text-gray-800 hover:bg-gray-800 hover:text-white"
+          >Account settings</a>
+          <a
+            href="#"
+            class="block px-4 py-2 text-gray-800 hover:bg-gray-800 hover:text-white"
+          >Support</a>
+          <button
+            @click="$store.dispatch('logout')"
+            class="block w-full text-left px-4 py-2 text-gray-800 hover:bg-gray-800 hover:text-white"
+          >Sign out</button>
+        </div>
+        <portal class="relative" to="popup-container" v-if="isOpen">
+          <button v-if="isOpen" @click="isOpen = false" tabindex="-1" class="popup-bg"></button>
+        </portal>
+      </div>
     </div>
   </div>
 </template>
 
 <script>
+import { mapState } from 'vuex';
 export default {
-  name: 'TheTopbar'
+  name: 'TheTopbar',
+  data: () => ({
+    isOpen: false
+  }),
+  computed: {
+    ...mapState(['user'])
+  },
+  created() {
+    const handleEscape = e => {
+      if (e.key === 'Esc' || e.key === 'Escape') {
+        this.isOpen = false;
+      }
+    };
+    document.addEventListener('keydown', handleEscape);
+    this.$once('hook:beforeDestroy', () => {
+      document.removeEventListener('keydown', handleEscape);
+    });
+  }
 };
 </script>
 
