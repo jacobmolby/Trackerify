@@ -1,73 +1,273 @@
 <template>
-  <main class="p-10 w-full text-gray-700">
-    <header class="text-center font-bold">
-      <div class="flex justify-center items-center w-full">
-        <svg class="fill-current inline-block h-24 w-24" viewBox="0 0 20 20">
-          <path
-            d="M15.3 14.89l2.77 2.77a1 1 0 0 1 0 1.41 1 1 0 0 1-1.41 0l-2.59-2.58A5.99 5.99 0 0 1 11 18V9.04a1 1 0 0 0-2 0V18a5.98 5.98 0 0 1-3.07-1.51l-2.59 2.58a1 1 0 0 1-1.41 0 1 1 0 0 1 0-1.41l2.77-2.77A5.95 5.95 0 0 1 4.07 13H1a1 1 0 1 1 0-2h3V8.41L.93 5.34a1 1 0 0 1 0-1.41 1 1 0 0 1 1.41 0l2.1 2.1h11.12l2.1-2.1a1 1 0 0 1 1.41 0 1 1 0 0 1 0 1.41L16 8.41V11h3a1 1 0 1 1 0 2h-3.07c-.1.67-.32 1.31-.63 1.89zM15 5H5a5 5 0 1 1 10 0z"
-          />
-        </svg>
-        <h1 class="ml-4 text-6xl">Trackerify</h1>
-      </div>
-      <h1 class="mt-5 text-2xl">
-        Your
-        <span class="text-red-600">Easy</span>
-        Bugtracking Platform
-      </h1>
-    </header>
-
-    <section class="mt-20">
-      <h2 class="font-semibold text-lg">What We Do?</h2>
-      <p>Lorem ipsum dolor sit amet, consectetur adipisicing elit. Nobis fugit, enim molestiae praesentium eveniet, recusandae et error beatae facilis ex harum consequuntur, quia pariatur non. Doloribus illo, ullam blanditiis ab.</p>
-    </section>
-    <section class="mt-10">
-      <h2 class="font-semibold text-lg">Why You Should Use It</h2>
-      <p>Lorem ipsum dolor sit amet, consectetur adipisicing elit. Nobis fugit, enim molestiae praesentium eveniet, recusandae et error beatae facilis ex harum consequuntur, quia pariatur non. Doloribus illo, ullam blanditiis ab.</p>
-    </section>
-    <section class="mt-10">
-      <h2 class="font-semibold text-lg">Don't Hesitate, Start Now!</h2>
-      <p>Lorem ipsum dolor sit amet, consectetur adipisicing elit. Nobis fugit, enim molestiae praesentium eveniet, recusandae et error beatae facilis ex harum consequuntur, quia pariatur non. Doloribus illo, ullam blanditiis ab.</p>
-    </section>
-    <section
-      class="mt-20 p-4 w-full bg-deepblue-500 max-w-md container mx-auto rounded-lg shadow-md text-white"
-    >
-      <h1 class="font-bold text-md md:text-2xl text-center">Get Notified When We Launch</h1>
-      <form class="flex flex-col sm:flex-row w-full mt-2 items-center justify-center">
-        <div class>
-          <label class="mb-6 text-lg font-semibold" for="email">Email</label>
-        </div>
-        <div class>
-          <input
-            class="mt-2 sm:mt-0 sm:ml-4 w-full bg-gray-100 rounded-lg border border-gray-300 text-gray-700 py-2 px-2 leading-tight focus:outline-none"
-            type="text"
-            id="email"
-            placeholder="example@example.com"
-            aria-label="Email"
-          />
-        </div>
-        <div class>
-          <button
+  <div class="leading-normal tracking-normal text-gray-900">
+    <Topbar />
+    <div class="pb-14 bg-right bg-cover" style="background-image:url('img/bg.svg');">
+      <!--Nav-->
+      <div class="w-full container mx-auto p-6">
+        <div class="w-full flex items-center justify-between">
+          <router-link
+            class="flex items-center text-indigo-600 font-bold text-2xl lg:text-4xl"
             to="/"
-            class="px-2 py-2 ml-0 mt-4 sm:mt-0 sm:ml-8 min-w-full border border-green-400 rounded-lg hover:text-gray-200 tracking-wide focus:outline-none focus:bg-gray-500 hover:border-gray-100"
-          >Sign Up</button>
+          >
+            <svg
+              class="h-8 fill-current text-indigo-600 pr-2"
+              xmlns="http://www.w3.org/2000/svg"
+              viewBox="0 0 20 20"
+            >
+              <path
+                d="M10 20a10 10 0 1 1 0-20 10 10 0 0 1 0 20zm-5.6-4.29a9.95 9.95 0 0 1 11.2 0 8 8 0 1 0-11.2 0zm6.12-7.64l3.02-3.02 1.41 1.41-3.02 3.02a2 2 0 1 1-1.41-1.41z"
+              />
+            </svg>Trackerify
+          </router-link>
+
+          <div class="flex w-1/2 justify-end content-center">
+            <a
+              class="inline-block text-blue-300 no-underline hover:text-indigo-800 hover:text-underline text-center h-10 p-2 md:h-auto md:p-4"
+              href="https://github.com/jacobmolby/Trackerify"
+            >
+              <svg class="fill-current h-6" viewBox="0 0 24 24" xmlns="http://www.w3.org/2000/svg">
+                <title>GitHub Page</title>
+                <path
+                  d="M12 .297c-6.63 0-12 5.373-12 12 0 5.303 3.438 9.8 8.205 11.385.6.113.82-.258.82-.577 0-.285-.01-1.04-.015-2.04-3.338.724-4.042-1.61-4.042-1.61C4.422 18.07 3.633 17.7 3.633 17.7c-1.087-.744.084-.729.084-.729 1.205.084 1.838 1.236 1.838 1.236 1.07 1.835 2.809 1.305 3.495.998.108-.776.417-1.305.76-1.605-2.665-.3-5.466-1.332-5.466-5.93 0-1.31.465-2.38 1.235-3.22-.135-.303-.54-1.523.105-3.176 0 0 1.005-.322 3.3 1.23.96-.267 1.98-.399 3-.405 1.02.006 2.04.138 3 .405 2.28-1.552 3.285-1.23 3.285-1.23.645 1.653.24 2.873.12 3.176.765.84 1.23 1.91 1.23 3.22 0 4.61-2.805 5.625-5.475 5.92.42.36.81 1.096.81 2.22 0 1.606-.015 2.896-.015 3.286 0 .315.21.69.825.57C20.565 22.092 24 17.592 24 12.297c0-6.627-5.373-12-12-12"
+                />
+              </svg>
+            </a>
+          </div>
         </div>
-      </form>
-    </section>
-  </main>
+      </div>
+
+      <!--Main-->
+      <div
+        class="container pt-24 md:pt-48 px-6 mx-auto flex flex-wrap flex-col md:flex-row items-center"
+      >
+        <!--Left Col-->
+        <div class="flex flex-col w-full xl:w-2/5 justify-center lg:items-start overflow-y-hidden">
+          <h1
+            class="my-4 text-3xl md:text-5xl text-purple-800 font-bold leading-tight text-center md:text-left slide-in-bottom-h1"
+          >Easy to use project management app</h1>
+          <p
+            class="leading-normal text-base md:text-2xl mb-8 text-center md:text-left slide-in-bottom-subtitle"
+          >Real time collaboration and much more</p>
+
+          <p
+            class="text-indigo-600 text-lg font-bold pb-8 lg:pb-6 text-center md:text-left fade-in"
+          >Get Started</p>
+          <div class="flex w-full justify-center md:justify-start pb-24 lg:pb-0 fade-in">
+            <router-link
+              to="/register"
+              class="px-2 py-2 text-sm font-medium text-white bg-purple-600 rounded hover:bg-purple-700"
+            >Create an account</router-link>
+          </div>
+        </div>
+
+        <!--Right Col-->
+        <div class="w-full xl:w-3/5 py-6 overflow-y-hidden"></div>
+
+        <!--Footer-->
+        <div class="w-full pt-16 pb-6 text-sm text-center md:text-left fade-in">
+          <span class="text-gray-500 no-underline hover:no-underline" href="#">
+            &copy; Trackerify 2019, this page is designed by
+            <a
+              class="hover:text-gray-900"
+              href="https://github.com/tailwindtoolbox/App-Landing-Page"
+            >Astrava.Solutions Ltd.</a>
+          </span>
+        </div>
+      </div>
+    </div>
+  </div>
 </template>
 
 <script>
+import Topbar from '../components/TopBar';
 export default {
   name: 'home',
+  components: {
+    Topbar
+  },
   beforeRouteEnter(to, from, next) {
-    next(vm => {
+    next(vueInstance => {
       if (to.query.logout) {
-        vm.$store.dispatch('logout');
+        vueInstance.$store.dispatch('logout');
       }
     });
   }
 };
 </script>
 
-<style>
+<style scoped>
+/* ----------------------------------------------
+	* Generated by Animista
+  * w: http://animista.net, t: @cssanimista
+	* ---------------------------------------------- */
+
+.slide-in-bottom {
+  -webkit-animation: slide-in-bottom 0.5s cubic-bezier(0.25, 0.46, 0.45, 0.94)
+    both;
+  animation: slide-in-bottom 0.5s cubic-bezier(0.25, 0.46, 0.45, 0.94) both;
+}
+.slide-in-bottom-h1 {
+  -webkit-animation: slide-in-bottom 0.5s cubic-bezier(0.25, 0.46, 0.45, 0.94)
+    0.5s both;
+  animation: slide-in-bottom 0.5s cubic-bezier(0.25, 0.46, 0.45, 0.94) 0.5s both;
+}
+.slide-in-bottom-subtitle {
+  -webkit-animation: slide-in-bottom 0.5s cubic-bezier(0.25, 0.46, 0.45, 0.94)
+    0.75s both;
+  animation: slide-in-bottom 0.5s cubic-bezier(0.25, 0.46, 0.45, 0.94) 0.75s
+    both;
+}
+.fade-in {
+  -webkit-animation: fade-in 1.2s cubic-bezier(0.39, 0.575, 0.565, 1) 1s both;
+  animation: fade-in 1.2s cubic-bezier(0.39, 0.575, 0.565, 1) 1s both;
+}
+.bounce-top-icons {
+  -webkit-animation: bounce-top 0.9s 1s both;
+  animation: bounce-top 0.9s 1s both;
+}
+
+@-webkit-keyframes slide-in-bottom {
+  0% {
+    -webkit-transform: translateY(1000px);
+    transform: translateY(1000px);
+    opacity: 0;
+  }
+  100% {
+    -webkit-transform: translateY(0);
+    transform: translateY(0);
+    opacity: 1;
+  }
+}
+@keyframes slide-in-bottom {
+  0% {
+    -webkit-transform: translateY(1000px);
+    transform: translateY(1000px);
+    opacity: 0;
+  }
+  100% {
+    -webkit-transform: translateY(0);
+    transform: translateY(0);
+    opacity: 1;
+  }
+}
+@-webkit-keyframes bounce-top {
+  0% {
+    -webkit-transform: translateY(-45px);
+    transform: translateY(-45px);
+    -webkit-animation-timing-function: ease-in;
+    animation-timing-function: ease-in;
+    opacity: 1;
+  }
+  24% {
+    opacity: 1;
+  }
+  40% {
+    -webkit-transform: translateY(-24px);
+    transform: translateY(-24px);
+    -webkit-animation-timing-function: ease-in;
+    animation-timing-function: ease-in;
+  }
+  65% {
+    -webkit-transform: translateY(-12px);
+    transform: translateY(-12px);
+    -webkit-animation-timing-function: ease-in;
+    animation-timing-function: ease-in;
+  }
+  82% {
+    -webkit-transform: translateY(-6px);
+    transform: translateY(-6px);
+    -webkit-animation-timing-function: ease-in;
+    animation-timing-function: ease-in;
+  }
+  93% {
+    -webkit-transform: translateY(-4px);
+    transform: translateY(-4px);
+    -webkit-animation-timing-function: ease-in;
+    animation-timing-function: ease-in;
+  }
+  25%,
+  55%,
+  75%,
+  87% {
+    -webkit-transform: translateY(0);
+    transform: translateY(0);
+    -webkit-animation-timing-function: ease-out;
+    animation-timing-function: ease-out;
+  }
+  100% {
+    -webkit-transform: translateY(0);
+    transform: translateY(0);
+    -webkit-animation-timing-function: ease-out;
+    animation-timing-function: ease-out;
+    opacity: 1;
+  }
+}
+@keyframes bounce-top {
+  0% {
+    -webkit-transform: translateY(-45px);
+    transform: translateY(-45px);
+    -webkit-animation-timing-function: ease-in;
+    animation-timing-function: ease-in;
+    opacity: 1;
+  }
+  24% {
+    opacity: 1;
+  }
+  40% {
+    -webkit-transform: translateY(-24px);
+    transform: translateY(-24px);
+    -webkit-animation-timing-function: ease-in;
+    animation-timing-function: ease-in;
+  }
+  65% {
+    -webkit-transform: translateY(-12px);
+    transform: translateY(-12px);
+    -webkit-animation-timing-function: ease-in;
+    animation-timing-function: ease-in;
+  }
+  82% {
+    -webkit-transform: translateY(-6px);
+    transform: translateY(-6px);
+    -webkit-animation-timing-function: ease-in;
+    animation-timing-function: ease-in;
+  }
+  93% {
+    -webkit-transform: translateY(-4px);
+    transform: translateY(-4px);
+    -webkit-animation-timing-function: ease-in;
+    animation-timing-function: ease-in;
+  }
+  25%,
+  55%,
+  75%,
+  87% {
+    -webkit-transform: translateY(0);
+    transform: translateY(0);
+    -webkit-animation-timing-function: ease-out;
+    animation-timing-function: ease-out;
+  }
+  100% {
+    -webkit-transform: translateY(0);
+    transform: translateY(0);
+    -webkit-animation-timing-function: ease-out;
+    animation-timing-function: ease-out;
+    opacity: 1;
+  }
+}
+@-webkit-keyframes fade-in {
+  0% {
+    opacity: 0;
+  }
+  100% {
+    opacity: 1;
+  }
+}
+@keyframes fade-in {
+  0% {
+    opacity: 0;
+  }
+  100% {
+    opacity: 1;
+  }
+}
 </style>
