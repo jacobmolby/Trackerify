@@ -1,16 +1,16 @@
 <template>
   <div>
-    <button @click="isOpen = !isOpen" class="primary-btn">
-      <svg class="h-4 w-4  hidden sm:block  fill-current" viewBox="0 0 20 20">
+    <button @click="$store.dispatch('addListIsOpen', true)" class="primary-btn">
+      <svg class="h-4 w-4 hidden sm:block fill-current" viewBox="0 0 20 20">
         <path
           d="M11 9h4v2h-4v4H9v-4H5V9h4V5h2v4zm-1 11a10 10 0 110-20 10 10 0 010 20zm0-2a8 8 0 100-16 8 8 0 000 16z"
         />
       </svg>
-      <span class="ml-0 sm:ml-1  whitespace-no-wrap">Add List</span>
+      <span class="ml-0 sm:ml-1 whitespace-no-wrap">Add List</span>
     </button>
 
-    <portal to="popup-container" v-if="isOpen">
-      <button @click="isOpen = false" tabindex="-1" class="popup-bg"></button>
+    <portal to="popup-container" v-if="addListIsOpen">
+      <button @click="$store.dispatch('addListIsOpen', false)" tabindex="-1" class="popup-bg"></button>
       <div class="popup">
         <h2 class="text-left text-lg font-semibold">Add List</h2>
 
@@ -41,6 +41,7 @@
 <script>
 import ListService from '@/services/ListService';
 import { Chrome } from 'vue-color';
+import { mapState } from 'vuex';
 export default {
   name: 'AddList',
   components: {
@@ -48,7 +49,6 @@ export default {
   },
   data() {
     return {
-      isOpen: false,
       pickingColor: false,
       list: {
         title: null,
@@ -58,6 +58,9 @@ export default {
       },
       error: null
     };
+  },
+  computed: {
+    ...mapState(['addListIsOpen'])
   },
   methods: {
     onChange(val) {
@@ -92,7 +95,7 @@ export default {
   created() {
     const handleEscape = e => {
       if (e.key === 'Esc' || e.key === 'Escape') {
-        this.isOpen = false;
+        this.$store.dispatch('addListIsOpen', false);
       }
     };
     document.addEventListener('keydown', handleEscape);

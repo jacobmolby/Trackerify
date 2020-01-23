@@ -4,8 +4,8 @@
     class="lg:block z-10 fixed inset-y-0 left-0 w-64 px-8 py-4 bg-gray-100 border-r overflow-y-auto lg:translate-x-0 lg:static lg:inset-auto"
   >
     <div class="flex items-center justify-between">
-      <div class="font-extrabold text-xl text-orange-500 border-b border-orange-500">
-        <router-link :to="{name: 'boardOverview'}" exact>TRACKERIFY</router-link>
+      <div class="font-extrabold text-xl text-purple-700 border-b hover:border-purple-800">
+        <router-link :to="{name: 'home'}" exact>TRACKERIFY</router-link>
       </div>
       <button @click="$emit('closeSidebar')" class="lg:hidden">
         <svg class="h-4 w-4 fill-current text-gray-800" viewBox="0 0 20 20">

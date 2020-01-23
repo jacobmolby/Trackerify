@@ -30,6 +30,9 @@ export const store = new Vuex.Store({
     socketio
   },
   state: {
+    labelOverviewIsOpen: false,
+    addUserIsOpen: false,
+    addListIsOpen: false,
     token: null,
     user: { boards: null },
     isUserLoggedIn: false,
@@ -57,11 +60,13 @@ export const store = new Vuex.Store({
       if (state.isLoading) return 0;
       let numberOfCards = 0;
       state.board.lists.forEach(list => {
-        list.cards.forEach(card => {
-          if (!card.archived) {
-            numberOfCards++;
-          }
-        });
+        if (list) {
+          list.cards.forEach(card => {
+            if (!card.archived) {
+              numberOfCards++;
+            }
+          });
+        }
       });
       return numberOfCards;
     },
@@ -241,6 +246,13 @@ export const store = new Vuex.Store({
     },
     changeViewStyle(state, viewStyle) {
       state.viewStyle = viewStyle;
+    },
+    addListIsOpen(state, bool) {
+      state.addListIsOpen = bool;
+    },
+
+    addUserIsOpen(state, bool) {
+      state.addUserIsOpen = bool;
     }
   },
   actions: {
@@ -277,6 +289,13 @@ export const store = new Vuex.Store({
     },
     changeViewStyle({ commit }, viewStyle) {
       commit('changeViewStyle', viewStyle);
+    },
+    addListIsOpen({ commit }, bool) {
+      commit('addListIsOpen', bool);
+    },
+
+    addUserIsOpen({ commit }, bool) {
+      commit('addUserIsOpen', bool);
     }
   }
 });

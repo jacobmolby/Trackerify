@@ -109,8 +109,6 @@
                       </button>
                     </div>
                   </div>
-
-                  <!-- <AddUserToBoard class="ml-2 hidden xl:block" /> -->
                 </div>
               </div>
 
@@ -136,7 +134,7 @@
                   </button>
                 </span>
                 <LabelOverview class="w-1/3 sm:w-auto sm:ml-2">Edit Labels</LabelOverview>
-                <AddList class="w-1/3 sm:w-auto ml-1" />
+                <AddList :addListIsOpen="addListIsOpen" class="w-1/3 sm:w-auto ml-1" />
                 <AddUserToBoard class="w-1/3 sm:w-auto ml-1" />
               </div>
             </div>
@@ -245,6 +243,7 @@ export default {
   name: 'board',
   data() {
     return {
+      addListIsOpen: false,
       boardId: this.$route.params.boardId,
       removeUserError: null,
       editingTitle: false,
@@ -365,18 +364,6 @@ export default {
     }
   },
   created() {
-    // VIRKER MEN ER IKKE EN GOD LØSNING
-    // this.$store.subscribe((mutation, state) => {
-    //   if (mutation.type === 'setBoard') {
-    //     let numOfCards = 0;
-    //     state.board.lists.forEach(list => {
-    //       list.cards.forEach(() => {
-    //         numOfCards++;
-    //       });
-    //     });
-    //     this.numberOfCards = numOfCards;
-    //   }
-    // });
     const handleTitleKeyPresses = e => {
       if (this.editingTitle === false) {
         return;
@@ -388,8 +375,21 @@ export default {
         this.updateTitle();
       }
     };
+
+    const handleKeydownEvents = e => {
+      if (e.ctrlKey && e.key === 'l') {
+        e.preventDefault();
+        this.$store.dispatch('addListIsOpen', true);
+      } else if (e.ctrlKey && e.key === 'u') {
+        e.preventDefault();
+        this.$store.dispatch('addUserIsOpen', true);
+      }
+    };
+
+    document.addEventListener('keydown', handleKeydownEvents);
     document.addEventListener('keydown', handleTitleKeyPresses);
     this.$once('hook:beforeDestroy', () => {
+      document.removeEventListener('keydown', handleKeydownEvents);
       document.removeEventListener('keydown', handleTitleKeyPresses);
     });
   }

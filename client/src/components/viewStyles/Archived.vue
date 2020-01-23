@@ -11,7 +11,6 @@
             <Card class="mb-2 p-3 rounded shadow bg-white" v-if="card.archived" :cardId="card._id"></Card>
           </li>
         </ol>
-        <AddCard :listId="list._id" />
       </div>
     </div>
   </main>
@@ -20,11 +19,9 @@
 <script>
 import { mapState } from 'vuex';
 import Card from '../card/Card';
-import AddCard from '../card/AddCard';
 export default {
   components: {
     Card,
-    AddCard
   },
   props: {
     lists: {

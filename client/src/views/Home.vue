@@ -1,41 +1,8 @@
 <template>
-  <div class="leading-normal tracking-normal text-gray-900">
-    <Topbar />
+  <div class="leading-normal tracking-normal text-gray-900 h-screen">
     <div class="pb-14 bg-right bg-cover" style="background-image:url('img/bg.svg');">
       <!--Nav-->
-      <div class="w-full container mx-auto p-6">
-        <div class="w-full flex items-center justify-between">
-          <router-link
-            class="flex items-center text-indigo-600 font-bold text-2xl lg:text-4xl"
-            to="/"
-          >
-            <svg
-              class="h-8 fill-current text-indigo-600 pr-2"
-              xmlns="http://www.w3.org/2000/svg"
-              viewBox="0 0 20 20"
-            >
-              <path
-                d="M10 20a10 10 0 1 1 0-20 10 10 0 0 1 0 20zm-5.6-4.29a9.95 9.95 0 0 1 11.2 0 8 8 0 1 0-11.2 0zm6.12-7.64l3.02-3.02 1.41 1.41-3.02 3.02a2 2 0 1 1-1.41-1.41z"
-              />
-            </svg>Trackerify
-          </router-link>
-
-          <div class="flex w-1/2 justify-end content-center">
-            <a
-              class="inline-block text-blue-300 no-underline hover:text-indigo-800 hover:text-underline text-center h-10 p-2 md:h-auto md:p-4"
-              href="https://github.com/jacobmolby/Trackerify"
-            >
-              <svg class="fill-current h-6" viewBox="0 0 24 24" xmlns="http://www.w3.org/2000/svg">
-                <title>GitHub Page</title>
-                <path
-                  d="M12 .297c-6.63 0-12 5.373-12 12 0 5.303 3.438 9.8 8.205 11.385.6.113.82-.258.82-.577 0-.285-.01-1.04-.015-2.04-3.338.724-4.042-1.61-4.042-1.61C4.422 18.07 3.633 17.7 3.633 17.7c-1.087-.744.084-.729.084-.729 1.205.084 1.838 1.236 1.838 1.236 1.07 1.835 2.809 1.305 3.495.998.108-.776.417-1.305.76-1.605-2.665-.3-5.466-1.332-5.466-5.93 0-1.31.465-2.38 1.235-3.22-.135-.303-.54-1.523.105-3.176 0 0 1.005-.322 3.3 1.23.96-.267 1.98-.399 3-.405 1.02.006 2.04.138 3 .405 2.28-1.552 3.285-1.23 3.285-1.23.645 1.653.24 2.873.12 3.176.765.84 1.23 1.91 1.23 3.22 0 4.61-2.805 5.625-5.475 5.92.42.36.81 1.096.81 2.22 0 1.606-.015 2.896-.015 3.286 0 .315.21.69.825.57C20.565 22.092 24 17.592 24 12.297c0-6.627-5.373-12-12-12"
-                />
-              </svg>
-            </a>
-          </div>
-        </div>
-      </div>
-
+      <MarketingSiteNavigation />
       <!--Main-->
       <div
         class="container pt-24 md:pt-48 px-6 mx-auto flex flex-wrap flex-col md:flex-row items-center"
@@ -64,26 +31,20 @@
         <div class="w-full xl:w-3/5 py-6 overflow-y-hidden"></div>
 
         <!--Footer-->
-        <div class="w-full pt-16 pb-6 text-sm text-center md:text-left fade-in">
-          <span class="text-gray-500 no-underline hover:no-underline" href="#">
-            &copy; Trackerify 2019, this page is designed by
-            <a
-              class="hover:text-gray-900"
-              href="https://github.com/tailwindtoolbox/App-Landing-Page"
-            >Astrava.Solutions Ltd.</a>
-          </span>
-        </div>
+        <TheFooter />
       </div>
     </div>
   </div>
 </template>
 
 <script>
-import Topbar from '../components/TopBar';
+import TheFooter from '../components/reusables/TheFooter';
+import MarketingSiteNavigation from '../components/MarketingSiteNavigation';
 export default {
   name: 'home',
   components: {
-    Topbar
+    MarketingSiteNavigation,
+    TheFooter
   },
   beforeRouteEnter(to, from, next) {
     next(vueInstance => {
@@ -121,10 +82,6 @@ export default {
   -webkit-animation: fade-in 1.2s cubic-bezier(0.39, 0.575, 0.565, 1) 1s both;
   animation: fade-in 1.2s cubic-bezier(0.39, 0.575, 0.565, 1) 1s both;
 }
-.bounce-top-icons {
-  -webkit-animation: bounce-top 0.9s 1s both;
-  animation: bounce-top 0.9s 1s both;
-}
 
 @-webkit-keyframes slide-in-bottom {
   0% {
@@ -150,110 +107,7 @@ export default {
     opacity: 1;
   }
 }
-@-webkit-keyframes bounce-top {
-  0% {
-    -webkit-transform: translateY(-45px);
-    transform: translateY(-45px);
-    -webkit-animation-timing-function: ease-in;
-    animation-timing-function: ease-in;
-    opacity: 1;
-  }
-  24% {
-    opacity: 1;
-  }
-  40% {
-    -webkit-transform: translateY(-24px);
-    transform: translateY(-24px);
-    -webkit-animation-timing-function: ease-in;
-    animation-timing-function: ease-in;
-  }
-  65% {
-    -webkit-transform: translateY(-12px);
-    transform: translateY(-12px);
-    -webkit-animation-timing-function: ease-in;
-    animation-timing-function: ease-in;
-  }
-  82% {
-    -webkit-transform: translateY(-6px);
-    transform: translateY(-6px);
-    -webkit-animation-timing-function: ease-in;
-    animation-timing-function: ease-in;
-  }
-  93% {
-    -webkit-transform: translateY(-4px);
-    transform: translateY(-4px);
-    -webkit-animation-timing-function: ease-in;
-    animation-timing-function: ease-in;
-  }
-  25%,
-  55%,
-  75%,
-  87% {
-    -webkit-transform: translateY(0);
-    transform: translateY(0);
-    -webkit-animation-timing-function: ease-out;
-    animation-timing-function: ease-out;
-  }
-  100% {
-    -webkit-transform: translateY(0);
-    transform: translateY(0);
-    -webkit-animation-timing-function: ease-out;
-    animation-timing-function: ease-out;
-    opacity: 1;
-  }
-}
-@keyframes bounce-top {
-  0% {
-    -webkit-transform: translateY(-45px);
-    transform: translateY(-45px);
-    -webkit-animation-timing-function: ease-in;
-    animation-timing-function: ease-in;
-    opacity: 1;
-  }
-  24% {
-    opacity: 1;
-  }
-  40% {
-    -webkit-transform: translateY(-24px);
-    transform: translateY(-24px);
-    -webkit-animation-timing-function: ease-in;
-    animation-timing-function: ease-in;
-  }
-  65% {
-    -webkit-transform: translateY(-12px);
-    transform: translateY(-12px);
-    -webkit-animation-timing-function: ease-in;
-    animation-timing-function: ease-in;
-  }
-  82% {
-    -webkit-transform: translateY(-6px);
-    transform: translateY(-6px);
-    -webkit-animation-timing-function: ease-in;
-    animation-timing-function: ease-in;
-  }
-  93% {
-    -webkit-transform: translateY(-4px);
-    transform: translateY(-4px);
-    -webkit-animation-timing-function: ease-in;
-    animation-timing-function: ease-in;
-  }
-  25%,
-  55%,
-  75%,
-  87% {
-    -webkit-transform: translateY(0);
-    transform: translateY(0);
-    -webkit-animation-timing-function: ease-out;
-    animation-timing-function: ease-out;
-  }
-  100% {
-    -webkit-transform: translateY(0);
-    transform: translateY(0);
-    -webkit-animation-timing-function: ease-out;
-    animation-timing-function: ease-out;
-    opacity: 1;
-  }
-}
+
 @-webkit-keyframes fade-in {
   0% {
     opacity: 0;
