@@ -24,14 +24,15 @@ export default {
     DeletePopup
   },
   props: {
-    comment: Object
+    comment: Object,
+    listId: String
   },
   methods: {
     async deleteComment() {
       try {
         await this.$store.dispatch('removeCommentFromCard', {
           cardId: this.comment.cardId,
-          listId: this.comment.listId,
+          listId: this.listId,
           commentId: this.comment._id
         });
       } catch (error) {

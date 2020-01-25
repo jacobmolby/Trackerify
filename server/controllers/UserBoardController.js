@@ -5,6 +5,8 @@ const mongoose = require('mongoose');
 
 module.exports = {
   async create(req, res) {
+    console.log(req.body);
+
     const { boardId, userId } = req.body;
 
     try {
@@ -23,13 +25,12 @@ module.exports = {
             .send({ error: 'User is already in the board.' });
         }
         board.users.addToSet(user._id);
-        user.boards.addToSet(board._id);
+
         await board.save();
-        const savedUser = await user.save();
         const response = {
-          _id: savedUser._id,
-          name: savedUser.name,
-          profileImage: savedUser.profileImage
+          _id: user._id,
+          name: user.name,
+          profileImage: user.profileImage
         };
         res.send(response);
       } else {
@@ -45,10 +46,9 @@ module.exports = {
   },
   async destroy(req, res) {
     const { userId, boardId } = req.params;
+    console.log(req.params);
+
     try {
-      const user = await User.findById(userId);
-      user.boards.pull(boardId);
-      await user.save();
       const board = await Board.findById(boardId);
       board.users.pull(userId);
       //Removes the user from all the cards assigned to the user

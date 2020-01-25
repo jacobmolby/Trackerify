@@ -13,8 +13,11 @@ export default {
       await ListService.put(payload);
       commit('updateListTitle', payload);
     },
-    async addList({ commit }, list) {
-      commit('addList', list);
+    async addList({ commit }, payload) {
+      const response = (await ListService.post(payload)).data;
+
+      commit('addList', response);
+      commit('addListIsOpen', false);
     },
     async removeList({ commit }, { listId }) {
       const deletedList = (await ListService.delete(listId)).data;

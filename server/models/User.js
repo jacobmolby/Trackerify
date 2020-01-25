@@ -1,6 +1,6 @@
-const mongoose = require('mongoose');
+const { Schema, model } = require('mongoose');
 
-const userSchema = new mongoose.Schema({
+const userSchema = new Schema({
   name: {
     type: String,
     required: true,
@@ -22,11 +22,14 @@ const userSchema = new mongoose.Schema({
     type: String,
     default: 'https://img.icons8.com/officel/48/000000/user.png'
   },
-  // boards: [{ type: mongoose.Schema.Types.ObjectId, ref: 'Board' }],
+  hasReadWelcomeMessage: {
+    type: Boolean,
+    default: false
+  },
   created: {
     type: Date,
     default: Date.now
   }
 });
 
-module.exports = mongoose.model('User', userSchema);
+module.exports = model('User', userSchema);

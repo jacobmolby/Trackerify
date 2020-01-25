@@ -12,7 +12,8 @@ module.exports = {
     const card = new Card({
       title: req.body.title,
       description: req.body.description,
-      list: listId
+      list: listId,
+      owner: req.user._id
     });
 
     try {

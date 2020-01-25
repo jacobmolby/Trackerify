@@ -11,12 +11,16 @@ export default store => {
     const blackListedMutations = [
       'setToken',
       'setUser',
-      'setBoard',
+      // 'setBoard',
       'setBoardOverview',
       'createBoard',
-
-      'DISCONNECT',
-      'CONNECT'
+      'isLoading',
+      'addListIsOpen',
+      'labelOverviewIsOpen',
+      'addUserIsOpen',
+      'changeViewStyle',
+      'SOCKET_DISCONNECT',
+      'SOCKET_CONNECT'
     ];
 
     const isBlacklisted = blackListedMutations.includes(type);

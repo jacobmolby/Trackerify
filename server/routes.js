@@ -10,6 +10,7 @@ const userBoardRoutes = require('./routes/userBoard');
 const userCardRoutes = require('./routes/userCard');
 const listOrderRoutes = require('./routes/listOrder');
 const cardOrderRoutes = require('./routes/cardOrder');
+const archiveCardRoutes = require('./routes/archiveCard');
 
 module.exports = app => {
   app.use('/api/auth', authRoutes);
@@ -24,4 +25,5 @@ module.exports = app => {
   app.use('/api/card/user', userCardRoutes);
   app.use('/api/list/order', listOrderRoutes);
   app.use('/api/card/order', cardOrderRoutes);
+  app.use('/api/card/archive', archiveCardRoutes);
 };

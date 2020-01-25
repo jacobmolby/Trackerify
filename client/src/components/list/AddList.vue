@@ -1,18 +1,16 @@
 <template>
   <div>
-    <button
-      @click="isOpen = !isOpen"
-      class="ml-6 inline-flex items-baseline text-gray-600 hover:text-gray-900"
-    >
-      <span>
-        <svg class="h-4 w-4 mr-2 fill-current" viewBox="0 0 20 20">
-          <path d="M20.64 15.64H15.64V20.64H14V15.64H9V14H14V9H15.64V14H20.64V15.64Z" />
-        </svg>
-      </span>
-      Add List
+    <button @click="$store.dispatch('addListIsOpen', true)" class="primary-btn">
+      <svg class="h-4 w-4 hidden sm:block fill-current" viewBox="0 0 20 20">
+        <path
+          d="M11 9h4v2h-4v4H9v-4H5V9h4V5h2v4zm-1 11a10 10 0 110-20 10 10 0 010 20zm0-2a8 8 0 100-16 8 8 0 000 16z"
+        />
+      </svg>
+      <span class="ml-0 sm:ml-1 whitespace-no-wrap">Add List</span>
     </button>
-    <portal to="popup-container" v-if="isOpen">
-      <button @click="isOpen = false" tabindex="-1" class="popup-bg"></button>
+
+    <portal to="popup-container" v-if="addListIsOpen">
+      <button @click="$store.dispatch('addListIsOpen', false)" tabindex="-1" class="popup-bg"></button>
       <div class="popup">
         <h2 class="text-left text-lg font-semibold">Add List</h2>
 
@@ -43,6 +41,7 @@
 <script>
 import ListService from '@/services/ListService';
 import { Chrome } from 'vue-color';
+import { mapState } from 'vuex';
 export default {
   name: 'AddList',
   components: {
@@ -50,7 +49,6 @@ export default {
   },
   data() {
     return {
-      isOpen: false,
       pickingColor: false,
       list: {
         title: null,
@@ -60,6 +58,9 @@ export default {
       },
       error: null
     };
+  },
+  computed: {
+    ...mapState(['addListIsOpen'])
   },
   methods: {
     onChange(val) {
@@ -71,22 +72,17 @@ export default {
         this.error = 'Please choose a title.';
       }
       if (this.list.title && this.list.color) {
-        const payload = {
-          title: this.list.title,
-          color: this.list.color.hex,
-          boardId: this.$store.state.board._id
-        };
         try {
-          const response = (await ListService.post(payload)).data;
+          this.$store.dispatch('addList', {
+            title: this.list.title,
+            color: this.list.color.hex,
+            boardId: this.$store.state.board._id
+          });
 
-          this.$store.dispatch('addList', response);
-
-          this.$socket.emit('addList', response);
           this.list.title = null;
           this.pickingColor = false;
-          this.isOpen = false;
         } catch (error) {
-          console.log(error);
+          console.log(error.response.data.error);
         }
       }
     }
@@ -94,7 +90,7 @@ export default {
   created() {
     const handleEscape = e => {
       if (e.key === 'Esc' || e.key === 'Escape') {
-        this.isOpen = false;
+        this.$store.dispatch('addListIsOpen', false);
       }
     };
     document.addEventListener('keydown', handleEscape);

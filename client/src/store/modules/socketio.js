@@ -17,7 +17,9 @@ export default {
     SOCKET_CONNECT({ commit }) {
       commit('SOCKET_CONNECT');
     },
-
+    SOCKET_connect_error({ commit }) {
+      commit('SOCKET_DISCONNECT');
+    },
     SOCKET_DISCONNECT({ commit }) {
       commit('SOCKET_DISCONNECT');
     },
@@ -78,7 +80,6 @@ export default {
     SOCKET_removeLabelFromCard({ commit }, payload) {
       commit('removeLabelFromCard', payload, { root: true });
     },
-
     SOCKET_updateLabel({ commit }, payload) {
       commit('updateLabel', payload, { root: true });
     },
@@ -87,6 +88,12 @@ export default {
     },
     SOCKET_updateListTitle({ commit }, payload) {
       commit('updateListTitle', payload, { root: true });
+    },
+    SOCKET_archiveCard({ commit }, payload) {
+      commit('archiveCard', payload, { root: true });
+    },
+    SOCKET_restoreCard({ commit }, payload) {
+      commit('restoreCard', payload, { root: true });
     }
   }
 };

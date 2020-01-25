@@ -81,7 +81,10 @@ export default {
       commit('removeLabelFromBoard', { labelId: payload.labelId });
     },
     async addLabelToCard({ commit }, payload) {
-      await LabelCardService.post(payload);
+      await LabelCardService.post({
+        cardId: payload.cardId,
+        labelId: payload.newLabel._id
+      });
       commit('addLabelToCard', payload);
     },
     async removeLabelFromCard({ commit }, payload) {

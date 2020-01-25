@@ -12,7 +12,7 @@ const token = () => {
   }
 };
 
-export default io.connect(API_URL, {
+export default io(API_URL, {
   query: {
     token: token()
   }

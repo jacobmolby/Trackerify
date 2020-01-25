@@ -1,9 +1,10 @@
-import Home from '@/views/Home';
-import Settings from '@/views/Settings';
-import Login from '@/views/Login';
-import Register from '@/views/Register';
-import Board from '@/views/Board';
-import BoardOverview from '@/views/BoardOverview';
+const Home = () => import('../views/Home');
+const Settings = () => import('../views/Settings');
+const Teams = () => import('../views/Teams');
+const Login = () => import('../views/Login');
+const Register = () => import('../views/Register');
+const BoardOverview = () => import('../views/BoardOverview');
+const Board = () => import('../views/Board');
 
 const routes = [
   {
@@ -35,6 +36,16 @@ const routes = [
     path: '/board/:boardId',
     name: 'board',
     component: Board
+  },
+  {
+    path: '/teams',
+    name: 'teams',
+    component: Teams
+  },
+  {
+    // Catch all until 404 is made
+    path: '*',
+    redirect: '/'
   }
 ];
 

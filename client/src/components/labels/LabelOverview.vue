@@ -1,13 +1,12 @@
 <template>
   <div>
-    <button
-      class="ml-6 inline-flex items-center text-gray-600 hover:text-gray-900"
-      @click="isOpen = !isOpen"
-    >
-      <svg class="h-3 w-3 mr-2 fill-current" viewBox="0 0 20 20">
+    <button class="primary-btn " @click="isOpen = !isOpen">
+      <svg class="h-3 w-3  hidden sm:block  fill-current" viewBox="0 0 20 20">
         <path d="M12.3 3.7l4 4L4 20H0v-4L12.3 3.7zm1.4-1.4L16 0l4 4-2.3 2.3-4-4z" />
       </svg>
-      <slot></slot>
+      <span class="ml-0 sm:ml-1  whitespace-no-wrap">
+        <slot></slot>
+      </span>
     </button>
     <portal to="popup-container-important" v-if="isOpen">
       <button @click="isOpen = false" tabindex="-1" class="popup-bg"></button>
@@ -130,7 +129,7 @@ export default {
     },
     async addLabelToCard(label) {
       try {
-        this.$store.dispatch('addLabelToCard', {
+        await this.$store.dispatch('addLabelToCard', {
           cardId: this.cardId,
           newLabel: label
         });

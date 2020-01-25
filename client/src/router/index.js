@@ -3,6 +3,7 @@ import jwtDecode from 'jwt-decode';
 import routes from './routes';
 import { store } from '../store';
 const router = new VueRouter({
+  mode: 'history',
   routes
 });
 
@@ -23,6 +24,10 @@ router.beforeEach((to, from, next) => {
   if (authRequired && tokenExpired) {
     store.dispatch('logout');
     return next('/login');
+  }
+
+  if (to.path === '/login' && store.state.isUserLoggedIn) {
+    return next('/board');
   }
 
   next();

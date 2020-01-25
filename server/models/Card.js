@@ -15,6 +15,15 @@ const cardSchema = new mongoose.Schema({
     type: String,
     required: false
   },
+  archived: {
+    type: Boolean,
+    default: false
+  },
+  owner: {
+    type: mongoose.Schema.Types.ObjectId,
+    ref: 'User',
+    required: true
+  },
   labels: [{ type: mongoose.Schema.Types.ObjectId, ref: 'Label' }],
   assignedUsers: [{ type: mongoose.Schema.Types.ObjectId, ref: 'User' }],
   comments: [{ type: mongoose.Schema.Types.ObjectId, ref: 'Comment' }],
