@@ -31,5 +31,5 @@ const userSchema = new Schema({
     default: Date.now
   }
 });
-
+userSchema.index({ name: 'text', email: 'text' });
 module.exports = model('User', userSchema);

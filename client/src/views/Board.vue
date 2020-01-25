@@ -134,7 +134,7 @@
                   </button>
                 </span>
                 <LabelOverview class="w-1/3 sm:w-auto sm:ml-2">Edit Labels</LabelOverview>
-                <AddList :addListIsOpen="addListIsOpen" class="w-1/3 sm:w-auto ml-1" />
+                <AddList :addListIsOpen="addListIsOpen" class="w-1/3 sm:w-full ml-1" />
                 <AddUserToBoard class="w-1/3 sm:w-auto ml-1" />
               </div>
             </div>

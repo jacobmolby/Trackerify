@@ -8,6 +8,7 @@ const labelCardRoutes = require('./routes/labelCard');
 const attachmentRoutes = require('./routes/attachment');
 const userBoardRoutes = require('./routes/userBoard');
 const userCardRoutes = require('./routes/userCard');
+const userSearchRoutes = require('./routes/userSearch');
 const listOrderRoutes = require('./routes/listOrder');
 const cardOrderRoutes = require('./routes/cardOrder');
 const archiveCardRoutes = require('./routes/archiveCard');
@@ -26,4 +27,5 @@ module.exports = app => {
   app.use('/api/list/order', listOrderRoutes);
   app.use('/api/card/order', cardOrderRoutes);
   app.use('/api/card/archive', archiveCardRoutes);
+  app.use('/api/user/search', userSearchRoutes);
 };

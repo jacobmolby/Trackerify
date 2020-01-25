@@ -151,7 +151,7 @@
           Attachments:
           <span class="font-bold text-red-500">NOT IMPLEMENTED YET.</span>
         </div>
-        <button v-if="!card.archived" @click="archiveCard" class="primary-btn">
+        <button v-if="!card.archived" @click="archiveCard" class="primary-btn w-full">
           <span>
             <svg class="h-3 w-3 fill-current text-white" viewBox="0 0 20 20">
               <path
@@ -161,7 +161,7 @@
           </span>
           <span class="ml-2">Archive</span>
         </button>
-        <button v-if="card.archived" @click="restoreCard" class="primary-btn">
+        <button v-if="card.archived" @click="restoreCard" class="primary-btn w-full">
           <span>
             <svg class="h-3 w-3 fill-current text-white" viewBox="0 0 20 20">
               <path
