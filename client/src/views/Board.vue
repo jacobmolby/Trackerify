@@ -38,7 +38,7 @@
         </button>
       </div>
       <h2 class="mt-8 text-xs font-semibold text-gray-600 uppercase tracking-wide">Labels</h2>
-      <div class="mt-2 -mx-3">
+      <div class="mt-2 -mx-3 pb-2 border-b border-gray-400">
         <button
           v-for="label in board.labels"
           :key="label._id"
@@ -377,12 +377,22 @@ export default {
     };
 
     const handleKeydownEvents = e => {
+      const store = this.$store;
+
       if (e.ctrlKey && e.key === 'l') {
         e.preventDefault();
-        this.$store.dispatch('addListIsOpen', true);
+        if (store.state.addListIsOpen) {
+          store.dispatch('addListIsOpen', false);
+        } else {
+          store.dispatch('addListIsOpen', true);
+        }
       } else if (e.ctrlKey && e.key === 'u') {
         e.preventDefault();
-        this.$store.dispatch('addUserIsOpen', true);
+        if (store.state.addUserIsOpen) {
+          store.dispatch('addUserIsOpen', false);
+        } else {
+          store.dispatch('addUserIsOpen', true);
+        }
       }
     };
 

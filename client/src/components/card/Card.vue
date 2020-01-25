@@ -14,7 +14,7 @@
         <span class="text-sm text-gray-700 leading-snug">
           <button class="text-left">{{card.title}}</button>
         </span>
-        <span v-if="card.archived" class="font-bold text-red-600">ARCHIVED</span>
+        <span v-if="card.archived" class="font-bold text-red-600">(ARCHIVED)</span>
       </div>
       <div class="mt-2 flex justify-between items-baseline">
         <div class="flex">
@@ -55,6 +55,7 @@
       <div class="popup">
         <div class="flex items-center justify-between">
           <div class="flex items-baseline w-full">
+            <span v-if="card.archived" class="mr-2 font-bold text-red-600">(ARCHIVED)</span>
             <h2 v-if="!isEditing" class="text-lg font-bold">{{title}}</h2>
             <input
               v-else-if="isEditing"

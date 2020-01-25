@@ -1,23 +1,26 @@
+const jwt = require('jsonwebtoken');
+
 module.exports = io => {
   io.use((socket, next) => {
     //TODO verify token
     let token = socket.handshake.query.token;
 
-    if (token) {
+    const verified = !!jwt.verify(token, process.env.TOKEN_SECRET);
+    if (verified) {
       return next();
     }
     return next(new Error('authentication error'));
   });
 
   io.on('connection', socket => {
-    console.log(`A user connected with socket id ${socket.id}`);
+    console.log(`A user connected with socketID: ${socket.id}`);
     socket.emit('CONNECT');
 
     socket.on('vuexEvent', payload => {
       //The payload is an object with
       //{boardId: "5as4d65a4sd4asdasd",
       // actionName: "deleteBoard",
-      // actionPayload:{Action payload}}
+      // actionPayload:{...ActionPayload}}
       const { boardId, actionName, actionPayload } = payload;
 
       if (actionName === 'setBoard') {

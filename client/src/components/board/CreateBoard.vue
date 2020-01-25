@@ -19,7 +19,7 @@
           />
           <div v-if="error">{{this.error}}</div>
           <button
-            class="mt-2 py-2 text-white bg-indigo-400 rounded shadow hover:bg-indigo-500"
+            class="mt-2 py-2 text-white bg-indigo-600 rounded shadow hover:bg-indigo-500"
           >Create Board</button>
         </form>
       </div>
@@ -54,14 +54,17 @@ export default {
     }
   },
   created() {
-    const handleEscape = e => {
+    const handleKeyPresses = e => {
       if (e.key === 'Esc' || e.key === 'Escape') {
         this.isOpen = false;
       }
+      if (e.key === 'b' && e.ctrlKey) {
+        this.isOpen = !this.isOpen;
+      }
     };
-    document.addEventListener('keydown', handleEscape);
+    document.addEventListener('keydown', handleKeyPresses);
     this.$once('hook:beforeDestroy', () => {
-      document.removeEventListener('keydown', handleEscape);
+      document.removeEventListener('keydown', handleKeyPresses);
     });
   }
 };

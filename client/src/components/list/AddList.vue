@@ -72,20 +72,15 @@ export default {
         this.error = 'Please choose a title.';
       }
       if (this.list.title && this.list.color) {
-        const payload = {
-          title: this.list.title,
-          color: this.list.color.hex,
-          boardId: this.$store.state.board._id
-        };
         try {
-          const response = (await ListService.post(payload)).data;
+          this.$store.dispatch('addList', {
+            title: this.list.title,
+            color: this.list.color.hex,
+            boardId: this.$store.state.board._id
+          });
 
-          this.$store.dispatch('addList', response);
-
-          this.$socket.emit('addList', response);
           this.list.title = null;
           this.pickingColor = false;
-          this.isOpen = false;
         } catch (error) {
           console.log(error.response.data.error);
         }

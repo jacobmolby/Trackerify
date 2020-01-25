@@ -1,13 +1,13 @@
 <template>
-  <div class="-mx-3 mt-4 pt-2 border-t border-gray-400 flex flex-col">
+  <div class="-mx-3 pt-2 flex flex-col">
     <router-link
       :to="{name:'boardOverview'}"
-      class="px-3 py-1 flex justify-between text-gray-700 text-sm font-medium hover:bg-gray-200 rounded-lg"
+      class="px-3 pb-1 flex justify-between text-gray-700 text-sm font-medium hover:bg-gray-200 rounded-lg"
     >Boards</router-link>
     <router-link
-      :to="{name:'team'}"
+      :to="{name:'teams'}"
       class="mt-1 px-3 py-1 flex justify-between text-gray-700 text-sm font-medium hover:bg-gray-200 rounded-lg"
-    >Team</router-link>
+    >Teams</router-link>
     <router-link
       :to="{name:'settings'}"
       class="mt-1 px-3 py-1 flex justify-between text-gray-700 text-sm font-medium hover:bg-gray-200 rounded-lg"
