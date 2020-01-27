@@ -13,6 +13,7 @@ const listOrderRoutes = require('./routes/listOrder');
 const cardOrderRoutes = require('./routes/cardOrder');
 const archiveCardRoutes = require('./routes/archiveCard');
 const teamRoutes = require('./routes/team.routes');
+const teamUserRoutes = require('./routes/teamUser.routes');
 
 module.exports = app => {
   app.use('/api/auth', authRoutes);
@@ -30,4 +31,5 @@ module.exports = app => {
   app.use('/api/card/archive', archiveCardRoutes);
   app.use('/api/user/search', userSearchRoutes);
   app.use('/api/team', teamRoutes);
+  app.use('/api/team/user', teamUserRoutes);
 };

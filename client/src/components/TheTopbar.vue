@@ -43,6 +43,7 @@
           v-if="isOpen"
           class="z-30 absolute right-0 mt-2 py-2 w-48 bg-white rounded-lg shadow-xl"
         >
+          <span class="block px-4 py-2 text-gray-800 font-medium border-b">{{user.name}}</span>
           <a
             href="#"
             class="block px-4 py-2 text-gray-800 hover:bg-gray-800 hover:text-white"

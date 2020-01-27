@@ -5,17 +5,23 @@ module.exports = io => {
     //TODO verify token
     let token = socket.handshake.query.token;
 
-    const verified = !!jwt.verify(token, process.env.TOKEN_SECRET);
-    if (verified) {
-      return next();
-    }
-    return next(new Error('authentication error'));
+    const verified = token
+      ? !!jwt.verify(token, process.env.TOKEN_SECRET)
+      : false;
+    socket.tokenIsVerified = verified;
+    // if (verified) {
+    //   socket.tokenIsVerified = false;
+    // }
+    next();
+    // return next(new Error('authentication error'));
   });
 
   io.on('connection', socket => {
     console.log(`A user connected with socketID: ${socket.id}`);
     socket.emit('CONNECT');
-
+    if (!socket.tokenIsVerified) {
+      return;
+    }
     socket.on('vuexEvent', payload => {
       //The payload is an object with
       //{boardId: "5as4d65a4sd4asdasd",

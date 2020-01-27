@@ -15,7 +15,10 @@
       </div>
 
       <!-- MAIN CONTENT -->
-      <div v-if="user.boards.length > 1" class="my-10 px-6 flex flex-col justify-between">
+      <div
+        v-if="user.boards && user.boards.length > 1"
+        class="my-10 px-6 flex flex-col justify-between"
+      >
         <router-link
           v-for="board in user.boards"
           :key="board._id"
@@ -39,10 +42,7 @@
         </router-link>
         <!-- </div> -->
       </div>
-      <div
-        v-if="user.boards.length === 0"
-        class="m-auto text-4xl p-6 font-light"
-      >There are no boards. You should create one.</div>
+      <div v-else class="m-auto text-4xl p-6 font-light">There are no boards. You should create one.</div>
       <div v-if="error">{{error}}</div>
       <!-- END MAIN CONTENT -->
       <button

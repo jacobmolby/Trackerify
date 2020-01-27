@@ -209,7 +209,7 @@ export const store = new Vuex.Store({
     logout({ commit }) {
       commit('setToken', null);
       commit('setUser', null);
-      commit('setBoard', null);
+      commit('setBoard', { _id: null, lists: [{ cards: [{}] }] });
     },
     setToken({ commit }, token) {
       commit('setToken', token);

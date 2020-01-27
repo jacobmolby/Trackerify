@@ -1,6 +1,6 @@
 <template>
   <nav class="w-full container mx-auto p-6">
-    <div class="w-full flex flex-col sm:flex-row items-center justify-between">
+    <div class="w-full flex flex-col sm:flex-row items-baseline sm:items-center justify-between">
       <router-link
         class="fade-in flex items-center text-indigo-700 font-bold text-2xl lg:text-4xl hover:text-indigo-900"
         to="/"
@@ -13,29 +13,31 @@
         <span>Trackerify</span>
       </router-link>
 
-      <div class="flex justify-end content-center items-center">
+      <div
+        class="flex justify-end content-center border-t border-purple-500 mt-2 sm:border-0 sm:mt-0 fade-in"
+      >
         <router-link
           v-if="!isUserLoggedIn"
           to="/register"
-          class="inline-block font-semibold text-blue-600 hover:text-indigo-800 text-center h-10 p-2 md:h-auto md:p-4 hover:underline fade-in"
+          class="inline-block font-semibold text-blue-600 hover:text-indigo-800 text-center h-10 p-2 md:h-auto md:p-4 hover:underline"
         >Register</router-link>
         <router-link
           v-if="!isUserLoggedIn"
           to="/login"
-          class="inline-block font-semibold text-blue-600 hover:text-indigo-800 text-center h-10 p-2 md:h-auto md:p-4 hover:underline fade-in"
+          class="inline-block font-semibold text-blue-600 hover:text-indigo-800 text-center h-10 p-2 md:h-auto md:p-4 hover:underline"
         >Login</router-link>
         <router-link
           v-if="isUserLoggedIn"
           to="/board"
-          class="inline-block font-semibold text-blue-600 hover:text-indigo-800 text-center h-10 p-2 md:h-auto md:p-4 hover:underline fade-in"
+          class="inline-block font-semibold text-blue-600 hover:text-indigo-800 text-center h-10 p-2 md:h-auto md:p-4 hover:underline"
         >Board Overview</router-link>
         <button
           v-if="isUserLoggedIn"
           @click="$store.dispatch('logout')"
-          class="inline-block font-semibold text-blue-600 hover:text-indigo-800 text-center h-10 p-2 md:h-auto md:p-4 hover:underline fade-in"
+          class="inline-block font-semibold text-blue-600 hover:text-indigo-800 text-center h-10 p-2 md:h-auto md:p-4 hover:underline"
         >Logout</button>
         <a
-          class="inline-block text-blue-300 no-underline hover:text-indigo-800 text-center h-10 p-2 md:h-auto md:p-4 fade-in"
+          class="inline-block text-blue-300 no-underline hover:text-indigo-800 text-center h-10 p-2 md:h-auto md:p-4"
           href="https://github.com/jacobmolby/Trackerify"
         >
           <svg class="fill-current h-6" viewBox="0 0 24 24">

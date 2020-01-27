@@ -1,4 +1,6 @@
 import TeamService from '../../services/TeamService';
+import TeamUserService from '../../services/TeamUserService';
+import Vue from 'vue';
 export default {
   state: [],
   mutations: {
@@ -8,6 +10,12 @@ export default {
     },
     createTeam(state, team) {
       state.push(team);
+    },
+    addTeamMember(state, { user, teamId }) {
+      const index = state.findIndex(team => team._id === teamId);
+      const newUsers = [...state[index].users, user];
+      const newTeam = { ...state[index], users: newUsers };
+      Vue.set(state, index, newTeam);
     }
   },
   actions: {
@@ -21,6 +29,10 @@ export default {
       //VISER IKKE MEDLEMMER
       const team = (await TeamService.post(payload)).data;
       commit('createTeam', team);
+    },
+    async addTeamMember({ commit }, { user, teamId }) {
+      await TeamUserService.post({ teamId, userId: user._id });
+      commit('addTeamMember', { user, teamId });
     }
   }
 };

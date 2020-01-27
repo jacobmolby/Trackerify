@@ -1,5 +1,5 @@
 <template>
-  <div class="min-w-full bg-gray-100 rounded shadow-lg">
+  <div class="min-w-full h-full bg-gray-100 rounded shadow-lg">
     <div class="p-3 w-full flex justify-between items-center border-b rounded-t bg-purple-600">
       <h3 class="font-medium text-white">{{team.name}}</h3>
       <DeletePopup
@@ -9,7 +9,8 @@
         :color="'white'"
       >{{team.name}}</DeletePopup>
     </div>
-    <div class="p-4 flex justify-between">
+    <!-- Its a bit hacky, but it works without using calc() -->
+    <div class="-mt-12 h-full p-4 pt-16 flex justify-between">
       <div class="w-1/2 mr-3 flex flex-col justify-between">
         <div>
           <h4 class="font-medium">Members</h4>
@@ -24,14 +25,7 @@
             </li>
           </ul>
         </div>
-        <button class="primary-btn mt-2">
-          <svg class="h-4 w-4 fill-current" viewBox="0 0 20 20">
-            <path
-              d="M2 6H0v2h2v2h2V8h2V6H4V4H2v2zm7 0a3 3 0 0 1 6 0v2a3 3 0 0 1-6 0V6zm11 9.14A15.93 15.93 0 0 0 12 13c-2.91 0-5.65.78-8 2.14V18h16v-2.86z"
-            />
-          </svg>
-          <span class="ml-2">Add Team Member</span>
-        </button>
+        <AddTeamMember :teamId="team._id" />
       </div>
       <div class="w-1/2 pl-3 border-l flex flex-col justify-between">
         <div>
@@ -65,6 +59,7 @@
 
 <script>
 import TeamMemberCard from './TeamMemberCard';
+import AddTeamMember from './AddTeamMember';
 import DeletePopup from '../reusables/DeletePopup';
 import { mapState } from 'vuex';
 export default {
@@ -89,7 +84,8 @@ export default {
   },
   components: {
     TeamMemberCard,
-    DeletePopup
+    DeletePopup,
+    AddTeamMember
   }
 };
 </script>

@@ -118,7 +118,6 @@ export default {
       this.searchResult = [];
       try {
         const response = (await UserSearchService.get(this.searchInput)).data;
-        console.log(response);
 
         if (response.length > 0) {
           this.searchResult = response;
@@ -127,8 +126,6 @@ export default {
           this.searchMessage = 'No search result.';
         }
       } catch (error) {
-        console.log('err');
-
         this.searchMessage = error.response.data.error;
       }
     },
