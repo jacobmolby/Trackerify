@@ -41,7 +41,11 @@ module.exports = {
     }
   },
   variants: {
-    margin: ['responsive', 'first', 'odd', 'hover', 'focus']
+    margin: ['responsive', 'first', 'odd', 'hover', 'focus'],
+    backgroundColor: ['responsive', 'first', 'odd', 'even', 'hover', 'focus'],
+    borderWidth: ['responsive', 'first', 'hover', 'focus'],
+    borderRadius: ['responsive', 'first', 'last', 'hover', 'focus'],
+    boxShadow: ['responsive', 'hover', 'focus', 'active']
   },
   plugins: [
     require('tailwindcss-transforms')({ '3d': false }),

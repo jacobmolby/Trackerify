@@ -10,8 +10,10 @@ export default {
   },
   actions: {
     async setBoardOverview({ commit }) {
+      commit('isLoading', true);
       const boards = (await BoardService.index()).data;
       commit('setBoardOverview', boards);
+      commit('isLoading', false);
     },
     async setBoard({ commit }, { boardId }) {
       const board = (await BoardService.show(boardId)).data;

@@ -46,7 +46,6 @@
 
 <script>
 import LabelService from '@/services/LabelService';
-import { fireAction } from '@/services/ActionService';
 import { Chrome } from 'vue-color';
 
 export default {

@@ -45,7 +45,6 @@ import draggable from 'vuedraggable';
 import { mapState } from 'vuex';
 import ListService from '@/services/ListService';
 import CardOrderService from '@/services/CardOrderService';
-import { fireAction } from '@/services/ActionService';
 import Card from '@/components/card/Card';
 import AddCard from '@/components/card/AddCard';
 import DeletePopup from '@/components/reusables/DeletePopup';

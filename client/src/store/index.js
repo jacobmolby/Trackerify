@@ -10,6 +10,9 @@ import comment from './events/commentEvents';
 import board from './events/boardEvents';
 import list from './events/listEvents';
 import card from './events/cardEvents';
+import teams from './modules/team.store';
+
+import getters from './getters';
 
 import AuthenticationService from '../services/AuthenticationService';
 
@@ -27,7 +30,8 @@ export const store = new Vuex.Store({
     webSocketPlugin
   ],
   modules: {
-    socketio
+    socketio,
+    teams
   },
   state: {
     labelOverviewIsOpen: false,
@@ -40,76 +44,8 @@ export const store = new Vuex.Store({
     isLoading: false,
     viewStyle: 'board'
   },
-  getters: {
-    getCardsByListId: state => listId => {
-      return state.board.lists.find(list => list._id === listId).cards;
-    },
+  getters,
 
-    getCardById: state => cardId => {
-      let cardById = {};
-      state.board.lists.forEach(list =>
-        list.cards.forEach(card => {
-          if (card._id === cardId) {
-            cardById = card;
-          }
-        })
-      );
-      return cardById;
-    },
-    numberOfAllCards(state) {
-      if (state.isLoading) return 0;
-      let numberOfCards = 0;
-      state.board.lists.forEach(list => {
-        if (list) {
-          list.cards.forEach(card => {
-            if (!card.archived) {
-              numberOfCards++;
-            }
-          });
-        }
-      });
-      return numberOfCards;
-    },
-    cardsCreatedByMe(state) {
-      let cardsByMe = [];
-      if (state.isLoading) return 0;
-      state.board.lists.forEach(list => {
-        list.cards.forEach(card => {
-          if (card.owner === state.user._id && !card.archived) {
-            cardsByMe.push(card);
-          }
-        });
-      });
-      return cardsByMe;
-    },
-    numberOfArchivedCards(state) {
-      if (state.isLoading) return 0;
-      let numberOfCards = 0;
-      state.board.lists.forEach(list => {
-        list.cards.forEach(card => {
-          if (card.archived) {
-            numberOfCards++;
-          }
-        });
-      });
-      return numberOfCards;
-    },
-    numberOfCardsAssignedToMe(state) {
-      if (state.isLoading) return 0;
-      let numberOfCards = 0;
-      state.board.lists.forEach(list => {
-        list.cards.forEach(card => {
-          if (!card.assignedUsers) return;
-          card.assignedUsers.forEach(user => {
-            if (user._id === state.user._id && !card.archived) {
-              numberOfCards++;
-            }
-          });
-        });
-      });
-      return numberOfCards;
-    }
-  },
   mutations: {
     ...label.mutations,
     ...card.mutations,

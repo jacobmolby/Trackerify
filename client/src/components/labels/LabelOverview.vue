@@ -68,7 +68,6 @@ import CreateLabel from '@/components/labels/CreateLabel';
 import DeletePopup from '@/components/reusables/DeletePopup';
 import LabelService from '@/services/LabelService';
 import LabelCardService from '@/services/LabelCardService';
-import { fireAction } from '@/services/ActionService';
 
 export default {
   components: {

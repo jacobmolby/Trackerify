@@ -2,9 +2,7 @@
   <div>
     <button @click="$store.dispatch('addListIsOpen', true)" class="primary-btn w-full">
       <svg class="h-4 w-4 hidden sm:block fill-current" viewBox="0 0 20 20">
-        <path
-          d="M11 9h4v2h-4v4H9v-4H5V9h4V5h2v4zm-1 11a10 10 0 110-20 10 10 0 010 20zm0-2a8 8 0 100-16 8 8 0 000 16z"
-        />
+        <path d="M15 9h-3v2h3v3h2v-3h3V9h-3V6h-2v3zM0 3h10v2H0V3zm0 8h10v2H0v-2zm0-4h10v2H0V7zm0 8h10v2H0v-2z"/>
       </svg>
       <span class="ml-0 sm:ml-1 whitespace-no-wrap">Add List</span>
     </button>

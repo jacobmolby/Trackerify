@@ -1,10 +1,10 @@
-const Home = () => import('../views/Home');
-const Settings = () => import('../views/Settings');
-const Teams = () => import('../views/Teams');
-const Login = () => import('../views/Login');
-const Register = () => import('../views/Register');
-const BoardOverview = () => import('../views/BoardOverview');
-const Board = () => import('../views/Board');
+const Home = () => import('../views/HomePage');
+const Settings = () => import('../views/SettingsPage');
+const Teams = () => import('../views/TeamsPage');
+const Login = () => import('../views/LoginPage');
+const Register = () => import('../views/RegisterPage');
+const BoardOverview = () => import('../views/BoardOverviewPage');
+const Board = () => import('../views/BoardPage');
 
 const routes = [
   {

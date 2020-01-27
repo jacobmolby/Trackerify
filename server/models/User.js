@@ -26,6 +26,7 @@ const userSchema = new Schema({
     type: Boolean,
     default: false
   },
+  teams: [{ type: Schema.Types.ObjectId, ref: 'Team' }],
   created: {
     type: Date,
     default: Date.now
