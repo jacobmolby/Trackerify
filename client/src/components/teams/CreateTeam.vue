@@ -118,9 +118,11 @@ export default {
       this.searchResult = [];
       try {
         const response = (await UserSearchService.get(this.searchInput)).data;
-
-        if (response.length > 0) {
-          this.searchResult = response;
+        const filteredResponse = [
+          ...response.filter(user => user._id !== this.$store.state.user._id)
+        ];
+        if (filteredResponse.length > 0) {
+          this.searchResult = filteredResponse;
           this.searchMessage = '';
         } else {
           this.searchMessage = 'No search result.';
@@ -169,6 +171,17 @@ export default {
         this.error = error.response.data.error;
       }
     }
+  },
+  created() {
+    const handleEscape = e => {
+      if (e.key === 'Esc' || e.key === 'Escape') {
+        this.addTeamIsOpen = false;
+      }
+    };
+    document.addEventListener('keydown', handleEscape);
+    this.$once('hook:beforeDestroy', () => {
+      document.removeEventListener('keydown', handleEscape);
+    });
   }
 };
 </script>

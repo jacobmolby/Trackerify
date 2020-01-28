@@ -17,13 +17,13 @@
       <!-- MAIN CONTENT -->
       <div
         v-if="user.boards && user.boards.length > 1"
-        class="my-10 px-6 flex flex-col justify-between"
+        class="p-6 flex flex-col overflow-y-auto justify-between"
       >
         <router-link
           v-for="board in user.boards"
           :key="board._id"
           :to="{ name: 'board', params: { boardId: board._id }}"
-          class="mt-4"
+          class="mt-4 first:mt-0"
         >
           <div class="p-5 bg-gray-800 rounded-lg shadow text-gray-200 hover:bg-gray-600">
             <h2 class="font-bold text-2xl">{{board.title}}</h2>

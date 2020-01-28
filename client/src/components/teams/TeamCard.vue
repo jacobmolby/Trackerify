@@ -21,7 +21,7 @@
               v-for="user in team.users"
               :key="user._id"
             >
-              <TeamMemberCard :isOwner="isOwner" :user="user" />
+              <TeamMemberCard :teamId="team._id" :isOwner="isOwner" :user="user" />
             </li>
           </ul>
         </div>
@@ -31,14 +31,16 @@
         <div>
           <h4 class="font-medium">Boards</h4>
           <ul>
-            <li class="mt-2 first:mt-1" v-for="i in 2" :key="i">
+            <li class="mt-2 first:mt-1" v-for="board in team.boards" :key="board._id">
               <div class="p-1 px-2 bg-white rounded shadow hover:shadow-lg active:shadow-inner">
-                <button class="w-full">
+                <button class="w-full" @click="$router.push(`/board/${board._id}`)">
                   <div class="border-b">
-                    <h4 class="font-semibold text-sm">Development</h4>
+                    <h4 class="font-semibold text-sm">{{board.title}}</h4>
                   </div>
                   <div class="flex flex-col text-left">
-                    <span class="text-xs">3 Lists</span>
+                    <span
+                      class="text-xs"
+                    >{{board.lists.length}} {{board.lists.length > 1 ? 'Lists': 'List'}}</span>
                     <span class="text-xs font-light">Last Updated: 4-1-2020</span>
                   </div>
                 </button>
@@ -46,12 +48,7 @@
             </li>
           </ul>
         </div>
-        <button class="primary-btn mt-2">
-          <svg class="h-4 w-4 fill-current" viewBox="0 0 20 20">
-            <path d="M12 4H8v12h4V4zm2 0v12h4V4h-4zM6 4H2v12h4V4zM0 2h20v16H0V2z" />
-          </svg>
-          <span class="ml-2">Add Board</span>
-        </button>
+        <AddBoardToTeam :team="team" />
       </div>
     </div>
   </div>
@@ -60,6 +57,7 @@
 <script>
 import TeamMemberCard from './TeamMemberCard';
 import AddTeamMember from './AddTeamMember';
+import AddBoardToTeam from './AddBoardToTeam';
 import DeletePopup from '../reusables/DeletePopup';
 import { mapState } from 'vuex';
 export default {
@@ -78,14 +76,20 @@ export default {
     }
   },
   methods: {
-    deleteTeam() {
+    async deleteTeam() {
       const teamId = this.team._id;
+      try {
+        await this.$store.dispatch('deleteTeam', teamId);
+      } catch (error) {
+        console.log(error.response.data.error);
+      }
     }
   },
   components: {
     TeamMemberCard,
     DeletePopup,
-    AddTeamMember
+    AddTeamMember,
+    AddBoardToTeam
   }
 };
 </script>

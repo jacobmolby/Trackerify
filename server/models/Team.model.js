@@ -9,6 +9,7 @@ const teamSchema = new Schema({
     type: Schema.Types.ObjectId,
     ref: 'User',
     required: true
-  }
+  },
+  boards: [{ type: Schema.Types.ObjectId, ref: 'Board' }]
 });
 module.exports = model('Team', teamSchema);

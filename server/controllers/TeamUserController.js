@@ -13,5 +13,18 @@ module.exports = {
     } catch (error) {
       res.status(403).send({ error });
     }
+  },
+  async destroy(req, res) {
+    const { teamId, userId } = req.params;
+
+    try {
+      const user = await User.findOneAndUpdate(
+        { _id: userId },
+        { $pull: { teams: teamId } }
+      );
+      res.send(user);
+    } catch (error) {
+      res.status(403).send({ error });
+    }
   }
 };

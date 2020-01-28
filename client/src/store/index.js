@@ -31,8 +31,7 @@ export const store = new Vuex.Store({
     webSocketPlugin
   ],
   modules: {
-    socketio,
-    teams
+    socketio
   },
   state: {
     labelOverviewIsOpen: false,
@@ -43,11 +42,13 @@ export const store = new Vuex.Store({
     isUserLoggedIn: false,
     board: { _id: null, lists: [{ cards: [{}] }] },
     isLoading: false,
-    viewStyle: 'board'
+    viewStyle: 'board',
+    teams: []
   },
   getters,
 
   mutations: {
+    ...teams.mutations,
     ...label.mutations,
     ...card.mutations,
     ...comment.mutations,
@@ -169,6 +170,8 @@ export const store = new Vuex.Store({
     }
   },
   actions: {
+    ...teams.actions,
+
     ...label.actions,
     ...comment.actions,
     ...board.actions,

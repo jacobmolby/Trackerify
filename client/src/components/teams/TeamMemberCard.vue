@@ -11,7 +11,8 @@
       <span class="ml-4">{{user.name}}</span>
     </div>
     <DeletePopup
-      v-if="canRemove "
+      @deleteFunction="removeTeamMember"
+      v-if="canRemove"
       :id="user._id"
       :deleteText="'remove'"
       :color="'gray'"
@@ -30,9 +31,25 @@ export default {
       type: Boolean,
       requried: true
     },
+    teamId: {
+      type: String,
+      requried: true
+    },
     user: {
       type: Object,
       requried: true
+    }
+  },
+  methods: {
+    async removeTeamMember() {
+      try {
+        this.$store.dispatch('removeTeamMember', {
+          teamId: this.teamId,
+          userId: this.user._id
+        });
+      } catch (error) {
+        console.log(error);
+      }
     }
   },
   computed: {
@@ -40,7 +57,7 @@ export default {
       userId: state => state.user._id
     }),
     canRemove() {
-      return this.userId === this.user._id ? true : this.isOwner;
+      return this.userId === this.user._id ? false : this.isOwner;
     }
   }
 };

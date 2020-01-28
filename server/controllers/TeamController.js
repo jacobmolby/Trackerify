@@ -12,16 +12,19 @@ module.exports = {
 
       //Maybe just include a users field on the team model?
       for (const team of teams) {
-        const users = await User.find({ teams: team._id }).select(
-          'name profileImage'
-        );
+        const users = await User.find({ teams: team._id })
+          .select('name profileImage')
+          .lean();
+        const boards = await Board.find({ _id: team.boards })
+          .select('title lists owner')
+          .lean();
 
         team._doc.users = users;
+        team._doc.boards = boards;
       }
-
       res.send(teams);
     } catch (error) {
-      res.status(403).send({ error });
+      res.status(400).send({ error });
     }
   },
   async create(req, res) {
@@ -42,11 +45,32 @@ module.exports = {
           { $addToSet: { teams: savedTeam._id } }
         );
       }
+      //Finds users with the team
+      const users = await User.find({ teams: savedTeam._id }).select(
+        'name profileImage'
+      );
+
+      savedTeam._doc.users = users;
+
       res.send(savedTeam);
     } catch (error) {
       console.log(error);
 
-      res.status(403).send({ error });
+      res.status(400).send({ error });
+    }
+  },
+  async destroy(req, res) {
+    const { teamId } = req.params;
+
+    try {
+      const team = await Team.findByIdAndDelete(teamId);
+      await User.updateMany(
+        { teams: { _id: teamId } },
+        { $pull: { teams: teamId } }
+      );
+      res.send(team);
+    } catch (error) {
+      res.status(400).send({ error });
     }
   }
 };

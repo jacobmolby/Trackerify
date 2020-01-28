@@ -10,12 +10,12 @@ module.exports = {
       const users = await User.find({ $text: { $search: user } })
         .limit(10)
         .select(['name', 'email', 'profileImage']);
-      if (user.length < 1) {
+      if (users.length < 1) {
         return res.send({ error: 'No users found.' });
       }
       res.send(users);
     } catch (error) {
-      res.send({ error });
+      res.status(400).send({ error });
     }
   }
 };

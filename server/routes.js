@@ -14,9 +14,13 @@ const cardOrderRoutes = require('./routes/cardOrder');
 const archiveCardRoutes = require('./routes/archiveCard');
 const teamRoutes = require('./routes/team.routes');
 const teamUserRoutes = require('./routes/teamUser.routes');
+const teamBoardRoutes = require('./routes/teamBoard.routes');
+const boardSearchRoutes = require('./routes/boardSearch.routes');
 
 module.exports = app => {
   app.use('/api/auth', authRoutes);
+  app.use('/api/board/search', boardSearchRoutes);
+  app.use('/api/board/user', userBoardRoutes);
   app.use('/api/board', boardRoutes);
   app.use('/api/list', listRoutes);
   app.use('/api/card', cardRoutes);
@@ -24,7 +28,6 @@ module.exports = app => {
   app.use('/api/label', labelRoutes);
   app.use('/api/label/card', labelCardRoutes);
   app.use('/api/attachment', attachmentRoutes);
-  app.use('/api/board/user', userBoardRoutes);
   app.use('/api/card/user', userCardRoutes);
   app.use('/api/list/order', listOrderRoutes);
   app.use('/api/card/order', cardOrderRoutes);
@@ -32,4 +35,5 @@ module.exports = app => {
   app.use('/api/user/search', userSearchRoutes);
   app.use('/api/team', teamRoutes);
   app.use('/api/team/user', teamUserRoutes);
+  app.use('/api/team/board', teamBoardRoutes);
 };

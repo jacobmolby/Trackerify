@@ -15,7 +15,7 @@ module.exports = io => {
 
   io.on('connection', socket => {
     console.log(
-      `A user connected with socketID: ${socket.id}, is verifed: ${socket.tokenIsVerified}`
+      `A user connected with socketID: ${socket.id}, is verified: ${socket.tokenIsVerified}`
     );
     socket.emit('CONNECT');
     if (!socket.tokenIsVerified) {
