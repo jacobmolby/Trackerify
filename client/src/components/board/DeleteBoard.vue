@@ -20,12 +20,7 @@ export default {
   methods: {
     async deleteBoard() {
       try {
-        console.log(this.board);
-
         await this.$store.dispatch('deleteBoard', { boardId: this.board._id });
-        // this.$router.push({
-        //   name: 'boardOverview'
-        // });
       } catch (error) {
         console.log('error occured');
         console.log(error);

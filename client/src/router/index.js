@@ -21,7 +21,8 @@ router.beforeEach((to, from, next) => {
   // try to access a restricted page + not logged in
   if (authRequired && tokenExpired) {
     store.dispatch('logout');
-    return next('/login');
+    return;
+    // next('/login');
   }
 
   if (to.path === '/login' && store.state.isUserLoggedIn) {

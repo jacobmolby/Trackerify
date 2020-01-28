@@ -9,15 +9,14 @@ module.exports = io => {
       ? !!jwt.verify(token, process.env.TOKEN_SECRET)
       : false;
     socket.tokenIsVerified = verified;
-    // if (verified) {
-    //   socket.tokenIsVerified = false;
-    // }
+
     next();
-    // return next(new Error('authentication error'));
   });
 
   io.on('connection', socket => {
-    console.log(`A user connected with socketID: ${socket.id}`);
+    console.log(
+      `A user connected with socketID: ${socket.id}, is verifed: ${socket.tokenIsVerified}`
+    );
     socket.emit('CONNECT');
     if (!socket.tokenIsVerified) {
       return;

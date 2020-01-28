@@ -45,14 +45,14 @@ export default {
   components: {
     MarketingSiteNavigation,
     TheFooter
-  },
-  beforeRouteEnter(to, from, next) {
-    next(vueInstance => {
-      if (to.query.logout) {
-        vueInstance.$store.dispatch('logout');
-      }
-    });
   }
+  // beforeRouteEnter(to, from, next) {
+  //   next(vueInstance => {
+  //     if (to.query.logout) {
+  //       vueInstance.$store.dispatch('logout');
+  //     }
+  //   });
+  // }
 };
 </script>
 
