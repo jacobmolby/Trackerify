@@ -25,7 +25,7 @@
             </li>
           </ul>
         </div>
-        <AddTeamMember :teamId="team._id" />
+        <AddTeamMember :team="team" />
       </div>
       <div class="w-1/2 pl-3 border-l flex flex-col justify-between">
         <div>

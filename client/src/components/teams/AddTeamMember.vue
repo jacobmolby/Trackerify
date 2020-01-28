@@ -65,12 +65,21 @@ export default {
     error: ''
   }),
   props: {
-    teamId: {
-      type: String,
+    team: {
+      type: Object,
       required: true
     }
   },
   methods: {
+    filterSearchResult(searchResult) {
+      return searchResult.filter(user => {
+        console.log(user);
+
+        return this.team.users.forEach(teamMember => {
+          return user._id === teamMember._id;
+        });
+      });
+    },
     async search() {
       this.searchMessage = 'Loading...';
       this.searchResult = [];
@@ -78,7 +87,9 @@ export default {
         const response = (await UserSearchService.get(this.searchInput)).data;
 
         if (response.length > 0) {
-          this.searchResult = response;
+          this.searchResult = this.filterSearchResult(response);
+          console.log(this.searchResult);
+
           this.searchMessage = '';
         } else {
           this.searchMessage = 'No search result.';
@@ -94,7 +105,7 @@ export default {
       this.isOpen = false;
       this.$store.dispatch('addTeamMember', {
         user,
-        teamId: this.teamId
+        teamId: this.team._id
       });
     }
   }
