@@ -77,11 +77,7 @@ export default {
   },
   methods: {
     logout() {
-      this.$store.dispatch('logout');
-      // this.$router.push({
-      //   name: 'home',
-      //   query: { logout: true }
-      // });
+      this.$store.dispatch('logout', true);
     }
   },
   created() {

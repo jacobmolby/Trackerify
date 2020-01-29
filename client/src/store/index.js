@@ -190,8 +190,10 @@ export const store = new Vuex.Store({
     isLoading({ commit }, bool) {
       commit('isLoading', bool);
     },
-    async logout({ commit }) {
-      await Router.push('/');
+    async logout({ commit }, shouldNavigate=false) {
+      if (shouldNavigate) {
+        await Router.push('/');
+      }
       commit('setToken', null);
       commit('setUser', null);
       commit('setBoard', { _id: null, lists: [{ cards: [{}] }] });
