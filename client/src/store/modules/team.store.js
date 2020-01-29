@@ -51,6 +51,10 @@ export default {
     async addBoardToTeam({ commit }, { board, teamId }) {
       await TeamBoardService.post({ boardId: board._id, teamId });
       commit('addBoardToTeam', { board, teamId });
+    },
+    async removeBoardFromTeam({ commit }, { boardId, teamId }) {
+      await TeamBoardService.delete({ boardId, teamId });
+      commit('removeBoardFromTeam', { boardId, teamId });
     }
   }
 };

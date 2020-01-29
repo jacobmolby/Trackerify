@@ -32,19 +32,7 @@
           <h4 class="font-medium">Boards</h4>
           <ul>
             <li class="mt-2 first:mt-1" v-for="board in team.boards" :key="board._id">
-              <div class="p-1 px-2 bg-white rounded shadow hover:shadow-lg active:shadow-inner">
-                <button class="w-full" @click="$router.push(`/board/${board._id}`)">
-                  <div class="border-b">
-                    <h4 class="font-semibold text-sm">{{board.title}}</h4>
-                  </div>
-                  <div class="flex flex-col text-left">
-                    <span
-                      class="text-xs"
-                    >{{board.lists.length}} {{board.lists.length > 1 ? 'Lists': 'List'}}</span>
-                    <span class="text-xs font-light">Last Updated: 4-1-2020</span>
-                  </div>
-                </button>
-              </div>
+              <TeamBoardCard :teamId="team._id" :board="board" :isOwner="isOwner" />
             </li>
           </ul>
         </div>
@@ -58,6 +46,8 @@
 import TeamMemberCard from './TeamMemberCard';
 import AddTeamMember from './AddTeamMember';
 import AddBoardToTeam from './AddBoardToTeam';
+import TeamBoardCard from './TeamBoardCard';
+
 import DeletePopup from '../reusables/DeletePopup';
 import { mapState } from 'vuex';
 export default {
@@ -89,7 +79,8 @@ export default {
     TeamMemberCard,
     DeletePopup,
     AddTeamMember,
-    AddBoardToTeam
+    AddBoardToTeam,
+    TeamBoardCard
   }
 };
 </script>

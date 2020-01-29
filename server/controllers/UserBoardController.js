@@ -46,14 +46,13 @@ module.exports = {
   },
   async destroy(req, res) {
     const { userId, boardId } = req.params;
-    console.log(req.params);
 
     try {
       const board = await Board.findById(boardId);
       board.users.pull(userId);
       //Removes the user from all the cards assigned to the user
       await Card.updateMany(
-        { assignedUsers: userId },
+        { assignedUsers: userId, boardId },
         { $pull: { assignedUsers: { $in: userId } } }
       );
 

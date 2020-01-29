@@ -12,7 +12,7 @@ module.exports = {
       let boards;
       if (mongoose.Types.ObjectId.isValid(board)) {
         boards = await Board.find({ id: board, owner: userId })
-          .select(['title'])
+          .select('title owner lists')
           .lean();
       } else {
         boards = await Board.find({
@@ -20,7 +20,7 @@ module.exports = {
           owner: userId
         })
           .limit(10)
-          .select(['title owner lists'])
+          .select('title owner lists')
           .lean();
       }
 

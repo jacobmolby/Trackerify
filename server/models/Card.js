@@ -11,6 +11,11 @@ const cardSchema = new mongoose.Schema({
     ref: 'List',
     required: true
   },
+  boardId: {
+    type: mongoose.Schema.Types.ObjectId,
+    ref: 'Board',
+    required: true
+  },
   description: {
     type: String,
     required: false

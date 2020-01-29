@@ -43,7 +43,7 @@
             >
               <button
                 @click="addBoardToTeam(board)"
-                class="w-full text-left py-1 px-2 hover:text-white"
+                class="w-full text-left font-semibold text-gray-700 py-1 px-2 hover:text-white"
               >{{board.title}}</button>
             </li>
           </ul>
@@ -106,6 +106,7 @@ export default {
 
         if (response.length > 0) {
           this.searchResult = this.filterSearchResult(response);
+
           if (this.searchResult.length > 0) {
             this.searchMessage = '';
           } else {
