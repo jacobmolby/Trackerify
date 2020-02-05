@@ -16,7 +16,6 @@ import moment from 'moment';
 import { mapActions } from 'vuex';
 import DeletePopup from '@/components/reusables/DeletePopup';
 import CommentService from '@/services/CommentService';
-import { fireAction } from '@/services/ActionService';
 
 export default {
   name: 'comment',

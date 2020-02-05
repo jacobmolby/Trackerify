@@ -1,7 +1,5 @@
 <template>
-  <footer
-    class="absolute bottom-0 w-full container pt-16 pb-6 text-sm text-center md:text-left fade-in"
-  >
+  <footer class="absolute bottom-0 pt-16 pb-6 text-sm text-center md:text-left fade-in">
     <span class="text-gray-500 no-underline hover:no-underline">
       &copy; Jacob Mølby 2019
       <br />This page is designed by

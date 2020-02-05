@@ -1,24 +1,37 @@
 <template>
   <div>
     <button class="focus:outline-none" @click="isOpen = !isOpen">
-      <svg class="h-3 w-3 fill-current text-red-600 hover:text-red-800" viewBox="0 0 20 20">
+      <svg
+        class="h-3 w-3 fill-current"
+        :class="color === 'white' ? 'text-white hover:text-gray-400' : `text-${color}-600 hover:text-${color}-800`"
+        viewBox="0 0 20 20"
+      >
         <path d="M6 2l2-2h4l2 2h4v2H2V2h4zM3 6h14l-1 14H4L3 6zm5 2v10h1V8H8zm3 0v10h1V8h-1z" />
       </svg>
     </button>
     <portal to="delete-popup" v-if="isOpen">
       <button @click="isOpen = false" tabindex="-1" class="popup-bg"></button>
       <div class="popup">
-        <h2 class="text-left text-lg font-semibold">
-          Are you sure you want to {{deleteText}}:
-          <span class="font-bold text-gray-800">
-            <slot></slot>
-          </span>
-        </h2>
+        <div class="flex justify-between items-center mb-10 border-b pb-2">
+          <h2 class="text-left text-lg font-semibold">
+            Are you sure you want to {{deleteText}}:
+            <span class="font-bold text-gray-800">
+              <slot></slot>
+            </span>
+          </h2>
+          <button class="ml-4" @click="isOpen = false">
+            <svg class="h-4 w-4 fill-current" viewBox="0 0 20 20">
+              <path
+                d="M10 8.586L2.929 1.515 1.515 2.929 8.586 10l-7.071 7.071 1.414 1.414L10 11.414l7.071 7.071 1.414-1.414L11.414 10l7.071-7.071-1.414-1.414L10 8.586z"
+              />
+            </svg>
+          </button>
+        </div>
         <div class="pt-3 flex flex-row w-full justify-end">
           <button
             class="py-2 px-3 text-white bg-red-600 rounded shadow hover:bg-red-700"
             @click="deleteFunction"
-          >Yes I'm sure</button>
+          >Yes, I'm sure</button>
           <button
             class="ml-3 py-2 px-3 text-white bg-green-600 rounded shadow hover:bg-green-700"
             @click="isOpen = false"
@@ -39,7 +52,7 @@ export default {
   props: {
     //Maybe needs to be an object later
     deleteText: { type: String, default: 'delete' },
-
+    color: { type: String, default: 'red' },
     id: String
   },
   methods: {
@@ -51,6 +64,17 @@ export default {
         this.$emit('deleteFunction');
       }
     }
+  },
+  created() {
+    const handleEscape = e => {
+      if (e.key === 'Esc' || e.key === 'Escape') {
+        this.isOpen = false;
+      }
+    };
+    document.addEventListener('keydown', handleEscape);
+    this.$once('hook:beforeDestroy', () => {
+      document.removeEventListener('keydown', handleEscape);
+    });
   }
 };
 </script>

@@ -15,23 +15,24 @@
       </div>
 
       <!-- MAIN CONTENT -->
-      <div v-if="user.boards" class="my-10 px-6 flex flex-col justify-between">
+      <div
+        v-if="user.boards && user.boards.length > 1"
+        class="p-6 flex flex-col overflow-y-auto justify-between"
+      >
         <router-link
           v-for="board in user.boards"
           :key="board._id"
           :to="{ name: 'board', params: { boardId: board._id }}"
-          class="mt-4"
+          class="mt-4 first:mt-0"
         >
           <div class="p-5 bg-gray-800 rounded-lg shadow text-gray-200 hover:bg-gray-600">
             <h2 class="font-bold text-2xl">{{board.title}}</h2>
             <ul class="mt-3">
               <li>
-                <span v-if="board.lists.length > 1">{{board.lists.length}} Lists</span>
-                <span v-else>{{board.lists.length}} List</span>
+                <span>{{board.lists.length}} {{board.lists.length > 1 ? 'Lists': 'List'}}</span>
               </li>
               <li>
-                <span v-if="board.users.length > 1">{{board.users.length}} Users</span>
-                <span v-else>{{board.users.length}} User</span>
+                <span>{{board.users.length}} {{board.users.length > 1 ?'Users' : 'User'}}</span>
               </li>
               <li v-if="isOwner(board.owner)">
                 <span class="font-medium text-yellow-500">You are the owner</span>
@@ -41,7 +42,7 @@
         </router-link>
         <!-- </div> -->
       </div>
-      <div v-else>There are no boards</div>
+      <div v-else class="m-auto text-4xl p-6 font-light">There are no boards. You should create one.</div>
       <div v-if="error">{{error}}</div>
       <!-- END MAIN CONTENT -->
       <button
@@ -50,11 +51,13 @@
         class="absolute w-full h-full inset-0 bg-black opacity-50 lg:hidden cursor-default"
       ></button>
     </div>
+    <LoadingSpinner v-if="isLoading" class="mt-10 flex items-center justify-center" />
   </div>
 </template>
 
 <script>
 import { mapState, mapActions } from 'vuex';
+import LoadingSpinner from '../components/reusables/LoadingSpinner';
 import CreateBoard from '../components/board/CreateBoard';
 import TheTopbar from '../components/TheTopbar';
 import Sidebar from '../components/Sidebar';
@@ -64,17 +67,17 @@ export default {
   data() {
     return {
       error: null,
-      isOpen: false,
-      isLoading: true
+      isOpen: false
     };
   },
   components: {
     CreateBoard,
     TheTopbar,
-    Sidebar
+    Sidebar,
+    LoadingSpinner
   },
   computed: {
-    ...mapState(['user'])
+    ...mapState(['user', 'isLoading'])
   },
   methods: {
     isOwner(ownerId) {
@@ -90,7 +93,6 @@ export default {
     this.error = null;
     try {
       await this.setBoardOverview();
-      this.isLoading = false;
     } catch (error) {
       this.error = error.response.data.error;
     }

@@ -19,5 +19,6 @@ const boardSchema = new mongoose.Schema({
     required: true
   }
 });
+boardSchema.index({ title: 'text', _id: 'text' });
 
 module.exports = mongoose.model('Board', boardSchema);

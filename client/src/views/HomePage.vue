@@ -1,6 +1,6 @@
 <template>
   <div class="leading-normal tracking-normal text-gray-900 h-screen">
-    <div class="pb-14 bg-right bg-cover" style="background-image:url('img/bg.svg');">
+    <div class="pb-14 bg-right bg-cover md:h-full" style="background-image:url('img/bg.svg');">
       <!--Nav-->
       <MarketingSiteNavigation />
       <!--Main-->
@@ -45,14 +45,14 @@ export default {
   components: {
     MarketingSiteNavigation,
     TheFooter
-  },
-  beforeRouteEnter(to, from, next) {
-    next(vueInstance => {
-      if (to.query.logout) {
-        vueInstance.$store.dispatch('logout');
-      }
-    });
   }
+  // beforeRouteEnter(to, from, next) {
+  //   next(vueInstance => {
+  //     if (to.query.logout) {
+  //       vueInstance.$store.dispatch('logout');
+  //     }
+  //   });
+  // }
 };
 </script>
 

@@ -12,6 +12,7 @@ module.exports = {
     const card = new Card({
       title: req.body.title,
       description: req.body.description,
+      boardId: parentList.boardId,
       list: listId,
       owner: req.user._id
     });

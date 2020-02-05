@@ -7,7 +7,7 @@ export default () => {
     timeout: 5000,
     //Assign the token, to use protected routes (every right now).
     headers: {
-      'auth-token': store.state.token
+      Authorization: 'Bearer ' + store.state.token
     }
   });
 };

@@ -3,6 +3,7 @@ import Vuex from 'vuex';
 import Router from '../router';
 import createPersistedState from 'vuex-persistedstate';
 import webSocketPlugin from './plugins/websocketPlugin';
+import socketInstance from '../socketInstance';
 
 import socketio from './modules/socketio';
 import label from './events/labelEvents';
@@ -10,6 +11,9 @@ import comment from './events/commentEvents';
 import board from './events/boardEvents';
 import list from './events/listEvents';
 import card from './events/cardEvents';
+import teams from './modules/team.store';
+
+import getters from './getters';
 
 import AuthenticationService from '../services/AuthenticationService';
 
@@ -38,79 +42,13 @@ export const store = new Vuex.Store({
     isUserLoggedIn: false,
     board: { _id: null, lists: [{ cards: [{}] }] },
     isLoading: false,
-    viewStyle: 'board'
+    viewStyle: 'board',
+    teams: []
   },
-  getters: {
-    getCardsByListId: state => listId => {
-      return state.board.lists.find(list => list._id === listId).cards;
-    },
+  getters,
 
-    getCardById: state => cardId => {
-      let cardById = {};
-      state.board.lists.forEach(list =>
-        list.cards.forEach(card => {
-          if (card._id === cardId) {
-            cardById = card;
-          }
-        })
-      );
-      return cardById;
-    },
-    numberOfAllCards(state) {
-      if (state.isLoading) return 0;
-      let numberOfCards = 0;
-      state.board.lists.forEach(list => {
-        if (list) {
-          list.cards.forEach(card => {
-            if (!card.archived) {
-              numberOfCards++;
-            }
-          });
-        }
-      });
-      return numberOfCards;
-    },
-    cardsCreatedByMe(state) {
-      let cardsByMe = [];
-      if (state.isLoading) return 0;
-      state.board.lists.forEach(list => {
-        list.cards.forEach(card => {
-          if (card.owner === state.user._id && !card.archived) {
-            cardsByMe.push(card);
-          }
-        });
-      });
-      return cardsByMe;
-    },
-    numberOfArchivedCards(state) {
-      if (state.isLoading) return 0;
-      let numberOfCards = 0;
-      state.board.lists.forEach(list => {
-        list.cards.forEach(card => {
-          if (card.archived) {
-            numberOfCards++;
-          }
-        });
-      });
-      return numberOfCards;
-    },
-    numberOfCardsAssignedToMe(state) {
-      if (state.isLoading) return 0;
-      let numberOfCards = 0;
-      state.board.lists.forEach(list => {
-        list.cards.forEach(card => {
-          if (!card.assignedUsers) return;
-          card.assignedUsers.forEach(user => {
-            if (user._id === state.user._id && !card.archived) {
-              numberOfCards++;
-            }
-          });
-        });
-      });
-      return numberOfCards;
-    }
-  },
   mutations: {
+    ...teams.mutations,
     ...label.mutations,
     ...card.mutations,
     ...comment.mutations,
@@ -134,14 +72,9 @@ export const store = new Vuex.Store({
     },
     updateBoard(state, board) {
       state.board.title = board.title;
-      //   state.user.boards.find(stateBoard => stateBoard._id === board._id).title =
-      //     board.title;
     },
     deleteBoard(state, { boardId }) {
-      state.board = null;
-      // state.user.boards = state.user.boards.filter(
-      //   board => board._id !== boardId
-      // );
+      state.board = { _id: null, lists: [{ cards: [{}] }] };
     },
     addList(state, list) {
       state.board.lists.push(list);
@@ -160,13 +93,6 @@ export const store = new Vuex.Store({
       state.board.lists = state.board.lists.filter(list => {
         return list._id !== deletedList._id;
       });
-
-      //For boardOverview
-      // state.user.boards.find(
-      //   board => board._id === deletedList.boardId
-      // ).lists = state.user.boards
-      //   .find(board => board._id === deletedList.boardId)
-      //   .lists.filter(list => list !== deletedList._id);
     },
     addComment(state, comment) {
       state.board.lists.forEach(list => {
@@ -191,9 +117,6 @@ export const store = new Vuex.Store({
     },
     addUserToBoard(state, payload) {
       state.board.users.push(payload.user);
-      // state.user.boards
-      //   .find(board => board._id === payload.boardId)
-      //   .users.push(payload.userId);
     },
     addUserToCard(state, payload) {
       const { user, listId, cardId } = payload;
@@ -216,26 +139,17 @@ export const store = new Vuex.Store({
           });
         });
       });
-      //For boardOverview
-      // state.user.boards.find(
-      //   board => board._id === payload.boardId
-      // ).users = state.user.boards
-      //   .find(board => board._id === payload.boardId)
-      //   .users.filter(user => user !== payload.userId);
     },
     removeUserFromCard(state, { userId, cardId, listId }) {
       //Payload has userId, cardId and listId on it.
 
-      // const { userId, cardId, listId } = payload;
+      const cardWithUser = state.board.lists
+        .find(list => list._id === listId)
+        .cards.find(card => card._id === cardId);
 
-      state.board.lists
-        .find(list => list._id === listId)
-        .cards.find(
-          card => card._id === cardId
-        ).assignedUsers = state.board.lists
-        .find(list => list._id === listId)
-        .cards.find(card => card._id === cardId)
-        .assignedUsers.filter(user => user._id !== userId);
+      cardWithUser.assignedUsers = cardWithUser.assignedUsers.filter(
+        user => user._id !== userId
+      );
     },
     updateCardOrder(state, payload) {
       const { cards, listId } = payload;
@@ -256,24 +170,35 @@ export const store = new Vuex.Store({
     }
   },
   actions: {
+    ...teams.actions,
+
     ...label.actions,
     ...comment.actions,
     ...board.actions,
     ...list.actions,
     ...card.actions,
     async login({ commit }, loginPayload) {
-      const response = await AuthenticationService.login(loginPayload);
-
-      commit('setToken', response.data.token);
-      commit('setUser', response.data.user);
+      const { token, user } = (
+        await AuthenticationService.login(loginPayload)
+      ).data;
+      socketInstance.query.token = token;
+      socketInstance.disconnect();
+      socketInstance.connect();
+      commit('setToken', token);
+      commit('setUser', user);
     },
     isLoading({ commit }, bool) {
       commit('isLoading', bool);
     },
-    logout({ commit }) {
+    async logout({ commit }, shouldNavigate=false) {
+      if (shouldNavigate) {
+        await Router.push('/');
+      }
       commit('setToken', null);
       commit('setUser', null);
-      commit('setBoard', null);
+      commit('setBoard', { _id: null, lists: [{ cards: [{}] }] });
+      socketInstance.query.token = '';
+      socketInstance.disconnect();
     },
     setToken({ commit }, token) {
       commit('setToken', token);

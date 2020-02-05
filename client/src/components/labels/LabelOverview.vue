@@ -1,10 +1,10 @@
 <template>
   <div>
-    <button class="primary-btn " @click="isOpen = !isOpen">
-      <svg class="h-3 w-3  hidden sm:block  fill-current" viewBox="0 0 20 20">
+    <button class="primary-btn w-full" @click="isOpen = !isOpen">
+      <svg class="h-3 w-3 hidden sm:block fill-current" viewBox="0 0 20 20">
         <path d="M12.3 3.7l4 4L4 20H0v-4L12.3 3.7zm1.4-1.4L16 0l4 4-2.3 2.3-4-4z" />
       </svg>
-      <span class="ml-0 sm:ml-1  whitespace-no-wrap">
+      <span class="ml-0 sm:ml-1 whitespace-no-wrap">
         <slot></slot>
       </span>
     </button>
@@ -68,7 +68,6 @@ import CreateLabel from '@/components/labels/CreateLabel';
 import DeletePopup from '@/components/reusables/DeletePopup';
 import LabelService from '@/services/LabelService';
 import LabelCardService from '@/services/LabelCardService';
-import { fireAction } from '@/services/ActionService';
 
 export default {
   components: {

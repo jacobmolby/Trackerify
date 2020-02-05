@@ -11,7 +11,6 @@ export default store => {
     const blackListedMutations = [
       'setToken',
       'setUser',
-      // 'setBoard',
       'setBoardOverview',
       'createBoard',
       'isLoading',
@@ -19,6 +18,7 @@ export default store => {
       'labelOverviewIsOpen',
       'addUserIsOpen',
       'changeViewStyle',
+      'setTeams',
       'SOCKET_DISCONNECT',
       'SOCKET_CONNECT'
     ];

@@ -35,7 +35,8 @@
       <div class="ml-6 relative">
         <button
           @click="isOpen = !isOpen"
-          class="relative block h-8 w-8 rounded-full overflow-hidden border border-gray-400 hover:border-gray-700"
+          class="relative block h-8 w-8 rounded-full overflow-hidden border-2 border-gray-200 hover:border-purple-700"
+          :class="isOpen ? 'border-purple-700 z-50' : ''"
         >
           <img class="h-full w-full object-cover" :src="user.profileImage" alt />
         </button>
@@ -43,6 +44,7 @@
           v-if="isOpen"
           class="z-30 absolute right-0 mt-2 py-2 w-48 bg-white rounded-lg shadow-xl"
         >
+          <span class="block px-4 py-2 text-gray-800 font-medium border-b">{{user.name}}</span>
           <a
             href="#"
             class="block px-4 py-2 text-gray-800 hover:bg-gray-800 hover:text-white"
@@ -76,10 +78,7 @@ export default {
   },
   methods: {
     logout() {
-      this.$router.push({
-        name: 'home',
-        query: { logout: true }
-      });
+      this.$store.dispatch('logout', true);
     }
   },
   created() {
