@@ -14,7 +14,7 @@ Vue.use(PortalVue);
 
 Vue.use(
   new VueSocketIO({
-    debug: true,
+    debug: false,
     connection: SocketInstance,
     vuex: { store, actionPrefix: 'SOCKET_' }
   })
