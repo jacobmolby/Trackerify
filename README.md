@@ -1,6 +1,6 @@
 # Trackerify
 Kanban board app with Vuejs client and Nodejs/Express server
-![Preview](https://imgur.com/rdpd2x2 "Board Page")
+![Preview](https://imgur.com/rdpd2x2.png "Board Page")
 
 ## Features
 * Authentication
