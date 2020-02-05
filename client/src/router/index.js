@@ -12,8 +12,11 @@ router.beforeEach((to, from, next) => {
   const publicPages = ['/login', '/', '/register'];
   const authRequired = !publicPages.includes(to.path);
   let token =
-    store.state.token ||
-    get(localStorage.getItem('vuex').split(' ')[1], token, false);
+    store.state.token || get(localStorage.getItem('vuex'), token, null);
+
+  if (token && token.split(' ').length > 1) {
+    token = token.split(' ')[1];
+  }
 
   const current_time = Date.now().valueOf() / 1000;
   const tokenExpired = !token ? true : jwtDecode(token).exp < current_time;

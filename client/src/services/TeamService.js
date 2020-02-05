@@ -7,6 +7,9 @@ export default {
   get() {
     return Api().get('/team');
   },
+  put(payload) {
+    return Api().put('/team', payload);
+  },
   delete(teamId) {
     return Api().delete(`/team/${teamId}`);
   }

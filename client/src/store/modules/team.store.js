@@ -22,6 +22,13 @@ export default {
     },
     addBoardToTeam(state, { board, teamId }) {
       state.teams.find(team => team._id === teamId).boards.push(board);
+    },
+    removeBoardFromTeam(state, { teamId, boardId }) {
+      const theTeam = state.teams.find(team => team._id === teamId);
+      theTeam.boards = theTeam.boards.filter(board => board._id !== boardId);
+    },
+    updateTeamName(state, { teamId, teamName }) {
+      state.teams.find(team => team._id === teamId).name = teamName;
     }
   },
   actions: {
@@ -32,7 +39,6 @@ export default {
       commit('isLoading', false);
     },
     async createTeam({ commit }, payload) {
-      //TODO VISER IKKE MEDLEMMER
       const team = (await TeamService.post(payload)).data;
       commit('createTeam', team);
     },
@@ -55,6 +61,15 @@ export default {
     async removeBoardFromTeam({ commit }, { boardId, teamId }) {
       await TeamBoardService.delete({ boardId, teamId });
       commit('removeBoardFromTeam', { boardId, teamId });
+    },
+    async leaveTeam({ commit }, { teamId, userId }) {
+      await TeamUserService.delete({ teamId, userId });
+      commit('removeTeamMember', { userId, teamId });
+      commit('deleteTeam', teamId);
+    },
+    async updateTeamName({ commit }, { teamId, teamName }) {
+      await TeamService.put({ teamId, teamName });
+      commit('updateTeamName', { teamId, teamName });
     }
   }
 };

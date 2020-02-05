@@ -59,6 +59,19 @@ module.exports = {
       res.status(400).send({ error });
     }
   },
+  async update(req, res) {
+    const { teamId, teamName } = req.body;
+    try {
+      const team = await Team.findByIdAndUpdate(
+        teamId,
+        { name: teamName },
+        { new: true }
+      ).lean();
+      res.send(team);
+    } catch (error) {
+      res.status(400).send({ error });
+    }
+  },
   async destroy(req, res) {
     const { teamId } = req.params;
 

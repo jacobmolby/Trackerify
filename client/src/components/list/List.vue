@@ -59,8 +59,6 @@ export default {
   props: ['listTitle', 'listId', 'listColor'],
   methods: {
     async updateTitle() {
-      console.log('update');
-
       if (this.title === '') return;
       try {
         await this.$store.dispatch('updateListTitle', {
