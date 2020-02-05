@@ -2,10 +2,6 @@
 
 @tailwind base;
 @tailwind components;
-/* purgecss end ignore */
-
-@tailwind utilities;
-/* purgecss start ignore */
 
 .primary-btn {
   @apply inline-flex items-center justify-center px-2 py-2 text-sm font-medium text-white bg-gray-800 rounded;
@@ -54,3 +50,5 @@
   outline: none !important;
 }
 /* purgecss end ignore */
+
+@tailwind utilities;
