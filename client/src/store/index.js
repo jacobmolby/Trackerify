@@ -190,7 +190,7 @@ export const store = new Vuex.Store({
     isLoading({ commit }, bool) {
       commit('isLoading', bool);
     },
-    async logout({ commit }, shouldNavigate=false) {
+    async logout({ commit }, shouldNavigate = false) {
       if (shouldNavigate) {
         await Router.push('/');
       }
@@ -209,8 +209,12 @@ export const store = new Vuex.Store({
     addUserToBoard({ commit }, payload) {
       commit('addUserToBoard', payload);
     },
-    removeUserFromBoard({ commit }, userId) {
-      commit('removeUserFromBoard', userId);
+    removeUserFromBoard({ commit }, { userId, boardId }) {
+      commit('removeUserFromBoard', { userId, boardId });
+      //Redirect the removed user
+      if (this.state.user._id === userId) {
+        Router.push('/board');
+      }
     },
     changeViewStyle({ commit }, viewStyle) {
       commit('changeViewStyle', viewStyle);

@@ -1,6 +1,6 @@
 <template>
   <div>
-    <delete-popup @deleteFunction="deleteBoard">{{board.title}}</delete-popup>
+    <DeletePopup @deleteFunction="deleteBoard">{{board.title}}</DeletePopup>
   </div>
 </template>
 

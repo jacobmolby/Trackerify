@@ -3,7 +3,7 @@
     <button class="focus:outline-none" @click="isOpen = !isOpen">
       <svg
         class="h-3 w-3 fill-current"
-        :class="color === 'white' ? 'text-white hover:text-gray-400' : `text-${color}-600 hover:text-${color}-800`"
+        :class="color === 'white' ? 'text-white hover:text-gray-400' : `${color} hover:${hoverColor}`"
         viewBox="0 0 20 20"
       >
         <path d="M6 2l2-2h4l2 2h4v2H2V2h4zM3 6h14l-1 14H4L3 6zm5 2v10h1V8H8zm3 0v10h1V8h-1z" />
@@ -12,13 +12,8 @@
     <portal to="delete-popup" v-if="isOpen">
       <button @click="isOpen = false" tabindex="-1" class="popup-bg"></button>
       <div class="popup">
-        <div class="flex justify-between items-center mb-10 border-b pb-2">
-          <h2 class="text-left text-lg font-semibold">
-            Are you sure you want to {{deleteText}}:
-            <span class="font-bold text-gray-800">
-              <slot></slot>
-            </span>
-          </h2>
+        <div class="flex justify-between items-center mb-4 border-b pb-2">
+          <h2 class="text-left text-lg font-semibold">Are you sure you want to {{deleteText}}:</h2>
           <button class="ml-4" @click="isOpen = false">
             <svg class="h-4 w-4 fill-current" viewBox="0 0 20 20">
               <path
@@ -27,6 +22,9 @@
             </svg>
           </button>
         </div>
+        <span class="mb-4 font-bold text-gray-800">
+          <slot></slot>
+        </span>
         <div class="pt-3 flex flex-row w-full justify-end">
           <button
             class="py-2 px-3 text-white bg-red-600 rounded shadow hover:bg-red-700"
@@ -52,7 +50,8 @@ export default {
   props: {
     //Maybe needs to be an object later
     deleteText: { type: String, default: 'delete' },
-    color: { type: String, default: 'red' },
+    color: { type: String, default: 'text-red-600' },
+    hoverColor: { type: String, default: 'text-red-700' },
     id: String
   },
   methods: {

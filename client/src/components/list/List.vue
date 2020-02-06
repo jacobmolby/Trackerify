@@ -18,7 +18,7 @@
         class="w-full text-gray-700 text-sm font-medium bg-gray-300"
         :class="`_${listId}`"
       />
-      <delete-popup class="ml-2" @deleteFunction="deleteList">{{listTitle}}</delete-popup>
+      <DeletePopup class="ml-2" @deleteFunction="deleteList">{{listTitle}}</DeletePopup>
     </div>
     <div class="flex-1 min-h-0">
       <draggable
@@ -36,7 +36,7 @@
       </draggable>
     </div>
     <!-- ADD CARD BUTTON -->
-    <add-card class="mt-1" :listId="listId"></add-card>
+    <AddCard class="mt-1" :listId="listId"></AddCard>
   </div>
 </template>
 

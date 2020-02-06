@@ -6,7 +6,7 @@
     </div>
     <div class="flex justify-between">
       <p>{{comment.content}}</p>
-      <delete-popup @deleteFunction="deleteComment">{{comment.user.name}}'s comment</delete-popup>
+      <DeletePopup @deleteFunction="deleteComment">{{comment.user.name}}'s comment</DeletePopup>
     </div>
   </div>
 </template>

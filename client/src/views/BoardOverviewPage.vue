@@ -16,7 +16,7 @@
 
       <!-- MAIN CONTENT -->
       <div
-        v-if="user.boards && user.boards.length > 1"
+        v-if="user.boards && user.boards.length > 0"
         class="p-6 flex flex-col overflow-y-auto justify-between"
       >
         <router-link
@@ -81,11 +81,7 @@ export default {
   },
   methods: {
     isOwner(ownerId) {
-      if (ownerId === this.user._id) {
-        return true;
-      } else {
-        return false;
-      }
+      return ownerId === this.user._id;
     },
     ...mapActions(['setBoardOverview'])
   },

@@ -1,16 +1,27 @@
 
 <template>
   <div>
-    <button @click="$store.dispatch('addUserIsOpen',true)" class="primary-btn w-full">
+    <button @click="$store.dispatch('addUserIsOpen',true)" class="btn btn-gray w-full">
       <svg class="h-4 w-4 hidden sm:block fill-current" viewBox="0 0 20 20">
-       <path d="M2 6H0v2h2v2h2V8h2V6H4V4H2v2zm7 0a3 3 0 0 1 6 0v2a3 3 0 0 1-6 0V6zm11 9.14A15.93 15.93 0 0 0 12 13c-2.91 0-5.65.78-8 2.14V18h16v-2.86z"/>
+        <path
+          d="M2 6H0v2h2v2h2V8h2V6H4V4H2v2zm7 0a3 3 0 0 1 6 0v2a3 3 0 0 1-6 0V6zm11 9.14A15.93 15.93 0 0 0 12 13c-2.91 0-5.65.78-8 2.14V18h16v-2.86z"
+        />
       </svg>
       <span class="ml-0 sm:ml-1 whitespace-no-wrap">Add User</span>
     </button>
     <portal to="popup-container" v-if="addUserIsOpen">
       <button @click="$store.dispatch('addUserIsOpen',false)" tabindex="-1" class="popup-bg"></button>
       <div class="popup">
-        <h2 class="text-left text-lg font-semibold">Add User To Board</h2>
+        <div class="flex justify-between items-center">
+          <h2 class="text-left text-lg font-semibold">Add User To Board</h2>
+          <button class="ml-4" @click="$store.dispatch('addUserIsOpen', false)">
+            <svg class="h-4 w-4 fill-current" viewBox="0 0 20 20">
+              <path
+                d="M10 8.586L2.929 1.515 1.515 2.929 8.586 10l-7.071 7.071 1.414 1.414L10 11.414l7.071 7.071 1.414-1.414L11.414 10l7.071-7.071-1.414-1.414L10 8.586z"
+              />
+            </svg>
+          </button>
+        </div>
 
         <form class="pt-3 flex flex-col" @submit.prevent="addUserToBoard">
           <input
@@ -20,10 +31,7 @@
             placeholder="UserId"
           />
           <div class="text-red-500 font-semibold">{{this.error}}</div>
-          <button
-            type="submit"
-            class="mt-2 py-2 text-white bg-indigo-400 rounded shadow hover:bg-indigo-500"
-          >Add User</button>
+          <button type="submit" class="btn btn-gray mt-2">Add User</button>
         </form>
       </div>
     </portal>
@@ -70,9 +78,9 @@ export default {
         };
 
         this.$store.dispatch('addUserToBoard', storePayload);
-        this.$socket.emit('addUserToBoard', storePayload);
+        // this.$socket.emit('addUserToBoard', storePayload);
         this.userId = null;
-        this.isOpen = false;
+        this.$store.dispatch('addUserIsOpen', false);
       } catch (error) {
         this.error = error.response.data.error;
         console.log(error.response.data.error);

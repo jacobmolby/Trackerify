@@ -9,7 +9,8 @@
           v-if="isOwner"
           @deleteFunction="removeBoardFromTeam"
           :deleteText="'remove'"
-          :color="'gray'"
+          :color="'text-gray-700'"
+          :hoverColor="'text-gray-900'"
         >{{board.title}}</DeletePopup>
       </div>
       <div class="flex flex-col text-left">

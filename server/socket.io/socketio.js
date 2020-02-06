@@ -4,11 +4,14 @@ module.exports = io => {
   io.use((socket, next) => {
     //TODO verify token
     let token = socket.handshake.query.token;
-
-    const verified = token
-      ? !!jwt.verify(token, process.env.TOKEN_SECRET)
-      : false;
-    socket.tokenIsVerified = verified;
+    try {
+      const verified = token
+        ? !!jwt.verify(token, process.env.TOKEN_SECRET)
+        : false;
+      socket.tokenIsVerified = verified;
+    } catch (error) {
+      socket.tokenIsVerified = false;
+    }
 
     next();
   });

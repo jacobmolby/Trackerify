@@ -91,7 +91,7 @@
                       alt="Profile Image"
                     />
                     <div
-                      v-if="user._id !== $store.state.user._id"
+                      v-if="canRemoveUser(user._id)"
                       class="absolute inset-0 flex opacity-0 bg-red-600 rounded-full hover:opacity-100"
                     >
                       <button
@@ -316,13 +316,19 @@ export default {
     }
   },
   methods: {
+    canRemoveUser(userId) {
+      if (userId === this.user._id && userId !== this.board.owner) return true;
+      if (userId !== this.user._id && this.user._id === this.board.owner)
+        return true;
+      return false;
+    },
     changeViewStyle(style) {
       this.$store.dispatch('changeViewStyle', style);
       this.isOpen = false;
     },
     async removeUser(userId) {
       this.removeUserError = null;
-      if (userId === this.$store.state.user._id) {
+      if (this.board.owner === this.$store.state.user._id) {
         return (this.removeUserError = 'You cannot remove yourself');
       }
       try {
@@ -407,38 +413,4 @@ export default {
 </script>
 
 <style>
-:focus {
-  outline: 0;
-}
-::-webkit-scrollbar {
-  width: 8px;
-  height: 8px;
-  background-color: rgba(0, 0, 0, 0);
-  -webkit-border-radius: 100px;
-  border-radius: 100px;
-}
-
-::-webkit-scrollbar:hover {
-  background-color: rgba(0, 0, 0, 0.09);
-}
-
-::-webkit-scrollbar-thumb {
-  background: rgba(0, 0, 0, 0.3);
-  -webkit-border-radius: 100px;
-  border-radius: 100px;
-}
-::-webkit-scrollbar-thumb:active {
-  background: rgba(0, 0, 0, 0.5);
-  /*Some darker color when you click it */
-  -webkit-border-radius: 100px;
-  border-radius: 100px;
-}
-
-/* add vertical min-height & horizontal min-width */
-::-webkit-scrollbar-thumb:vertical {
-  min-height: 10px;
-}
-::-webkit-scrollbar-thumb:horizontal {
-  min-width: 10px;
-}
 </style>
