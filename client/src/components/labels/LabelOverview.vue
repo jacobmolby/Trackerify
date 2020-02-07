@@ -27,12 +27,13 @@
         <ul class="flex-col">
           <li class="mt-2 pb-2 border-b flex" v-for="label in labels" :key="label._id">
             <DeletePopup
-              v-if="!usedOnCard || labelAlreadOnCard(label._id)"
-              :deleteText="usedOnCard ? 'remove':'delete'"
+              class="mr-3"
+              v-if="!usedOnCard "
+              :deleteText="'delete'"
               :id="label._id"
               @deleteFunction="deleteLabel"
             >{{label.title}}</DeletePopup>
-            <div class="ml-3 w-full flex items-center justify-between">
+            <div class="w-full flex items-center justify-between">
               <button
                 v-if="usedOnCard && !labelAlreadOnCard(label._id)"
                 @click="addLabelToCard(label)"
@@ -40,9 +41,15 @@
                 <Label :color="label.color">{{label.title}}</Label>
               </button>
               <div v-else class="flex items-center">
-                <svg v-if="usedOnCard" class="w-2 h-2 mr-2" viewBox="0 0 20 20">
-                  <path d="M0 11l2-2 5 5L18 3l2 2L7 18z" />
-                </svg>
+                <button
+                  v-if="usedOnCard && labelAlreadOnCard(label._id)"
+                  @click="removeLabel(label._id)"
+                  class="p-2 mr-1 hover:text-red-600 hover:bg-red-500 rounded-full"
+                >
+                  <svg class="w-2 h-2 fill-current" viewBox="0 0 20 20">
+                    <path d="M0 11l2-2 5 5L18 3l2 2L7 18z" />
+                  </svg>
+                </button>
 
                 <Label :color="label.color">{{label.title}}</Label>
               </div>
@@ -104,26 +111,23 @@ export default {
       return !!this.card.labels.some(label => label._id === labelId);
     },
     async deleteLabel(labelId) {
-      if (!this.usedOnCard) {
-        try {
-          await this.$store.dispatch('removeLabelFromBoard', {
-            boardId: this.boardId,
-            labelId
-          });
-        } catch (error) {
-          console.log(error.response.data.error);
-        }
-      } else {
-        try {
-          await this.$store.dispatch('removeLabelFromCard', {
-            cardId: this.cardId,
-            labelId
-          });
-        } catch (error) {
-          console.log(error);
-
-          // console.log(error.response.data.error);
-        }
+      try {
+        await this.$store.dispatch('removeLabelFromBoard', {
+          boardId: this.boardId,
+          labelId
+        });
+      } catch (error) {
+        console.log(error.response.data.error);
+      }
+    },
+    async removeLabel(labelId) {
+      try {
+        await this.$store.dispatch('removeLabelFromCard', {
+          cardId: this.cardId,
+          labelId
+        });
+      } catch (error) {
+        console.log(error.response.data.error);
       }
     },
     async addLabelToCard(label) {

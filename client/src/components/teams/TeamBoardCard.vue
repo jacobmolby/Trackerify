@@ -15,7 +15,7 @@
       </div>
       <div class="flex flex-col text-left">
         <span class="text-xs">{{board.lists.length}} {{board.lists.length > 1 ? 'Lists': 'List'}}</span>
-        <span class="text-xs font-light">Last Updated: 4-1-2020</span>
+        <span class="text-xs font-light">Last Updated: {{updatedDate}}</span>
       </div>
     </div>
   </div>
@@ -23,6 +23,8 @@
 
 <script>
 import DeletePopup from '../reusables/DeletePopup';
+import moment from 'moment';
+
 export default {
   props: {
     board: {
@@ -44,6 +46,11 @@ export default {
         teamId: this.teamId,
         boardId: this.board._id
       });
+    }
+  },
+  computed: {
+    updatedDate() {
+      return moment(this.board.updatedAt).format('HH:mm, DD MMM YY');
     }
   },
   components: {

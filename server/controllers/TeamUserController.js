@@ -1,4 +1,6 @@
+const Team = require('../models/Team.model');
 const User = require('../models/User');
+const Board = require('../models/Board');
 
 module.exports = {
   async create(req, res) {
@@ -8,7 +10,14 @@ module.exports = {
       const user = await User.findOneAndUpdate(
         { _id: userId },
         { $addToSet: { teams: teamId } }
-      );
+      ).select('name profileImage');
+      const team = await Team.findById(teamId);
+      team.boards.forEach(async board => {
+        //maybe not necessary to await this operation
+        await Board.findByIdAndUpdate(board._id, {
+          $addToSet: { users: userId }
+        });
+      });
       res.send(user);
     } catch (error) {
       res.status(403).send({ error });
@@ -21,7 +30,16 @@ module.exports = {
       const user = await User.findOneAndUpdate(
         { _id: userId },
         { $pull: { teams: teamId } }
-      );
+      ).select('name profileImage');
+
+      const team = await Team.findById(teamId);
+      team.boards.forEach(async board => {
+        //maybe not necessary to await this operation
+        await Board.findByIdAndUpdate(board._id, {
+          $pull: { users: userId }
+        });
+      });
+
       res.send(user);
     } catch (error) {
       res.status(403).send({ error });

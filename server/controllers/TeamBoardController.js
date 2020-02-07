@@ -1,7 +1,6 @@
 const Team = require('../models/Team.model');
 const User = require('../models/User');
 const Board = require('../models/Board');
-const Card = require('../models/Card');
 
 module.exports = {
   async create(req, res) {

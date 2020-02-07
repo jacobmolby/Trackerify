@@ -36,6 +36,7 @@ module.exports = {
   },
   async show(req, res) {
     const { id } = req.params;
+    const userId = req.user._id;
 
     if (mongoose.Types.ObjectId.isValid(id)) {
       try {
@@ -74,7 +75,9 @@ module.exports = {
         if (!board) {
           return res.status(400).send({ error: "Board doesn't exist" });
         }
-        if (board.users.find(user => user._id === req.user._id)) {
+
+        //Authorizing the user
+        if (!board.users.find(user => user._id.toString() === userId)) {
           return res
             .status(401)
             .send({ error: 'User not member of the board' });
@@ -85,7 +88,7 @@ module.exports = {
         res.send(error);
       }
     } else {
-      return res.status(400).send({ error: "ID isn't valid" });
+      return res.status(400).send({ error: "Board doesn't exist" });
     }
   },
   async update(req, res) {
@@ -103,13 +106,20 @@ module.exports = {
     }
   },
   async destroy(req, res) {
-    //TODO Check if the person deleting the board is part of it
     const id = req.params.id;
-    const board = await Board.findById(id);
-    if (!board) {
-      return res.status(400).send({ error: "Board doesn't exist" });
-    }
+    const userId = req.user._id;
+
     try {
+      const board = await Board.findById(id);
+      if (!board) {
+        return res.status(400).send({ error: "Board doesn't exist" });
+      }
+
+      //Authorizing the user
+      if (!board.users.find(user => user._id.toString() === userId)) {
+        return res.status(401).send({ error: 'User not member of the board' });
+      }
+
       const result = await Board.findByIdAndDelete(id);
 
       if (result) {

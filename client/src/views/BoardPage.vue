@@ -79,6 +79,7 @@
                   />
                   <DeleteBoard :board="board" class="ml-2"></DeleteBoard>
                 </div>
+                <!-- Users in topbar -->
                 <div class="flex items-center ml-4">
                   <div
                     v-for="user in board.users"
@@ -110,6 +111,7 @@
                     </div>
                   </div>
                 </div>
+                <!-- End Users in topbar -->
               </div>
 
               <div class="py-1 flex items-center">
@@ -307,12 +309,13 @@ export default {
       }
       this.$store.dispatch('isLoading', false);
     } catch (error) {
-      if (error.response.data.error === "Board doesn't exist") {
+      const errorMessage = error.response.data.error;
+      if (
+        errorMessage === "Board doesn't exist" ||
+        errorMessage === 'User not member of the board'
+      ) {
         this.$router.push({ name: 'boardOverview' });
       }
-      console.log(error);
-
-      console.log(error.response.data.error);
     }
   },
   methods: {
@@ -327,10 +330,7 @@ export default {
       this.isOpen = false;
     },
     async removeUser(userId) {
-      this.removeUserError = null;
-      if (this.board.owner === this.$store.state.user._id) {
-        return (this.removeUserError = 'You cannot remove yourself');
-      }
+      //TODO Move into Vuex
       try {
         await UserBoardService.delete(userId, this.boardId);
         const storePayload = {
@@ -338,7 +338,6 @@ export default {
           boardId: this.boardId
         };
         this.$store.dispatch('removeUserFromBoard', storePayload);
-        this.$socket.emit('removeUserFromBoard', storePayload);
       } catch (error) {
         console.log(error.response.data.error);
       }

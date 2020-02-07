@@ -43,8 +43,7 @@ export default {
   },
   computed: {
     date() {
-      const dateObj = new Date(this.comment.created);
-      return moment(this.comment.created).format('dddd HH:mm, DD MMM YY');
+      return moment(this.comment.createdAt).format('dddd HH:mm, DD MMM YY');
     }
   }
 };
