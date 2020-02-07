@@ -17,7 +17,9 @@ module.exports = {
         }
         const board = await Board.findById(boardId);
 
-        const alreadyInBoard = board.users.find(user => user == userId);
+        const alreadyInBoard = !!board.users.find(
+          user => user._id.toString() === userId
+        );
 
         if (alreadyInBoard) {
           return res

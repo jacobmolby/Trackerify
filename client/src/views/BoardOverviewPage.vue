@@ -34,8 +34,12 @@
               <li>
                 <span>{{board.users.length}} {{board.users.length > 1 ?'Users' : 'User'}}</span>
               </li>
+              <li class="text-sm">
+                <span class="font-light">Last Change:</span>
+                {{lastUpdated(board)}}
+              </li>
               <li v-if="isOwner(board.owner)">
-                <span class="font-medium text-yellow-500">You are the owner</span>
+                <span class="text-yellow-500">You are the owner</span>
               </li>
             </ul>
           </div>
@@ -56,6 +60,7 @@
 </template>
 
 <script>
+import moment from 'moment';
 import { mapState, mapActions } from 'vuex';
 import LoadingSpinner from '../components/reusables/LoadingSpinner';
 import CreateBoard from '../components/board/CreateBoard';
@@ -80,6 +85,9 @@ export default {
     ...mapState(['user', 'isLoading'])
   },
   methods: {
+    lastUpdated(board) {
+      return moment(board.updatedAt).format('dddd HH:mm, DD MMM YY');
+    },
     isOwner(ownerId) {
       return ownerId === this.user._id;
     },

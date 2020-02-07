@@ -5,7 +5,8 @@ import socket from '../../socketInstance';
 export default store => {
   if (!store.state.token) return;
   store.subscribe(({ type, payload }) => {
-    console.log('Mutation:', type);
+    const development = !(process.env.PRODUCTION === 'production');
+    if (development) console.log('Mutation:', type);
 
     // The mutation comes in the format of `{ type, payload }`.
     const blackListedMutations = [
@@ -31,7 +32,7 @@ export default store => {
     const fromSocket = get(payload, 'socket', false);
 
     if (!isBlacklisted && boardId && !fromSocket) {
-      console.log('Emitting:', type);
+      if (development) console.log('Emitting:', type);
 
       socket.emit('vuexEvent', {
         boardId,

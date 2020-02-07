@@ -21,18 +21,20 @@
             </svg>
           </button>
         </div>
-        <div class="mt-2 flex">
+        <form @submit.prevent="search" class="mt-2 flex">
           <input
-            @change="search"
             class="w-full p-2 rounded-l rounded-r-none border-t border-l border-b border-gray-400"
             v-model.trim="searchInput"
             type="search"
             placeholder="Name or Email"
           />
-          <button class="py-2 px-4 rounded-r rounded-l-none bg-purple-800 hover:bg-purple-600">
+          <button
+            type="submit"
+            class="py-2 px-4 rounded-r rounded-l-none bg-purple-800 hover:bg-purple-600"
+          >
             <span class="text-white">Search</span>
           </button>
-        </div>
+        </form>
         <div class="mt-2">
           <ul class="border rounded" v-if="searchResult.length > 0">
             <li
@@ -61,8 +63,7 @@ export default {
     isOpen: false,
     searchInput: '',
     searchMessage: '',
-    searchResult: [],
-    error: ''
+    searchResult: []
   }),
   props: {
     team: {
@@ -108,13 +109,18 @@ export default {
     },
     async addTeamMember(user) {
       //TODO Check if user is already in team
-      await this.$store.dispatch('addTeamMember', {
-        user,
-        teamId: this.team._id
-      });
-      this.searchInput = '';
-      this.searchResult = [];
-      this.isOpen = false;
+      this.searchMessage = '';
+      try {
+        await this.$store.dispatch('addTeamMember', {
+          user,
+          teamId: this.team._id
+        });
+        this.searchInput = '';
+        this.searchResult = [];
+        this.isOpen = false;
+      } catch (error) {
+        this.searchMessage = error.response.data.error;
+      }
     }
   },
   created() {
