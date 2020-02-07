@@ -46,13 +46,6 @@ export default {
     MarketingSiteNavigation,
     TheFooter
   }
-  // beforeRouteEnter(to, from, next) {
-  //   next(vueInstance => {
-  //     if (to.query.logout) {
-  //       vueInstance.$store.dispatch('logout');
-  //     }
-  //   });
-  // }
 };
 </script>
 

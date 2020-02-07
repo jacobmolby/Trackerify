@@ -77,7 +77,7 @@ export default {
           this.pickingColor = false;
           this.isOpen = false;
         } catch (error) {
-          console.log(error);
+          this.error = error.response.data.error;
         }
       }
     }

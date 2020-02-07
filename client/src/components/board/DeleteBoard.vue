@@ -22,9 +22,10 @@ export default {
       try {
         await this.$store.dispatch('deleteBoard', { boardId: this.board._id });
       } catch (error) {
-        console.log('error occured');
-        console.log(error);
-        // console.log(error.response.data.error);
+        this.$store.dispatch('notify', {
+          message: error.response.data.error,
+          type: 'error'
+        });
       }
     }
   }

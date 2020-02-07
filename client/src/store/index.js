@@ -43,7 +43,12 @@ export const store = new Vuex.Store({
     board: { _id: null, lists: [{ cards: [{}] }] },
     isLoading: false,
     viewStyle: 'board',
-    teams: []
+    teams: [],
+    modal: {
+      message: '',
+      showing: false,
+      type: 'normal'
+    }
   },
   getters,
 
@@ -54,6 +59,12 @@ export const store = new Vuex.Store({
     ...comment.mutations,
     ...board.mutations,
     ...list.mutations,
+    notify(state, { message, type }) {
+      state.modal = { message, showing: true, type };
+      setTimeout(() => {
+        state.modal = { message: '', showing: false, type: 'normal' };
+      }, 5000);
+    },
     isLoading(state, bool) {
       state.isLoading = bool;
     },
@@ -225,6 +236,10 @@ export const store = new Vuex.Store({
 
     addUserIsOpen({ commit }, bool) {
       commit('addUserIsOpen', bool);
+    },
+    notify({ commit }, { message, type }) {
+      if (type === undefined) type = 'normal';
+      commit('notify', { message, type });
     }
   }
 });

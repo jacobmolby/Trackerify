@@ -94,7 +94,6 @@ export default {
           this.description = null;
         } catch (error) {
           this.error = error.response.data.error;
-          console.log(error.response.data.error);
         }
       }
     }

@@ -81,7 +81,7 @@ export default {
         this.searchInput = '';
         this.searchResult = [];
       } catch (error) {
-        console.log(error.response.data.error);
+        this.$store.dispatch('notify', { message: error.response.data.error });
       }
     },
     filterSearchResult(searchResult) {

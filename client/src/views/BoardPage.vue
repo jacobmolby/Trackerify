@@ -68,16 +68,22 @@
                 <div class="flex items-center">
                   <h1
                     v-if="!editingTitle"
-                    @click="editingTitle = !editingTitle"
                     class="font-semibold text-2xl text-gray-800"
+                    :class="`_${boardId}`"
                   >{{board.title}}</h1>
                   <input
-                    v-else
-                    v-model="title"
+                    v-if="editingTitle"
+                    v-model.trim="title"
                     type="text"
                     class="font-semibold text-2xl bg-gray-300 text-gray-800"
+                    :class="`_${boardId}`"
+                    @change="updateTitle"
                   />
-                  <DeleteBoard :board="board" class="ml-2"></DeleteBoard>
+                  <DeleteBoard
+                    v-if="this.user._id === this.board.owner"
+                    :board="board"
+                    class="ml-2"
+                  ></DeleteBoard>
                 </div>
                 <!-- Users in topbar -->
                 <div class="flex items-center ml-4">
@@ -266,8 +272,6 @@ export default {
     ConnectionLost,
     LoadingSpinner,
     Sidebar,
-    // Card,
-    // AddCard,
     CreatedByMe,
     ListView,
     Archived,
@@ -314,6 +318,7 @@ export default {
         errorMessage === "Board doesn't exist" ||
         errorMessage === 'User not member of the board'
       ) {
+        this.$store.dispatch('notify', { message: errorMessage });
         this.$router.push({ name: 'boardOverview' });
       }
     }
@@ -339,7 +344,7 @@ export default {
         };
         this.$store.dispatch('removeUserFromBoard', storePayload);
       } catch (error) {
-        console.log(error.response.data.error);
+        this.$store.dispatch('notify', { message: error.response.data.error });
       }
     },
     async updateTitle() {
@@ -364,9 +369,19 @@ export default {
         });
         this.editingTitle = false;
       } catch (error) {
-        console.log(error.response.data.error);
+        this.$store.dispatch('notify', { message: error.response.data.error });
       }
     }
+  },
+  updated() {
+    if (!this.editingTitle) {
+      this.title = this.board.title;
+    }
+
+    this.$nextTick(() => {
+      const input = document.querySelector(`input._${this.boardId}`);
+      if (input) input.focus();
+    });
   },
   created() {
     const handleTitleKeyPresses = e => {
@@ -374,10 +389,22 @@ export default {
         return;
       }
       if (e.key === 'Esc' || e.key === 'Escape') {
+        this.title = this.board.title;
+
         this.editingTitle = false;
       }
-      if (e.key === 'Enter') {
-        this.updateTitle();
+    };
+
+    const handleClickOnTitle = e => {
+      const clickedTitle = e.target.closest(`h1._${this.boardId}`);
+      const clickedInput = e.target.closest(`input._${this.boardId}`);
+      //If clicked on the title, initiate editingmode
+
+      if (!!clickedTitle && !this.editingTitle) {
+        this.editingTitle = true;
+        //If editingmode is on, turn it off
+      } else if (!clickedInput && this.editingTitle) {
+        this.editingTitle = false;
       }
     };
 
@@ -385,6 +412,8 @@ export default {
       const store = this.$store;
 
       if (e.ctrlKey && e.key === 'l') {
+        console.log(e.key);
+
         e.preventDefault();
         if (store.state.addListIsOpen) {
           store.dispatch('addListIsOpen', false);
@@ -403,9 +432,12 @@ export default {
 
     document.addEventListener('keydown', handleKeydownEvents);
     document.addEventListener('keydown', handleTitleKeyPresses);
+    document.addEventListener('click', handleClickOnTitle);
+
     this.$once('hook:beforeDestroy', () => {
       document.removeEventListener('keydown', handleKeydownEvents);
       document.removeEventListener('keydown', handleTitleKeyPresses);
+      document.removeEventListener('click', handleClickOnTitle);
     });
   }
 };

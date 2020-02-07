@@ -120,7 +120,7 @@ module.exports = {
         return res.status(401).send({ error: 'User not member of the board' });
       }
 
-      const result = await Board.findByIdAndDelete(id);
+      const result = await board.remove();
 
       if (result) {
         return res.send(`Board: "${result.title}" deleted`);
@@ -128,7 +128,7 @@ module.exports = {
         return res.status(400).send({ error: 'Something went wrong' });
       }
     } catch (error) {
-      res.send({ error: error });
+      res.send({ error: error.message });
     }
   }
 };

@@ -56,7 +56,10 @@ export default {
         this.isOpen = false;
         this.title = null;
       } catch (error) {
-        console.log(error);
+        this.$store.dispatch('notify', {
+          message: error.response.data.error,
+          type: 'error'
+        });
       }
     }
   },

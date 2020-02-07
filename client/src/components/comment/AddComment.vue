@@ -38,7 +38,10 @@ export default {
           });
           this.comment = '';
         } catch (error) {
-          console.log(error);
+          this.$store.dispatch('notify', {
+            message: error.response.data.error,
+            type: 'error'
+          });
         }
       }
     }

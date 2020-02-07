@@ -1,7 +1,7 @@
 <template>
   <footer class="absolute bottom-0 pt-16 pb-6 text-sm text-center md:text-left fade-in">
     <span class="text-gray-500 no-underline hover:no-underline">
-      &copy; Jacob Mølby 2019
+      &copy; Jacob Mølby 2020
       <br />This page is designed by
       <a
         class="hover:text-gray-900"

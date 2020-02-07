@@ -117,8 +117,7 @@ export default {
           labelId
         });
       } catch (error) {
-        console.log(error.response.data.error);
-      }
+this.$store.dispatch('notify', { message: error.response.data.error,type: 'error' });      }
     },
     async removeLabel(labelId) {
       try {
@@ -127,7 +126,7 @@ export default {
           labelId
         });
       } catch (error) {
-        console.log(error.response.data.error);
+       this.$store.dispatch('notify', { message: error.response.data.error,type: 'error' });
       }
     },
     async addLabelToCard(label) {
@@ -137,8 +136,7 @@ export default {
           newLabel: label
         });
       } catch (error) {
-        console.log(error);
-      }
+this.$store.dispatch('notify', { message: error.response.data.error,type: 'error' });      }
     }
   },
   created() {

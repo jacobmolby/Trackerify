@@ -88,14 +88,17 @@ export default {
           this.list.title = null;
           this.pickingColor = false;
         } catch (error) {
-          console.log(error.response.data.error);
+          this.$store.dispatch('notify', {
+            message: error.response.data.error,
+            type: 'error'
+          });
         }
       }
     }
   },
   created() {
     const handleEscape = e => {
-      if (e.key === 'Esc' || e.key === 'Escape') {
+      if (this.addListIsOpen && (e.key === 'Esc' || e.key === 'Escape')) {
         this.$store.dispatch('addListIsOpen', false);
       }
     };

@@ -13,7 +13,7 @@
       <input
         v-show="editingTitle"
         @change="updateTitle"
-        v-model="title"
+        v-model.trim="title"
         type="text"
         class="w-full text-gray-700 text-sm font-medium bg-gray-300"
         :class="`_${listId}`"
@@ -67,14 +67,14 @@ export default {
         });
         this.editingTitle = false;
       } catch (error) {
-        console.log(error);
-      }
+this.$store.dispatch('notify', { message: error.response.data.error,type: 'error' });      }
     },
     async deleteList() {
       try {
         await this.$store.dispatch('removeList', { listId: this.listId });
       } catch (error) {
-        console.log(error);
+        this.$store.dispatch('notify', { message: error.response.data.error,type: 'error' });
+
       }
     }
   },
@@ -105,7 +105,7 @@ export default {
             listId: this.listId
           });
         } catch (error) {
-          console.log(error);
+this.$store.dispatch('notify', { message: error.response.data.error,type: 'error' });
         }
       }
     }

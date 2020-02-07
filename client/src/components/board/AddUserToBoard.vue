@@ -134,13 +134,12 @@ export default {
         this.$store.dispatch('addUserIsOpen', false);
       } catch (error) {
         this.searchMessage = error.response.data.error;
-        console.log(error.response.data.error);
       }
     }
   },
   created() {
     const handleEscape = e => {
-      if (e.key === 'Esc' || e.key === 'Escape') {
+      if (this.addUserIsOpen && (e.key === 'Esc' || e.key === 'Escape')) {
         this.$store.dispatch('addUserIsOpen', false);
       }
     };

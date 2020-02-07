@@ -21,7 +21,8 @@ export default store => {
       'changeViewStyle',
       'setTeams',
       'SOCKET_DISCONNECT',
-      'SOCKET_CONNECT'
+      'SOCKET_CONNECT',
+      'notify'
     ];
 
     const isBlacklisted = blackListedMutations.includes(type);

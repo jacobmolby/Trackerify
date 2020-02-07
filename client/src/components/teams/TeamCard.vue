@@ -8,7 +8,7 @@
         :class="`_${team._id}`"
         class="bg-purple-800 font-medium text-white"
         @change="updateTitle"
-        v-model="title"
+        v-model.trim="title"
       />
       <DeletePopup
         v-if="isOwner"
@@ -84,8 +84,6 @@ export default {
   },
   methods: {
     async updateTitle() {
-      console.log(this.title);
-
       if (this.title === '') return;
       try {
         await this.$store.dispatch('updateTeamName', {
@@ -119,6 +117,10 @@ export default {
     if (!this.editingTitle) {
       this.title = this.team.name;
     }
+    this.$nextTick(() => {
+      const input = document.querySelector(`input._${this.team._id}`);
+      if (input) input.focus();
+    });
   },
   created() {
     this.title = this.team.name;
@@ -128,6 +130,7 @@ export default {
         return;
       }
       if (e.key === 'Esc' || e.key === 'Escape') {
+        this.title = this.team.name;
         this.editingTitle = false;
       }
     };

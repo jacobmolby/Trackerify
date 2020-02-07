@@ -231,7 +231,10 @@ export default {
       try {
         await this.$store.dispatch('archiveCard', { cardId });
       } catch (error) {
-        console.log(error.response.data.error);
+        this.$store.dispatch('notify', {
+          message: error.response.data.error,
+          type: 'error'
+        });
       }
     },
     async restoreCard() {
@@ -239,7 +242,10 @@ export default {
       try {
         await this.$store.dispatch('restoreCard', { cardId });
       } catch (error) {
-        console.log(error.response.data.error);
+        this.$store.dispatch('notify', {
+          message: error.response.data.error,
+          type: 'error'
+        });
       }
     },
     async deleteCard() {
@@ -249,7 +255,10 @@ export default {
         await this.$store.dispatch('removeCard', { cardId });
         this.isOpen = false;
       } catch (error) {
-        console.log(error);
+        this.$store.dispatch('notify', {
+          message: error.response.data.error,
+          type: 'error'
+        });
       }
     },
     async updateCard() {
@@ -268,7 +277,10 @@ export default {
         });
         this.isEditing = false;
       } catch (error) {
-        console.log(error);
+        this.$store.dispatch('notify', {
+          message: error.response.data.error,
+          type: 'error'
+        });
       }
     },
     async removeUser(userId) {
@@ -280,9 +292,10 @@ export default {
           boardId: this.$store.state.board._id
         });
       } catch (error) {
-        console.log('error occured');
-
-        console.log(error.response.data.error);
+        this.$store.dispatch('notify', {
+          message: error.response.data.error,
+          type: 'error'
+        });
       }
     }
   },
