@@ -17,6 +17,9 @@ export default {
   name: 'app',
   components: {
     NotificationModal
+  },
+  mounted() {
+    console.log(process.env.NETLIFY);
   }
 };
 </script>
