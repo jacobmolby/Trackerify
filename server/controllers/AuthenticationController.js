@@ -46,12 +46,10 @@ module.exports = {
   async login(req, res) {
     try {
       //Check if email exists
-      const user = await User.findOne({ email: req.body.email })
-        .populate({
-          path: 'boards',
-          select: ['_id', 'title', 'users', 'lists']
-        })
-        .lean();
+      const user = await User.findOne({ email: req.body.email }).populate({
+        path: 'boards',
+        select: ['_id', 'title', 'users', 'lists']
+      });
       if (!user) return res.status(400).send({ error: "Email doesn't exist." });
 
       //Check correct password

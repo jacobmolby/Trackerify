@@ -1,8 +1,8 @@
+/* eslint-disable no-console */
 const jwt = require('jsonwebtoken');
 
 module.exports = io => {
   io.use((socket, next) => {
-    //TODO verify token
     let token = socket.handshake.query.token;
     try {
       const verified = token

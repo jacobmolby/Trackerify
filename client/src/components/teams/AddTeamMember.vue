@@ -108,7 +108,6 @@ export default {
       }
     },
     async addTeamMember(user) {
-      //TODO Check if user is already in team
       this.searchMessage = '';
       try {
         await this.$store.dispatch('addTeamMember', {

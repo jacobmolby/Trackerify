@@ -1,6 +1,7 @@
 const Team = require('../models/Team.model');
 const User = require('../models/User');
 const Board = require('../models/Board');
+const Card = require('../models/Card');
 
 module.exports = {
   async create(req, res) {
@@ -27,7 +28,6 @@ module.exports = {
       let users = await User.find({
         teams: teamId
       }).lean();
-      // console.log(users);
       users = users.filter(user => {
         return user._id.toString() !== req.user._id;
       });
@@ -40,11 +40,10 @@ module.exports = {
         { new: true }
       );
 
-      //TODO remove teammembers from cards that they are assigned to. The code underneath doesn't work
-      // await Card.updateMany(
-      //   { assignedUsers: users, boardId },
-      //   { $pullAll: { assignedUsers: users } }
-      // );
+      await Card.updateMany(
+        { boardId, assignedUsers: users },
+        { $pullAll: { assignedUsers: users } }
+      );
 
       res.send(team);
     } catch (error) {
