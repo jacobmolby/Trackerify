@@ -36,15 +36,15 @@ module.exports = {
     }
   },
   async destroy(req, res) {
-    const { boardId, labelId } = req.params;
+    const { labelId } = req.params;
 
     try {
       const label = await Label.findByIdAndDelete(labelId);
-      const board = await Board.updateMany(
+      await Board.updateMany(
         { labels: { _id: labelId } },
         { $pull: { labels: { _id: labelId } } }
       );
-      const cards = await Card.updateMany(
+      await Card.updateMany(
         { labels: { _id: labelId } },
         { $pull: { labels: { _id: labelId } } }
       );

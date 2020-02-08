@@ -1,4 +1,3 @@
-const Label = require('../models/Label');
 const Card = require('../models/Card');
 
 module.exports = {

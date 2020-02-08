@@ -27,7 +27,6 @@ module.exports = {
       res.status(400).send({ error: error.message });
     }
   },
-  async show(req, res) {},
   async destroy(req, res) {
     const cardId = req.params.id;
     try {

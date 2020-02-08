@@ -32,7 +32,7 @@ module.exports = {
         return user._id.toString() !== req.user._id;
       });
 
-      const board = await Board.findByIdAndUpdate(
+      await Board.findByIdAndUpdate(
         boardId,
         {
           $pullAll: { users }

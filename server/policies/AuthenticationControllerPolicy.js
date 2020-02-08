@@ -1,3 +1,4 @@
+/* eslint-disable indent */
 const Joi = require('@hapi/joi');
 
 module.exports = {
@@ -30,6 +31,7 @@ module.exports = {
           res.status(400).send({
             error: 'A valid email is required'
           });
+          break;
         case 'password':
           res.status(400).send({
             error:

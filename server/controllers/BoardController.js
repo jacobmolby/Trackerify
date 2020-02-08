@@ -1,5 +1,4 @@
 const Board = require('../models/Board');
-const User = require('../models/User');
 const Label = require('../models/Label');
 const defaultLabels = require('../util/DefaultLabels');
 
@@ -117,7 +116,9 @@ module.exports = {
 
       //Authorizing the user
       if (!board.users.find(user => user._id.toString() === userId)) {
-        return res.status(401).send({ error: 'User is not member of the board' });
+        return res
+          .status(401)
+          .send({ error: 'User is not member of the board' });
       }
 
       const result = await board.remove();

@@ -1,6 +1,4 @@
-const Card = require('../models/Card');
 const User = require('../models/User');
-const mongoose = require('mongoose');
 
 module.exports = {
   async update(req, res) {
