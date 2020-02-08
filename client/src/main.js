@@ -9,12 +9,14 @@ import '@/assets/css/tailwind.css';
 
 import router from './router';
 
+const development = !process.env.NETLIFY;
+
 Vue.use(VueRouter);
 Vue.use(PortalVue);
 
 Vue.use(
   new VueSocketIO({
-    debug: !process.env.NETLIFY,
+    debug: development,
     connection: SocketInstance,
     vuex: { store, actionPrefix: 'SOCKET_' }
   })
