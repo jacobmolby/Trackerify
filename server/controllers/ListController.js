@@ -27,7 +27,9 @@ module.exports = {
     }
   },
   async show(req, res) {
-    const list = await List.findById(req.params.id).populate('cards');
+    const list = await List.findById(req.params.id)
+      .populate('cards')
+      .lean();
     if (!list) {
       return res.status(400).send({ error: "List doesn't exist" });
     }
@@ -35,12 +37,12 @@ module.exports = {
   },
   async destroy(req, res) {
     const { id } = req.params;
-    const list = await List.findById(id);
-    if (!list) {
-      return res.status(400).send({ error: "List doesn't exist" });
-    }
     try {
-      const result = await List.findByIdAndDelete(id);
+      const list = await List.findById(id);
+      if (!list) {
+        return res.status(400).send({ error: "List doesn't exist" });
+      }
+      const result = await list.remove();
       //removing the list from the board
       await Board.updateOne(
         { _id: result._doc.boardId },
@@ -70,7 +72,7 @@ module.exports = {
         listId,
         { title: listTitle },
         { new: true }
-      );
+      ).lean();
 
       res.send(list);
     } catch (error) {

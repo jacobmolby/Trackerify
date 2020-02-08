@@ -12,7 +12,7 @@ module.exports = {
   async register(req, res) {
     //Check if email exists
     try {
-      const emailExist = await User.findOne({ email: req.body.email });
+      const emailExist = await User.findOne({ email: req.body.email }).lean();
       if (emailExist) {
         return res.status(400).send({ error: 'Email already in use.' });
       }
@@ -46,10 +46,12 @@ module.exports = {
   async login(req, res) {
     try {
       //Check if email exists
-      const user = await User.findOne({ email: req.body.email }).populate({
-        path: 'boards',
-        select: ['_id', 'title', 'users', 'lists']
-      });
+      const user = await User.findOne({ email: req.body.email })
+        .populate({
+          path: 'boards',
+          select: ['_id', 'title', 'users', 'lists']
+        })
+        .lean();
       if (!user) return res.status(400).send({ error: "Email doesn't exist." });
 
       //Check correct password

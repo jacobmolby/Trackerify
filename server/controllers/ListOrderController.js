@@ -7,7 +7,7 @@ module.exports = {
       const board = await Board.findOneAndUpdate(
         { _id: boardId },
         { $set: { lists: listIds } }
-      );
+      ).lean();
       res.send(board);
     } catch (error) {
       res.status(400).send({ error: error.message });

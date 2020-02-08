@@ -36,6 +36,7 @@ export default {
       Router.push({
         name: 'boardOverview'
       });
+      commit('notify', { message: 'Board was deleted' });
       commit('deleteBoard', payload, { root: true });
     },
     SOCKET_addList({ commit }, list) {

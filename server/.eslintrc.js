@@ -13,6 +13,7 @@ module.exports = {
     ecmaVersion: 2018
   },
   rules: {
+    'no-console': ['warn'],
     'no-unused-vars': ['warn'],
     indent: ['error', 2],
     'linebreak-style': ['error', 'windows'],

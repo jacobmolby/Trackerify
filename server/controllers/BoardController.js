@@ -1,4 +1,6 @@
 const Board = require('../models/Board');
+const List = require('../models/List');
+const Card = require('../models/Card');
 const Label = require('../models/Label');
 const defaultLabels = require('../util/DefaultLabels');
 
@@ -8,7 +10,9 @@ module.exports = {
     const userId = req.user._id;
 
     try {
-      const boards = await Board.find({ users: userId }).populate();
+      const boards = await Board.find({ users: userId })
+        .populate()
+        .lean();
       res.send(boards);
     } catch (error) {
       res.status(400).send({ error: error.message });
@@ -28,8 +32,6 @@ module.exports = {
       const savedBoard = await board.save();
       res.send(savedBoard.toJSON());
     } catch (error) {
-      console.log(error);
-
       res.status(400).send({ error: error.message });
     }
   },
@@ -69,7 +71,8 @@ module.exports = {
           })
           .populate({
             path: 'labels'
-          });
+          })
+          .lean();
 
         if (!board) {
           return res.status(400).send({ error: "Board doesn't exist" });
@@ -92,34 +95,52 @@ module.exports = {
   },
   async update(req, res) {
     const { boardId, title } = req.body;
-    //TODO check if user is part of board
+    const userId = req.user._id;
     try {
-      const board = await Board.findByIdAndUpdate(
-        boardId,
-        { $set: { title } },
-        { new: true }
-      );
-      res.send(board);
+      const board = await Board.findById(boardId);
+      //Authorizing the user
+      if (!board.users.find(user => user._id.toString() === userId)) {
+        res.status(401).send({ error: 'Access denied' });
+      }
+      board.title = title;
+      const response = await board.save();
+
+      res.send(response);
     } catch (error) {
       res.status(400).send({ error: error.message });
     }
   },
   async destroy(req, res) {
-    const id = req.params.id;
+    const { id } = req.params;
     const userId = req.user._id;
 
     try {
-      const board = await Board.findById(id);
+      const board = await Board.findById(id)
+        .select('lists owner')
+        .populate({
+          path: 'lists',
+          populate: {
+            path: 'cards'
+          }
+        });
+
       if (!board) {
         return res.status(400).send({ error: "Board doesn't exist" });
       }
 
       //Authorizing the user
-      if (!board.users.find(user => user._id.toString() === userId)) {
+      if (userId !== board.owner.toString()) {
         return res
           .status(401)
           .send({ error: 'User is not member of the board' });
       }
+
+      board.lists.forEach(async list => {
+        list.cards.forEach(async card => {
+          await Card.findByIdAndDelete(card._id);
+        });
+        await List.findByIdAndDelete(list._id);
+      });
 
       const result = await board.remove();
 

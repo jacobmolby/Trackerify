@@ -9,19 +9,18 @@ module.exports = {
       user: req.user._id
     });
 
-    const card = await Card.findById(req.body.cardId);
-    if (!card) {
-      return res.status(400).send({ error: 'A comment needs a card' });
-    }
-
     try {
+      const card = await Card.findById(req.body.cardId);
+      if (!card) {
+        return res.status(400).send({ error: 'A comment needs a card' });
+      }
       let savedComment = await comment.save();
       savedComment = await savedComment
         .populate({
           path: 'user',
           select: ['name', '_id']
         })
-        .execPopulate();
+        .lean();
       const commentId = savedComment._id;
       card.comments.addToSet(commentId);
       await card.save();
@@ -45,8 +44,8 @@ module.exports = {
       }
       const card = await Card.findById(comment.cardId);
       card.comments.pull(commentId);
-      card.save();
-      const result = await Comment.findByIdAndDelete(commentId);
+      await card.save();
+      const result = await comment.remove();
 
       if (result) {
         return res.send(`Comment with content: "${result.content}" deleted`);

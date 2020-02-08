@@ -5,13 +5,11 @@ const mongoose = require('mongoose');
 
 module.exports = {
   async create(req, res) {
-    console.log(req.body);
-
     const { boardId, userId } = req.body;
 
     try {
       if (mongoose.Types.ObjectId.isValid(userId)) {
-        const user = await User.findById(userId);
+        const user = await User.findById(userId).lean();
         if (!user) {
           return res.status(400).send({ error: 'No user with that id.' });
         }

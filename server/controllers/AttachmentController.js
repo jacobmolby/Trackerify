@@ -26,7 +26,7 @@ module.exports = {
       return res.status(401).send({ error: 'Access Denied' });
     }
     try {
-      const result = await Attachment.findByIdAndDelete(id);
+      const result = attachment.remove();
 
       if (result) {
         return res.send(`Attachment: "${result.title}" deleted`);

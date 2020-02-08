@@ -2,9 +2,31 @@ import CardService from '../../services/CardService';
 import UserCardService from '../../services/UserCardService';
 import CardOrderService from '../../services/CardOrderService';
 import ArchiveCardService from '../../services/ArchiveCardService';
+import Vue from 'vue';
 
 export default {
   mutations: {
+    addCard(state, card) {
+      state.board.lists.find(list => list._id === card.list).cards.push(card);
+    },
+    removeCard(state, deletedCard) {
+      state.board.lists.find(
+        list => list._id === deletedCard.list
+      ).cards = state.board.lists
+        .find(list => list._id === deletedCard.list)
+        .cards.filter(card => card._id !== deletedCard._id);
+    },
+    updateCard(state, card) {
+      const cardIndex = state.board.lists
+        .find(list => list._id === card.list)
+        .cards.findIndex(cardIterator => cardIterator._id === card._id);
+      //Using Vue.set to change a value on an array, Vue.set(array, indexOfItem, newValue)
+      Vue.set(
+        state.board.lists.find(list => list._id === card.list).cards,
+        cardIndex,
+        card
+      );
+    },
     archiveCard(state, { cardId }) {
       state.board.lists.forEach(list => {
         if (list.cards) {
@@ -26,6 +48,27 @@ export default {
           });
         }
       });
+    },
+    addUserToCard(state, payload) {
+      const { user, listId, cardId } = payload;
+
+      state.board.lists
+        .find(list => list._id === listId)
+        .cards.find(card => card._id === cardId)
+        .assignedUsers.push(user);
+    },
+    removeUserFromCard(state, { userId, cardId, listId }) {
+      const cardWithUser = state.board.lists
+        .find(list => list._id === listId)
+        .cards.find(card => card._id === cardId);
+
+      cardWithUser.assignedUsers = cardWithUser.assignedUsers.filter(
+        user => user._id !== userId
+      );
+    },
+    updateCardOrder(state, payload) {
+      const { cards, listId } = payload;
+      state.board.lists.find(list => list._id === listId).cards = cards;
     }
   },
   actions: {

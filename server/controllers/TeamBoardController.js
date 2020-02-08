@@ -9,7 +9,7 @@ module.exports = {
       const team = await Team.findOneAndUpdate(
         { _id: teamId },
         { $addToSet: { boards: boardId } }
-      );
+      ).lean();
       const users = await User.find({ teams: teamId }).lean();
       await Board.findByIdAndUpdate(boardId, { $addToSet: { users } });
       res.send(team);

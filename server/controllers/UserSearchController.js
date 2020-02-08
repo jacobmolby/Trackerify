@@ -9,7 +9,8 @@ module.exports = {
     try {
       const users = await User.find({ $text: { $search: user } })
         .limit(10)
-        .select(['name', 'email', 'profileImage']);
+        .select(['name', 'email', 'profileImage'])
+        .lean();
       if (users.length < 1) {
         return res.send({ error: 'No users found.' });
       }

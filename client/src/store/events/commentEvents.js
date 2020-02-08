@@ -16,6 +16,16 @@ export default {
       card.comments = card.comments.filter(comment => {
         return comment._id !== commentId;
       });
+    },
+    addComment(state, comment) {
+      state.board.lists.forEach(list => {
+        let cardToAddCommment = list.cards.find(
+          card => card._id === comment.cardId
+        );
+        if (cardToAddCommment) {
+          cardToAddCommment.comments.push(comment);
+        }
+      });
     }
   },
   actions: {

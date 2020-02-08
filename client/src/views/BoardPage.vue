@@ -319,7 +319,7 @@ export default {
       const errorMessage = error.response.data.error;
       if (
         errorMessage === "Board doesn't exist" ||
-        errorMessage === 'User not member of the board'
+        errorMessage === 'User is not member of the board'
       ) {
         this.$store.dispatch('notify', { message: errorMessage });
         this.$router.push({ name: 'boardOverview' });
@@ -338,16 +338,16 @@ export default {
       this.isOpen = false;
     },
     async removeUser(userId) {
-      //TODO Move into Vuex
       try {
-        await UserBoardService.delete(userId, this.boardId);
-        const storePayload = {
+        this.$store.dispatch('removeUserFromBoard', {
           userId,
           boardId: this.boardId
-        };
-        this.$store.dispatch('removeUserFromBoard', storePayload);
+        });
       } catch (error) {
-        this.$store.dispatch('notify', { message: error.response.data.error });
+        this.$store.dispatch('notify', {
+          message: error.response.data.error,
+          type: 'error'
+        });
       }
     },
     async updateTitle() {
@@ -356,15 +356,13 @@ export default {
 
         return;
       }
-      if (this.title.trim() === '') {
-        //TODO implement an error
-        this.title = 'Enter a title';
+      if (this.title === '') {
+        this.$store.dispatch('notify', {
+          message: "Title can't be empty",
+          type: 'error'
+        });
         return;
       }
-      const payload = {
-        title: this.title,
-        boardId: this.boardId
-      };
       try {
         await this.$store.dispatch('updateBoard', {
           title: this.title,

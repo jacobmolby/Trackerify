@@ -3,7 +3,6 @@ const Card = require('../models/Card');
 
 module.exports = {
   async update(req, res) {
-    //Its for updating the listorder, should be put into its own controller when you should be able to change the title and color of a list
     const { listId, cards } = req.body;
     const updatedOrder = [];
 
@@ -12,7 +11,10 @@ module.exports = {
         //Updates the listid for the each of cards in the moved list
         const cardId = cards[i]._id;
         updatedOrder.push(cardId);
-        await Card.updateOne({ _id: cardId }, { $set: { list: listId } });
+        await Card.updateOne(
+          { _id: cardId },
+          { $set: { list: listId } }
+        ).lean();
       }
       const list = await List.findById(listId);
       list.cards = updatedOrder;

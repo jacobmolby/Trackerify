@@ -28,7 +28,7 @@ module.exports = {
         labelId,
         { $set: { title, color } },
         { new: true }
-      );
+      ).lean();
 
       res.send(label);
     } catch (error) {

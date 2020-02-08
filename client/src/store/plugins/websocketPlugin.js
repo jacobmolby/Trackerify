@@ -27,9 +27,14 @@ export default store => {
     ];
 
     const isBlacklisted = blackListedMutations.includes(type);
+
     const boardIdFromPayload = get(payload, 'boardId', false);
     //virker ikke? boardId bliver null hvis state.board._id er undefined
-    const boardId = get(store, 'state.board._id', boardIdFromPayload);
+
+    let boardId = get(store, 'state.board._id', boardIdFromPayload);
+    if (type === 'deleteBoard') {
+      boardId = payload.boardId;
+    }
 
     const fromSocket = get(payload, 'socket', false);
 

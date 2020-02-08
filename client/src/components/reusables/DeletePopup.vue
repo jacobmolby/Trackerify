@@ -28,11 +28,11 @@
           </span>
           <div class="pt-3 flex flex-row w-full justify-end">
             <button
-              class="py-2 px-3 text-white bg-red-600 rounded shadow hover:bg-red-700"
+              class="btn text-white bg-red-600 hover:bg-red-700"
               @click="deleteFunction"
             >Yes, I'm sure</button>
             <button
-              class="ml-3 py-2 px-3 text-white bg-green-600 rounded shadow hover:bg-green-700"
+              class="ml-3 btn text-white bg-green-600 hover:bg-green-700"
               @click="isOpen = false"
             >No, take me back</button>
           </div>

@@ -6,6 +6,18 @@ export default {
     updateListTitle(state, list) {
       const { listTitle, listId } = list;
       state.board.lists.find(list => list._id === listId).title = listTitle;
+    },
+    addList(state, list) {
+      state.board.lists.push(list);
+    },
+
+    removeList(state, deletedList) {
+      state.board.lists = state.board.lists.filter(list => {
+        return list._id !== deletedList._id;
+      });
+    },
+    updateListOrder(state, { lists }) {
+      state.board.lists = lists;
     }
   },
   actions: {

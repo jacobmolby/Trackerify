@@ -10,8 +10,10 @@ module.exports = {
       const user = await User.findOneAndUpdate(
         { _id: userId },
         { $addToSet: { teams: teamId } }
-      ).select('name profileImage');
-      const team = await Team.findById(teamId);
+      )
+        .select('name profileImage')
+        .lean();
+      const team = await Team.findById(teamId).lean();
       team.boards.forEach(async board => {
         //maybe not necessary to await this operation
         await Board.findByIdAndUpdate(board._id, {
@@ -30,9 +32,11 @@ module.exports = {
       const user = await User.findOneAndUpdate(
         { _id: userId },
         { $pull: { teams: teamId } }
-      ).select('name profileImage');
+      )
+        .select('name profileImage')
+        .lean();
 
-      const team = await Team.findById(teamId);
+      const team = await Team.findById(teamId).lean();
       team.boards.forEach(async board => {
         //maybe not necessary to await this operation
         await Board.findByIdAndUpdate(board._id, {

@@ -35,12 +35,12 @@ module.exports = {
       if (!card) {
         return res.status(400).send({ error: "Card doesn't exist" });
       }
-      const result = await Card.findByIdAndDelete(cardId);
+      const result = await card.remove();
       const list = await List.findById(listId);
       list.cards.pull(cardId);
       await list.save();
       if (result) {
-        return res.send(result);
+        return res.send({ message: 'Card was deleted succesfuly' });
       } else {
         return res.status(400).send({ error: 'Something went wrong' });
       }
@@ -55,12 +55,14 @@ module.exports = {
         { _id: cardId },
         { title, description },
         { new: true, useFindAndModify: false }
-      ).populate([
-        { path: 'assignedUsers', select: ['name', 'id', 'profileImage'] },
-        { path: 'comments' },
-        { path: 'labels' },
-        { path: 'attachments' }
-      ]);
+      )
+        .populate([
+          { path: 'assignedUsers', select: ['name', 'id', 'profileImage'] },
+          { path: 'comments' },
+          { path: 'labels' },
+          { path: 'attachments' }
+        ])
+        .lean();
 
       res.send(response);
     } catch (error) {
