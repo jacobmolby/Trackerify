@@ -9,13 +9,14 @@ module.exports = {
     try {
       const users = await User.find({ $text: { $search: user } })
         .limit(10)
-        .select(['name', 'email', 'profileImage']);
+        .select(['name', 'email', 'profileImage'])
+        .lean();
       if (users.length < 1) {
         return res.send({ error: 'No users found.' });
       }
       res.send(users);
     } catch (error) {
-      res.status(400).send({ error });
+      res.status(400).send({ error: error.message });
     }
   }
 };

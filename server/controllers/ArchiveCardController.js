@@ -10,10 +10,10 @@ module.exports = {
         { _id: cardId },
         { $set: { archived: true } },
         { new: true }
-      );
+      ).lean();
       res.send(card);
     } catch (error) {
-      res.status(403).send({ error });
+      res.status(400).send({ error: error.message });
     }
   },
   //Un-Archives a given card
@@ -26,10 +26,10 @@ module.exports = {
         { _id: cardId },
         { $set: { archived: false } },
         { new: true }
-      );
+      ).lean();
       res.send(card);
     } catch (error) {
-      res.status(403).send({ error });
+      res.status(400).send({ error: error.message });
     }
   }
 };

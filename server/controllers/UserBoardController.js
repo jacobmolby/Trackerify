@@ -5,19 +5,19 @@ const mongoose = require('mongoose');
 
 module.exports = {
   async create(req, res) {
-    console.log(req.body);
-
     const { boardId, userId } = req.body;
 
     try {
       if (mongoose.Types.ObjectId.isValid(userId)) {
-        const user = await User.findById(userId);
+        const user = await User.findById(userId).lean();
         if (!user) {
           return res.status(400).send({ error: 'No user with that id.' });
         }
         const board = await Board.findById(boardId);
 
-        const alreadyInBoard = board.users.find(user => user == userId);
+        const alreadyInBoard = !!board.users.find(
+          user => user._id.toString() === userId
+        );
 
         if (alreadyInBoard) {
           return res
@@ -34,13 +34,9 @@ module.exports = {
         };
         res.send(response);
       } else {
-        console.log('not valid');
-
         res.status(400).send({ error: 'Not a valid ID' });
       }
     } catch (error) {
-      console.log(error);
-
       res.status(400).send({ error: 'Something went wrong.' });
     }
   },

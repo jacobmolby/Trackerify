@@ -80,6 +80,22 @@
               <p class="text-red-500 mt-3 text-xs italic">{{this.error}}</p>
             </div>
           </div>
+          <div class="-mx-3 mb-5 flex items-center justify-end">
+            <div class="px-3 flex items-center">
+              <label class="text-gray-700 text-xs font-bold">
+                I agree to the
+                <a
+                  class="hover:text-gray-900 hover:border-b border-gray-900"
+                  href="https://www.termsfeed.com/privacy-policy/dacfeadef9ec30aa49ef22a20cfaaddf"
+                >Privacy Policy</a>
+              </label>
+              <input
+                v-model="privacyPolicy"
+                type="checkbox"
+                class="ml-2 border-2 border-pink-500 form-checkbox text-pink-500 focus:border-0"
+              />
+            </div>
+          </div>
           <div class="-mx-3 flex items-center justify-end">
             <div class="px-3">
               <button
@@ -111,6 +127,7 @@ export default {
   },
   data() {
     return {
+      privacyPolicy: false,
       firstName: null,
       lastName: null,
       firstNameError: null,
@@ -158,6 +175,11 @@ export default {
         this.passwordError =
           'A password must contain at least a letter, a capital letter, a number and must be between 8 and 32 characters long';
       }
+
+      if (!this.privacyPolicy) {
+        return (this.error = 'You have to accept the Privacy Policy.');
+      }
+
       if (emailIsValid && passwordIsValid && this.fullName) {
         this.register();
       }
@@ -176,10 +198,11 @@ export default {
           name: 'boardOverview'
         });
       } catch (error) {
+        this.error = 'Server is down';
+
         if (error.response.data.error) {
           this.error = error.response.data.error;
         }
-        this.error = 'Server is down';
       }
     }
   }

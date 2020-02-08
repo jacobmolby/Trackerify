@@ -1,6 +1,6 @@
 <template>
   <div>
-    <button @click="isOpen = true" class="w-full primary-btn mt-2">
+    <button @click="isOpen = true" class="w-full btn btn-gray mt-2">
       <svg class="h-4 w-4 fill-current" viewBox="0 0 20 20">
         <path d="M12 4H8v12h4V4zm2 0v12h4V4h-4zM6 4H2v12h4V4zM0 2h20v16H0V2z" />
       </svg>
@@ -81,7 +81,7 @@ export default {
         this.searchInput = '';
         this.searchResult = [];
       } catch (error) {
-        console.log(error.response.data.error);
+        this.$store.dispatch('notify', { message: error.response.data.error });
       }
     },
     filterSearchResult(searchResult) {

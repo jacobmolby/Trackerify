@@ -6,7 +6,7 @@
     </div>
     <div class="flex justify-between">
       <p>{{comment.content}}</p>
-      <delete-popup @deleteFunction="deleteComment">{{comment.user.name}}'s comment</delete-popup>
+      <DeletePopup @deleteFunction="deleteComment">{{comment.user.name}}'s comment</DeletePopup>
     </div>
   </div>
 </template>
@@ -43,8 +43,7 @@ export default {
   },
   computed: {
     date() {
-      const dateObj = new Date(this.comment.created);
-      return moment(this.comment.created).format('dddd HH:mm, DD MMM YY');
+      return moment(this.comment.createdAt).format('dddd HH:mm, DD MMM YY');
     }
   }
 };

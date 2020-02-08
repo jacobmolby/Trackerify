@@ -8,7 +8,7 @@ const mongoose = require('mongoose');
 const cors = require('cors');
 
 //Import Config
-const dotenv = require('dotenv').config();
+require('dotenv').config();
 const port = process.env.PORT || 8000;
 const DB_USER = process.env.DB_USER;
 const DB_PASS = process.env.DB_PASS;

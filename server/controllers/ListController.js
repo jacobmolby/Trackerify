@@ -8,7 +8,7 @@ module.exports = {
 
     const parentBoard = await Board.findById(boardId);
     if (!parentBoard) {
-      return res.status(403).send({ error: 'A list needs a parent board' });
+      return res.status(400).send({ error: 'A list needs a parent board' });
     }
     const list = new List({
       boardId,
@@ -23,24 +23,26 @@ module.exports = {
       await parentBoard.save();
       res.send(savedList.toJSON());
     } catch (error) {
-      res.status(403).send({ error });
+      res.status(400).send({ error: error.message });
     }
   },
   async show(req, res) {
-    const list = await List.findById(req.params.id).populate('cards');
+    const list = await List.findById(req.params.id)
+      .populate('cards')
+      .lean();
     if (!list) {
-      return res.status(403).send({ error: "List doesn't exist" });
+      return res.status(400).send({ error: "List doesn't exist" });
     }
     res.send(list.toJSON());
   },
   async destroy(req, res) {
     const { id } = req.params;
-    const list = await List.findById(id);
-    if (!list) {
-      return res.status(403).send({ error: "List doesn't exist" });
-    }
     try {
-      const result = await List.findByIdAndDelete(id);
+      const list = await List.findById(id);
+      if (!list) {
+        return res.status(400).send({ error: "List doesn't exist" });
+      }
+      const result = await list.remove();
       //removing the list from the board
       await Board.updateOne(
         { _id: result._doc.boardId },
@@ -56,12 +58,10 @@ module.exports = {
       if (response) {
         return res.send(response);
       } else {
-        return res.status(403).send({ error: 'Something went wrong' });
+        return res.status(400).send({ error: 'Something went wrong' });
       }
     } catch (error) {
-      console.log(error);
-
-      res.send({ error: error });
+      res.status(400).send({ error: error.message });
     }
   },
   async update(req, res) {
@@ -72,11 +72,11 @@ module.exports = {
         listId,
         { title: listTitle },
         { new: true }
-      );
+      ).lean();
 
       res.send(list);
     } catch (error) {
-      res.status(403).send({ error });
+      res.status(400).send({ error: error.message });
     }
   }
 };

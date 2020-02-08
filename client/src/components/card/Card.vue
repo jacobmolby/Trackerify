@@ -58,8 +58,9 @@
             <span v-if="card.archived" class="mr-2 font-bold text-red-600">(ARCHIVED)</span>
             <h2 v-if="!isEditing" class="text-lg font-bold">{{title}}</h2>
             <input
+              @change="updateCard"
               v-else-if="isEditing"
-              class="px-1 text-lg w-full font-bold bg-gray-100 border rounded focus:outline-none"
+              class="text-lg w-full font-bold bg-gray-100 border rounded focus:outline-none"
               type="text"
               v-model="title"
             />
@@ -78,12 +79,12 @@
             v-model="description"
             :disabled="!this.isEditing"
             :class="[(isEditing ? 'bg-gray-100 border' : ''),(description == 'No description' ? 'italic' : '')]"
-            class="w-10/12 h-16 py-1 bg-transparent resize-none outline-none rounded"
+            class="w-10/12 h-32 py-1 bg-transparent resize-none outline-none rounded"
           ></textarea>
           <button
             v-if="!this.isEditing"
             class="ml-2 px-1 py-2 w-2/12 bg-green-400 rounded text-white focus:outline-none shadow opacity-75"
-            @click="isEditing = !isEditing;"
+            @click="isEditing = !isEditing"
           >Edit</button>
           <button
             v-else
@@ -151,7 +152,7 @@
           Attachments:
           <span class="font-bold text-red-500">NOT IMPLEMENTED YET.</span>
         </div>
-        <button v-if="!card.archived" @click="archiveCard" class="primary-btn w-full">
+        <button v-if="!card.archived" @click="archiveCard" class="btn btn-gray w-full">
           <span>
             <svg class="h-3 w-3 fill-current text-white" viewBox="0 0 20 20">
               <path
@@ -161,7 +162,7 @@
           </span>
           <span class="ml-2">Archive</span>
         </button>
-        <button v-if="card.archived" @click="restoreCard" class="primary-btn w-full">
+        <button v-if="card.archived" @click="restoreCard" class="btn btn-gray w-full">
           <span>
             <svg class="h-3 w-3 fill-current text-white" viewBox="0 0 20 20">
               <path
@@ -230,7 +231,10 @@ export default {
       try {
         await this.$store.dispatch('archiveCard', { cardId });
       } catch (error) {
-        console.log(error.response.data.error);
+        this.$store.dispatch('notify', {
+          message: error.response.data.error,
+          type: 'error'
+        });
       }
     },
     async restoreCard() {
@@ -238,7 +242,10 @@ export default {
       try {
         await this.$store.dispatch('restoreCard', { cardId });
       } catch (error) {
-        console.log(error.response.data.error);
+        this.$store.dispatch('notify', {
+          message: error.response.data.error,
+          type: 'error'
+        });
       }
     },
     async deleteCard() {
@@ -248,7 +255,10 @@ export default {
         await this.$store.dispatch('removeCard', { cardId });
         this.isOpen = false;
       } catch (error) {
-        console.log(error);
+        this.$store.dispatch('notify', {
+          message: error.response.data.error,
+          type: 'error'
+        });
       }
     },
     async updateCard() {
@@ -267,7 +277,10 @@ export default {
         });
         this.isEditing = false;
       } catch (error) {
-        console.log(error);
+        this.$store.dispatch('notify', {
+          message: error.response.data.error,
+          type: 'error'
+        });
       }
     },
     async removeUser(userId) {
@@ -279,9 +292,10 @@ export default {
           boardId: this.$store.state.board._id
         });
       } catch (error) {
-        console.log('error occured');
-
-        console.log(error.response.data.error);
+        this.$store.dispatch('notify', {
+          message: error.response.data.error,
+          type: 'error'
+        });
       }
     }
   },

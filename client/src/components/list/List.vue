@@ -13,12 +13,12 @@
       <input
         v-show="editingTitle"
         @change="updateTitle"
-        v-model="title"
+        v-model.trim="title"
         type="text"
         class="w-full text-gray-700 text-sm font-medium bg-gray-300"
         :class="`_${listId}`"
       />
-      <delete-popup class="ml-2" @deleteFunction="deleteList">{{listTitle}}</delete-popup>
+      <DeletePopup class="ml-2" @deleteFunction="deleteList">{{listTitle}}</DeletePopup>
     </div>
     <div class="flex-1 min-h-0">
       <draggable
@@ -36,7 +36,7 @@
       </draggable>
     </div>
     <!-- ADD CARD BUTTON -->
-    <add-card class="mt-1" :listId="listId"></add-card>
+    <AddCard class="mt-1" :listId="listId"></AddCard>
   </div>
 </template>
 
@@ -67,14 +67,14 @@ export default {
         });
         this.editingTitle = false;
       } catch (error) {
-        console.log(error);
-      }
+this.$store.dispatch('notify', { message: error.response.data.error,type: 'error' });      }
     },
     async deleteList() {
       try {
         await this.$store.dispatch('removeList', { listId: this.listId });
       } catch (error) {
-        console.log(error);
+        this.$store.dispatch('notify', { message: error.response.data.error,type: 'error' });
+
       }
     }
   },
@@ -105,7 +105,7 @@ export default {
             listId: this.listId
           });
         } catch (error) {
-          console.log(error);
+this.$store.dispatch('notify', { message: error.response.data.error,type: 'error' });
         }
       }
     }

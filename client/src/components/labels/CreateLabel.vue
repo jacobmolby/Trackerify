@@ -30,10 +30,7 @@
           >{{this.label.color.hex}}</button>
           <chrome v-if="!pickingColor" class="mx-auto my-2 shadow-none" v-model="label.color"></chrome>
           <div class="text-red-500 font-semibold">{{this.error}}</div>
-          <button
-            type="submit"
-            class="mt-2 py-2 text-white font-semibold bg-green-400 rounded shadow hover:bg-green-500"
-          >Create New Label</button>
+          <button type="submit" class="mt-2 btn btn-gray">Create New Label</button>
         </form>
       </div>
     </portal>
@@ -80,7 +77,7 @@ export default {
           this.pickingColor = false;
           this.isOpen = false;
         } catch (error) {
-          console.log(error);
+          this.error = error.response.data.error;
         }
       }
     }

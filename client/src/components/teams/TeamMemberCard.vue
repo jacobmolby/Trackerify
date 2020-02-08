@@ -15,7 +15,8 @@
       v-if="canRemove"
       :id="user._id"
       :deleteText="'remove'"
-      :color="'gray'"
+      :color="'text-gray-700'"
+      :hoverColor="'text-gray-900'"
     >{{user.name}}</DeletePopup>
   </div>
 </template>

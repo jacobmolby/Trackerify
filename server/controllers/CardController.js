@@ -7,7 +7,7 @@ module.exports = {
 
     const parentList = await List.findById(listId);
     if (!parentList) {
-      return res.status(400).send('A list needs a parent list');
+      return res.status(400).send({ error: 'A card needs a list' });
     }
     const card = new Card({
       title: req.body.title,
@@ -24,29 +24,28 @@ module.exports = {
       await parentList.save();
       res.send(savedCard.toJSON());
     } catch (error) {
-      res.status(403).send({ error });
+      res.status(400).send({ error: error.message });
     }
   },
-  async show(req, res) {},
   async destroy(req, res) {
     const cardId = req.params.id;
     try {
       const card = await Card.findById(cardId);
       const listId = card.list;
       if (!card) {
-        return res.status(403).send({ error: "Card doesn't exist" });
+        return res.status(400).send({ error: "Card doesn't exist" });
       }
-      const result = await Card.findByIdAndDelete(cardId);
+      const result = await card.remove();
       const list = await List.findById(listId);
       list.cards.pull(cardId);
       await list.save();
       if (result) {
-        return res.send(result);
+        return res.send({ message: 'Card was deleted succesfuly' });
       } else {
-        return res.status(403).send({ error: 'Something went wrong' });
+        return res.status(400).send({ error: 'Something went wrong' });
       }
     } catch (error) {
-      res.send({ error: error });
+      res.status(400).send({ error: error.message });
     }
   },
   async update(req, res) {
@@ -56,16 +55,18 @@ module.exports = {
         { _id: cardId },
         { title, description },
         { new: true, useFindAndModify: false }
-      ).populate([
-        { path: 'assignedUsers', select: ['name', 'id', 'profileImage'] },
-        { path: 'comments' },
-        { path: 'labels' },
-        { path: 'attachments' }
-      ]);
+      )
+        .populate([
+          { path: 'assignedUsers', select: ['name', 'id', 'profileImage'] },
+          { path: 'comments' },
+          { path: 'labels' },
+          { path: 'attachments' }
+        ])
+        .lean();
 
       res.send(response);
     } catch (error) {
-      console.log(error);
+      res.status(400).send({ error: error.message });
     }
   }
 };

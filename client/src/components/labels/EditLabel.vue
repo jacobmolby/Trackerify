@@ -34,10 +34,7 @@
             v-model="componentLabel.color"
           ></chrome>
           <div class="text-red-500 font-semibold">{{this.error}}</div>
-          <button
-            type="submit"
-            class="mt-2 py-2 text-white font-semibold bg-blue-400 rounded shadow hover:bg-blue-600"
-          >Save Label</button>
+          <button type="submit" class="mt-2 btn btn-gray">Save Label</button>
         </form>
       </div>
     </portal>
@@ -89,7 +86,7 @@ export default {
           this.pickingColor = false;
           this.isOpen = false;
         } catch (error) {
-          console.log(error);
+          this.error = error.response.data.error;
         }
       } else {
         this.error = 'No values changed.';

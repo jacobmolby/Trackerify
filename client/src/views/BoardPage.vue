@@ -68,17 +68,24 @@
                 <div class="flex items-center">
                   <h1
                     v-if="!editingTitle"
-                    @click="editingTitle = !editingTitle"
                     class="font-semibold text-2xl text-gray-800"
+                    :class="`_${boardId}`"
                   >{{board.title}}</h1>
                   <input
-                    v-else
-                    v-model="title"
+                    v-if="editingTitle"
+                    v-model.trim="title"
                     type="text"
                     class="font-semibold text-2xl bg-gray-300 text-gray-800"
+                    :class="`_${boardId}`"
+                    @change="updateTitle"
                   />
-                  <DeleteBoard :board="board" class="ml-2"></DeleteBoard>
+                  <DeleteBoard
+                    v-if="this.user._id === this.board.owner"
+                    :board="board"
+                    class="ml-2"
+                  ></DeleteBoard>
                 </div>
+                <!-- Users in topbar -->
                 <div class="flex items-center ml-4">
                   <div
                     v-for="user in board.users"
@@ -91,7 +98,7 @@
                       alt="Profile Image"
                     />
                     <div
-                      v-if="user._id !== $store.state.user._id"
+                      v-if="canRemoveUser(user._id)"
                       class="absolute inset-0 flex opacity-0 bg-red-600 rounded-full hover:opacity-100"
                     >
                       <button
@@ -110,6 +117,7 @@
                     </div>
                   </div>
                 </div>
+                <!-- End Users in topbar -->
               </div>
 
               <div class="py-1 flex items-center">
@@ -264,8 +272,6 @@ export default {
     ConnectionLost,
     LoadingSpinner,
     Sidebar,
-    // Card,
-    // AddCard,
     CreatedByMe,
     ListView,
     Archived,
@@ -290,7 +296,10 @@ export default {
             boardId: this.boardId
           });
         } catch (error) {
-          console.log(error);
+          this.$store.dispatch('notify', {
+            message: error.response.data.error,
+            type: 'error'
+          });
         }
       }
     }
@@ -307,34 +316,38 @@ export default {
       }
       this.$store.dispatch('isLoading', false);
     } catch (error) {
-      if (error.response.data.error === "Board doesn't exist") {
+      const errorMessage = error.response.data.error;
+      if (
+        errorMessage === "Board doesn't exist" ||
+        errorMessage === 'User is not member of the board'
+      ) {
+        this.$store.dispatch('notify', { message: errorMessage });
         this.$router.push({ name: 'boardOverview' });
       }
-      console.log(error);
-
-      console.log(error.response.data.error);
     }
   },
   methods: {
+    canRemoveUser(userId) {
+      if (userId === this.user._id && userId !== this.board.owner) return true;
+      if (userId !== this.user._id && this.user._id === this.board.owner)
+        return true;
+      return false;
+    },
     changeViewStyle(style) {
       this.$store.dispatch('changeViewStyle', style);
       this.isOpen = false;
     },
     async removeUser(userId) {
-      this.removeUserError = null;
-      if (userId === this.$store.state.user._id) {
-        return (this.removeUserError = 'You cannot remove yourself');
-      }
       try {
-        await UserBoardService.delete(userId, this.boardId);
-        const storePayload = {
+        this.$store.dispatch('removeUserFromBoard', {
           userId,
           boardId: this.boardId
-        };
-        this.$store.dispatch('removeUserFromBoard', storePayload);
-        this.$socket.emit('removeUserFromBoard', storePayload);
+        });
       } catch (error) {
-        console.log(error.response.data.error);
+        this.$store.dispatch('notify', {
+          message: error.response.data.error,
+          type: 'error'
+        });
       }
     },
     async updateTitle() {
@@ -343,15 +356,13 @@ export default {
 
         return;
       }
-      if (this.title.trim() === '') {
-        //TODO implement an error
-        this.title = 'Enter a title';
+      if (this.title === '') {
+        this.$store.dispatch('notify', {
+          message: "Title can't be empty",
+          type: 'error'
+        });
         return;
       }
-      const payload = {
-        title: this.title,
-        boardId: this.boardId
-      };
       try {
         await this.$store.dispatch('updateBoard', {
           title: this.title,
@@ -359,9 +370,19 @@ export default {
         });
         this.editingTitle = false;
       } catch (error) {
-        console.log(error.response.data.error);
+        this.$store.dispatch('notify', { message: error.response.data.error });
       }
     }
+  },
+  updated() {
+    if (!this.editingTitle) {
+      this.title = this.board.title;
+    }
+
+    this.$nextTick(() => {
+      const input = document.querySelector(`input._${this.boardId}`);
+      if (input) input.focus();
+    });
   },
   created() {
     const handleTitleKeyPresses = e => {
@@ -369,24 +390,36 @@ export default {
         return;
       }
       if (e.key === 'Esc' || e.key === 'Escape') {
+        this.title = this.board.title;
+
         this.editingTitle = false;
       }
-      if (e.key === 'Enter') {
-        this.updateTitle();
+    };
+
+    const handleClickOnTitle = e => {
+      const clickedTitle = e.target.closest(`h1._${this.boardId}`);
+      const clickedInput = e.target.closest(`input._${this.boardId}`);
+      //If clicked on the title, initiate editingmode
+
+      if (!!clickedTitle && !this.editingTitle) {
+        this.editingTitle = true;
+        //If editingmode is on, turn it off
+      } else if (!clickedInput && this.editingTitle) {
+        this.editingTitle = false;
       }
     };
 
     const handleKeydownEvents = e => {
       const store = this.$store;
 
-      if (e.ctrlKey && e.key === 'l') {
+      if (e.altKey && e.key === 'l') {
         e.preventDefault();
         if (store.state.addListIsOpen) {
           store.dispatch('addListIsOpen', false);
         } else {
           store.dispatch('addListIsOpen', true);
         }
-      } else if (e.ctrlKey && e.key === 'u') {
+      } else if (e.altKey && e.key === 'u') {
         e.preventDefault();
         if (store.state.addUserIsOpen) {
           store.dispatch('addUserIsOpen', false);
@@ -398,47 +431,16 @@ export default {
 
     document.addEventListener('keydown', handleKeydownEvents);
     document.addEventListener('keydown', handleTitleKeyPresses);
+    document.addEventListener('click', handleClickOnTitle);
+
     this.$once('hook:beforeDestroy', () => {
       document.removeEventListener('keydown', handleKeydownEvents);
       document.removeEventListener('keydown', handleTitleKeyPresses);
+      document.removeEventListener('click', handleClickOnTitle);
     });
   }
 };
 </script>
 
 <style>
-:focus {
-  outline: 0;
-}
-::-webkit-scrollbar {
-  width: 8px;
-  height: 8px;
-  background-color: rgba(0, 0, 0, 0);
-  -webkit-border-radius: 100px;
-  border-radius: 100px;
-}
-
-::-webkit-scrollbar:hover {
-  background-color: rgba(0, 0, 0, 0.09);
-}
-
-::-webkit-scrollbar-thumb {
-  background: rgba(0, 0, 0, 0.3);
-  -webkit-border-radius: 100px;
-  border-radius: 100px;
-}
-::-webkit-scrollbar-thumb:active {
-  background: rgba(0, 0, 0, 0.5);
-  /*Some darker color when you click it */
-  -webkit-border-radius: 100px;
-  border-radius: 100px;
-}
-
-/* add vertical min-height & horizontal min-width */
-::-webkit-scrollbar-thumb:vertical {
-  min-height: 10px;
-}
-::-webkit-scrollbar-thumb:horizontal {
-  min-width: 10px;
-}
 </style>

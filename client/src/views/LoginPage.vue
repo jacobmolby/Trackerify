@@ -113,7 +113,6 @@ export default {
         });
       } catch (error) {
         this.error = 'Server is down';
-        console.log(error);
 
         if (error.response.data.error) {
           this.error = error.response.data.error;

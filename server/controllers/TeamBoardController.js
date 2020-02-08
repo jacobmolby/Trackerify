@@ -10,12 +10,12 @@ module.exports = {
       const team = await Team.findOneAndUpdate(
         { _id: teamId },
         { $addToSet: { boards: boardId } }
-      );
+      ).lean();
       const users = await User.find({ teams: teamId }).lean();
       await Board.findByIdAndUpdate(boardId, { $addToSet: { users } });
       res.send(team);
     } catch (error) {
-      res.status(400).send({ error });
+      res.status(400).send({ error: error.message });
     }
   },
   async destroy(req, res) {
@@ -28,12 +28,11 @@ module.exports = {
       let users = await User.find({
         teams: teamId
       }).lean();
-      // console.log(users);
       users = users.filter(user => {
         return user._id.toString() !== req.user._id;
       });
 
-      const board = await Board.findByIdAndUpdate(
+      await Board.findByIdAndUpdate(
         boardId,
         {
           $pullAll: { users }
@@ -41,17 +40,14 @@ module.exports = {
         { new: true }
       );
 
-      //TODO remove teammembers from cards that they are assigned to. The code underneath doesn't work
-      // await Card.updateMany(
-      //   { assignedUsers: users, boardId },
-      //   { $pullAll: { assignedUsers: users } }
-      // );
+      await Card.updateMany(
+        { boardId, assignedUsers: users },
+        { $pullAll: { assignedUsers: users } }
+      );
 
       res.send(team);
     } catch (error) {
-      console.log(error);
-
-      res.status(400).send({ error });
+      res.status(400).send({ error: error.message });
     }
   }
 };

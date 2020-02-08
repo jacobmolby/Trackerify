@@ -11,17 +11,23 @@
     <portal to="popup-container-important" v-if="isOpen">
       <button @click="isOpen = false" tabindex="-1" class="popup-bg"></button>
       <div class="popup">
-        <h2 class="text-left text-lg font-semibold">Add User To Card</h2>
+        <div class="flex justify-between items-center">
+          <h2 class="text-left text-lg font-semibold">Add User To Card</h2>
+          <button @click="isOpen = !isOpen">
+            <svg class="h-4 w-4 fill-current" viewBox="0 0 20 20">
+              <path
+                d="M10 8.586L2.929 1.515 1.515 2.929 8.586 10l-7.071 7.071 1.414 1.414L10 11.414l7.071 7.071 1.414-1.414L11.414 10l7.071-7.071-1.414-1.414L10 8.586z"
+              />
+            </svg>
+          </button>
+        </div>
         <form class="pt-3 flex flex-col" @submit.prevent="addUserToCard">
           <select v-model="userId" class="p-2 border-2 rounded">
             <option disabled value>Please select one</option>
             <option v-for="user in notAssignedUsers" :key="user._id" :value="user._id">{{user.name}}</option>
           </select>
           <div class="text-red-500 font-semibold">{{this.error}}</div>
-          <button
-            type="submit"
-            class="mt-2 py-2 text-white bg-indigo-400 rounded shadow hover:bg-indigo-500"
-          >Add User</button>
+          <button type="submit" class="mt-2 btn btn-gray">Add User</button>
         </form>
       </div>
     </portal>

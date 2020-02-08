@@ -18,7 +18,10 @@
 
       <!-- MAIN CONTENT -->
       <div class="flex-1 overflow-auto px-6">
-        <div class="mt-6 flex justify-center flex-col md:flex-row md:flex-wrap">
+        <div
+          v-if="teams.length > 0"
+          class="mt-6 flex justify-center flex-col md:flex-row md:flex-wrap"
+        >
           <div
             class="w-full max-w-xl mt-2 mb-10 flex flex-col mx-5"
             v-for="team in teams"
@@ -26,6 +29,12 @@
           >
             <TeamCard :team="team" />
           </div>
+        </div>
+        <div
+          v-if="teams.length == 0"
+          class="mt-6 flex justify-center flex-col md:flex-row md:flex-wrap"
+        >
+          <div class="m-auto text-4xl p-6 font-light">There are no teams. You should create one.</div>
         </div>
       </div>
       <div v-if="error">{{error}}</div>

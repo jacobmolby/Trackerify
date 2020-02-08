@@ -17,7 +17,7 @@ module.exports = {
       const savedLabel = await label.save();
       res.send(savedLabel.toJSON());
     } catch (error) {
-      res.status(403).send(error);
+      res.status(400).send({ error: error.message });
     }
   },
   async update(req, res) {
@@ -28,24 +28,23 @@ module.exports = {
         labelId,
         { $set: { title, color } },
         { new: true }
-      );
+      ).lean();
 
       res.send(label);
     } catch (error) {
-      console.log(error);
-      res.status(403).send({ error });
+      res.status(400).send({ error: error.message });
     }
   },
   async destroy(req, res) {
-    const { boardId, labelId } = req.params;
+    const { labelId } = req.params;
 
     try {
       const label = await Label.findByIdAndDelete(labelId);
-      const board = await Board.updateMany(
+      await Board.updateMany(
         { labels: { _id: labelId } },
         { $pull: { labels: { _id: labelId } } }
       );
-      const cards = await Card.updateMany(
+      await Card.updateMany(
         { labels: { _id: labelId } },
         { $pull: { labels: { _id: labelId } } }
       );
@@ -53,12 +52,10 @@ module.exports = {
       if (label) {
         return res.send(`Label: "${label.title}" deleted`);
       } else {
-        return res.status(403).send({ error: 'Something went wrong' });
+        return res.status(400).send({ error: 'Something went wrong' });
       }
     } catch (error) {
-      console.log(error);
-
-      res.send({ error: error });
+      res.status(400).send({ error: error.message });
     }
   }
 };

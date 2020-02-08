@@ -12,7 +12,7 @@ module.exports = {
       const savedAttachment = await attachment.save();
       res.send(savedAttachment.toJSON());
     } catch (error) {
-      res.status(400).send({ error });
+      res.status(400).send();
     }
   },
   async destroy(req, res) {
@@ -21,20 +21,20 @@ module.exports = {
     const attachment = await Attachment.findById(id);
 
     if (!attachment) {
-      return res.status(403).send({ error: "Attachment doesn't exist" });
+      return res.status(400).send({ error: "Attachment doesn't exist" });
     } else if (attachment.user != userid) {
-      return res.status(403).send({ error: 'Access Denied' });
+      return res.status(401).send({ error: 'Access Denied' });
     }
     try {
-      const result = await Attachment.findByIdAndDelete(id);
+      const result = attachment.remove();
 
       if (result) {
         return res.send(`Attachment: "${result.title}" deleted`);
       } else {
-        return res.status(403).send({ error: 'Something went wrong' });
+        return res.status(400).send({ error: 'Something went wrong' });
       }
     } catch (error) {
-      res.send({ error: error });
+      res.send({ error: error.message });
     }
   }
 };

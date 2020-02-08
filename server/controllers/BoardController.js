@@ -1,5 +1,6 @@
 const Board = require('../models/Board');
-const User = require('../models/User');
+const List = require('../models/List');
+const Card = require('../models/Card');
 const Label = require('../models/Label');
 const defaultLabels = require('../util/DefaultLabels');
 
@@ -9,10 +10,12 @@ module.exports = {
     const userId = req.user._id;
 
     try {
-      const boards = await Board.find({ users: userId }).populate();
+      const boards = await Board.find({ users: userId })
+        .populate()
+        .lean();
       res.send(boards);
     } catch (error) {
-      res.status(400).send({ error });
+      res.status(400).send({ error: error.message });
     }
   },
   async create(req, res) {
@@ -29,13 +32,12 @@ module.exports = {
       const savedBoard = await board.save();
       res.send(savedBoard.toJSON());
     } catch (error) {
-      console.log(error);
-
-      res.status(400).send({ error });
+      res.status(400).send({ error: error.message });
     }
   },
   async show(req, res) {
     const { id } = req.params;
+    const userId = req.user._id;
 
     if (mongoose.Types.ObjectId.isValid(id)) {
       try {
@@ -69,15 +71,18 @@ module.exports = {
           })
           .populate({
             path: 'labels'
-          });
+          })
+          .lean();
 
         if (!board) {
           return res.status(400).send({ error: "Board doesn't exist" });
         }
-        if (board.users.find(user => user._id === req.user._id)) {
+
+        //Authorizing the user
+        if (!board.users.find(user => user._id.toString() === userId)) {
           return res
             .status(401)
-            .send({ error: 'User not member of the board' });
+            .send({ error: 'User is not member of the board' });
         }
 
         res.send(board);
@@ -85,32 +90,59 @@ module.exports = {
         res.send(error);
       }
     } else {
-      return res.status(400).send({ error: "ID isn't valid" });
+      return res.status(400).send({ error: "Board doesn't exist" });
     }
   },
   async update(req, res) {
     const { boardId, title } = req.body;
-    //TODO check if user is part of board
+    const userId = req.user._id;
     try {
-      const board = await Board.findByIdAndUpdate(
-        boardId,
-        { $set: { title } },
-        { new: true }
-      );
-      res.send(board);
+      const board = await Board.findById(boardId);
+      //Authorizing the user
+      if (!board.users.find(user => user._id.toString() === userId)) {
+        res.status(401).send({ error: 'Access denied' });
+      }
+      board.title = title;
+      const response = await board.save();
+
+      res.send(response);
     } catch (error) {
-      res.status(400).send({ error });
+      res.status(400).send({ error: error.message });
     }
   },
   async destroy(req, res) {
-    //TODO Check if the person deleting the board is part of it
-    const id = req.params.id;
-    const board = await Board.findById(id);
-    if (!board) {
-      return res.status(400).send({ error: "Board doesn't exist" });
-    }
+    const { id } = req.params;
+    const userId = req.user._id;
+
     try {
-      const result = await Board.findByIdAndDelete(id);
+      const board = await Board.findById(id)
+        .select('lists owner')
+        .populate({
+          path: 'lists',
+          populate: {
+            path: 'cards'
+          }
+        });
+
+      if (!board) {
+        return res.status(400).send({ error: "Board doesn't exist" });
+      }
+
+      //Authorizing the user
+      if (userId !== board.owner.toString()) {
+        return res
+          .status(401)
+          .send({ error: 'User is not member of the board' });
+      }
+
+      board.lists.forEach(async list => {
+        list.cards.forEach(async card => {
+          await Card.findByIdAndDelete(card._id);
+        });
+        await List.findByIdAndDelete(list._id);
+      });
+
+      const result = await board.remove();
 
       if (result) {
         return res.send(`Board: "${result.title}" deleted`);
@@ -118,7 +150,7 @@ module.exports = {
         return res.status(400).send({ error: 'Something went wrong' });
       }
     } catch (error) {
-      res.send({ error: error });
+      res.status(400).send({ error: error.message });
     }
   }
 };

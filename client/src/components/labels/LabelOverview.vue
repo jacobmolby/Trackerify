@@ -1,6 +1,6 @@
 <template>
   <div>
-    <button class="primary-btn w-full" @click="isOpen = !isOpen">
+    <button class="btn btn-gray w-full" @click="isOpen = !isOpen">
       <svg class="h-3 w-3 hidden sm:block fill-current" viewBox="0 0 20 20">
         <path d="M12.3 3.7l4 4L4 20H0v-4L12.3 3.7zm1.4-1.4L16 0l4 4-2.3 2.3-4-4z" />
       </svg>
@@ -26,13 +26,14 @@
 
         <ul class="flex-col">
           <li class="mt-2 pb-2 border-b flex" v-for="label in labels" :key="label._id">
-            <delete-popup
-              v-if="!usedOnCard || labelAlreadOnCard(label._id)"
-              :deleteText="usedOnCard ? 'remove':'delete'"
+            <DeletePopup
+              class="mr-3"
+              v-if="!usedOnCard "
+              :deleteText="'delete'"
               :id="label._id"
               @deleteFunction="deleteLabel"
-            >{{label.title}}</delete-popup>
-            <div class="ml-3 w-full flex items-center justify-between">
+            >{{label.title}}</DeletePopup>
+            <div class="w-full flex items-center justify-between">
               <button
                 v-if="usedOnCard && !labelAlreadOnCard(label._id)"
                 @click="addLabelToCard(label)"
@@ -40,9 +41,15 @@
                 <Label :color="label.color">{{label.title}}</Label>
               </button>
               <div v-else class="flex items-center">
-                <svg v-if="usedOnCard" class="w-2 h-2 mr-2" viewBox="0 0 20 20">
-                  <path d="M0 11l2-2 5 5L18 3l2 2L7 18z" />
-                </svg>
+                <button
+                  v-if="usedOnCard && labelAlreadOnCard(label._id)"
+                  @click="removeLabel(label._id)"
+                  class="p-2 mr-1 hover:text-red-600 hover:bg-red-500 rounded-full"
+                >
+                  <svg class="w-2 h-2 fill-current" viewBox="0 0 20 20">
+                    <path d="M0 11l2-2 5 5L18 3l2 2L7 18z" />
+                  </svg>
+                </button>
 
                 <Label :color="label.color">{{label.title}}</Label>
               </div>
@@ -104,26 +111,22 @@ export default {
       return !!this.card.labels.some(label => label._id === labelId);
     },
     async deleteLabel(labelId) {
-      if (!this.usedOnCard) {
-        try {
-          await this.$store.dispatch('removeLabelFromBoard', {
-            boardId: this.boardId,
-            labelId
-          });
-        } catch (error) {
-          console.log(error.response.data.error);
-        }
-      } else {
-        try {
-          await this.$store.dispatch('removeLabelFromCard', {
-            cardId: this.cardId,
-            labelId
-          });
-        } catch (error) {
-          console.log(error);
-
-          // console.log(error.response.data.error);
-        }
+      try {
+        await this.$store.dispatch('removeLabelFromBoard', {
+          boardId: this.boardId,
+          labelId
+        });
+      } catch (error) {
+this.$store.dispatch('notify', { message: error.response.data.error,type: 'error' });      }
+    },
+    async removeLabel(labelId) {
+      try {
+        await this.$store.dispatch('removeLabelFromCard', {
+          cardId: this.cardId,
+          labelId
+        });
+      } catch (error) {
+       this.$store.dispatch('notify', { message: error.response.data.error,type: 'error' });
       }
     },
     async addLabelToCard(label) {
@@ -133,8 +136,7 @@ export default {
           newLabel: label
         });
       } catch (error) {
-        console.log(error);
-      }
+this.$store.dispatch('notify', { message: error.response.data.error,type: 'error' });      }
     }
   },
   created() {
