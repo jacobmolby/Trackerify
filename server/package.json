@@ -4,7 +4,8 @@
   "description": "REST api server",
   "main": "index.js",
   "scripts": {
-    "dev": "nodemon index.js"
+    "dev": "nodemon index.js",
+    "start": "node index.js"
   },
   "author": "Jacob Mølby",
   "license": "MIT",
@@ -15,9 +16,11 @@
   "dependencies": {
     "@hapi/joi": "^16.1.7",
     "bcryptjs": "^2.4.3",
+    "compression": "^1.7.4",
     "cors": "^2.8.5",
     "dotenv": "^8.2.0",
     "express": "^4.17.1",
+    "helmet": "^3.21.2",
     "jsonwebtoken": "^8.5.1",
     "mongoose": "^5.7.7",
     "morgan": "^1.9.1",
