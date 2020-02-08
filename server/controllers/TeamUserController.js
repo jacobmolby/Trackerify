@@ -20,7 +20,7 @@ module.exports = {
       });
       res.send(user);
     } catch (error) {
-      res.status(403).send({ error });
+      res.status(400).send({ error: error.message });
     }
   },
   async destroy(req, res) {
@@ -42,7 +42,7 @@ module.exports = {
 
       res.send(user);
     } catch (error) {
-      res.status(403).send({ error });
+      res.status(400).send({ error: error.message });
     }
   }
 };

@@ -16,6 +16,7 @@ import teams from './modules/team.store';
 import getters from './getters';
 
 import AuthenticationService from '../services/AuthenticationService';
+import UserService from '../services/UserService';
 
 Vue.use(Vuex);
 
@@ -48,7 +49,8 @@ export const store = new Vuex.Store({
       message: '',
       showing: false,
       type: 'normal'
-    }
+    },
+    welcomeMessage: false
   },
   getters,
 
@@ -74,6 +76,10 @@ export const store = new Vuex.Store({
     },
     setUser(state, user) {
       state.user = user;
+      //Show welcome message
+      if (user && !user.hasReadWelcomeMessage) {
+        state.welcomeMessage = true;
+      }
     },
     setBoard(state, board) {
       state.board = board;
@@ -178,6 +184,9 @@ export const store = new Vuex.Store({
 
     addUserIsOpen(state, bool) {
       state.addUserIsOpen = bool;
+    },
+    closeWelcomeMessage(state) {
+      state.welcomeMessage = false;
     }
   },
   actions: {
@@ -240,6 +249,10 @@ export const store = new Vuex.Store({
     notify({ commit }, { message, type }) {
       if (type === undefined) type = 'normal';
       commit('notify', { message, type });
+    },
+    closeWelcomeMessage({ commit }, dontShowAgain) {
+      UserService.put({ hasReadWelcomeMessage: dontShowAgain });
+      commit('closeWelcomeMessage');
     }
   }
 });

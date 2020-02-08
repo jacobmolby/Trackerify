@@ -14,7 +14,7 @@ module.exports = {
       await Board.findByIdAndUpdate(boardId, { $addToSet: { users } });
       res.send(team);
     } catch (error) {
-      res.status(400).send({ error });
+      res.status(400).send({ error: error.message });
     }
   },
   async destroy(req, res) {
@@ -48,9 +48,7 @@ module.exports = {
 
       res.send(team);
     } catch (error) {
-      console.log(error);
-
-      res.status(400).send({ error });
+      res.status(400).send({ error: error.message });
     }
   }
 };

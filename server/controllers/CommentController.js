@@ -11,7 +11,7 @@ module.exports = {
 
     const card = await Card.findById(req.body.cardId);
     if (!card) {
-      return res.status(400).send('A comment needs a card');
+      return res.status(400).send({ error: 'A comment needs a card' });
     }
 
     try {
@@ -28,7 +28,7 @@ module.exports = {
 
       res.send(savedComment);
     } catch (error) {
-      res.status(403).send({ error });
+      res.status(400).send({ error: error.message });
     }
   },
   async destroy(req, res) {
@@ -41,7 +41,7 @@ module.exports = {
       if (!comment) {
         return res.status(400).send({ error: "Comment doesn't exist" });
       } else if (comment.user != userid) {
-        return res.status(403).send({ error: 'Access Denied' });
+        return res.status(401).send({ error: 'Access Denied' });
       }
       const card = await Card.findById(comment.cardId);
       card.comments.pull(commentId);
@@ -51,12 +51,10 @@ module.exports = {
       if (result) {
         return res.send(`Comment with content: "${result.content}" deleted`);
       } else {
-        return res.status(403).send({ error: 'Something went wrong' });
+        return res.status(400).send({ error: 'Something went wrong' });
       }
     } catch (error) {
-      console.log(error);
-
-      res.status(403).send({ error: error });
+      res.status(400).send({ error: error.message });
     }
   }
 };

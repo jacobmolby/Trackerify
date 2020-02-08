@@ -39,8 +39,8 @@ module.exports = {
         user: savedUserJson,
         token: jwtSignUser(savedUserJson)
       });
-    } catch (err) {
-      res.status(400).send({ error: err });
+    } catch (error) {
+      res.status(400).send({ error: error.message });
     }
   },
   async login(req, res) {
@@ -50,12 +50,12 @@ module.exports = {
         path: 'boards',
         select: ['_id', 'title', 'users', 'lists']
       });
-      if (!user) return res.status(403).send({ error: "Email doesn't exist." });
+      if (!user) return res.status(400).send({ error: "Email doesn't exist." });
 
       //Check correct password
       const validPass = await bcrypt.compare(req.body.password, user.password);
       if (!validPass)
-        return res.status(403).send({ error: 'Password is wrong.' });
+        return res.status(400).send({ error: 'Password is wrong.' });
 
       user.password = undefined;
       user.created = undefined;
@@ -69,9 +69,7 @@ module.exports = {
         token
       });
     } catch (error) {
-      console.log(error);
-
-      res.status(403).send({ error });
+      res.status(400).send({ error: error.message });
     }
   }
 };

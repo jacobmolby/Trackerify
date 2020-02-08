@@ -1,4 +1,4 @@
-/* eslint-disable no-debugger */
+/* eslint-disable no-console */
 import { get } from 'lodash';
 import socket from '../../socketInstance';
 
@@ -22,7 +22,8 @@ export default store => {
       'setTeams',
       'SOCKET_DISCONNECT',
       'SOCKET_CONNECT',
-      'notify'
+      'notify',
+      'closeWelcomeMessage'
     ];
 
     const isBlacklisted = blackListedMutations.includes(type);

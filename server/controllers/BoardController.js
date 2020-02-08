@@ -12,7 +12,7 @@ module.exports = {
       const boards = await Board.find({ users: userId }).populate();
       res.send(boards);
     } catch (error) {
-      res.status(400).send({ error });
+      res.status(400).send({ error: error.message });
     }
   },
   async create(req, res) {
@@ -31,7 +31,7 @@ module.exports = {
     } catch (error) {
       console.log(error);
 
-      res.status(400).send({ error });
+      res.status(400).send({ error: error.message });
     }
   },
   async show(req, res) {
@@ -80,7 +80,7 @@ module.exports = {
         if (!board.users.find(user => user._id.toString() === userId)) {
           return res
             .status(401)
-            .send({ error: 'User not member of the board' });
+            .send({ error: 'User is not member of the board' });
         }
 
         res.send(board);
@@ -102,7 +102,7 @@ module.exports = {
       );
       res.send(board);
     } catch (error) {
-      res.status(400).send({ error });
+      res.status(400).send({ error: error.message });
     }
   },
   async destroy(req, res) {
@@ -117,7 +117,7 @@ module.exports = {
 
       //Authorizing the user
       if (!board.users.find(user => user._id.toString() === userId)) {
-        return res.status(401).send({ error: 'User not member of the board' });
+        return res.status(401).send({ error: 'User is not member of the board' });
       }
 
       const result = await board.remove();
@@ -128,7 +128,7 @@ module.exports = {
         return res.status(400).send({ error: 'Something went wrong' });
       }
     } catch (error) {
-      res.send({ error: error.message });
+      res.status(400).send({ error: error.message });
     }
   }
 };

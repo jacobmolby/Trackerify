@@ -7,7 +7,7 @@ module.exports = {
 
     const parentList = await List.findById(listId);
     if (!parentList) {
-      return res.status(400).send('A list needs a parent list');
+      return res.status(400).send({ error: 'A card needs a list' });
     }
     const card = new Card({
       title: req.body.title,
@@ -24,7 +24,7 @@ module.exports = {
       await parentList.save();
       res.send(savedCard.toJSON());
     } catch (error) {
-      res.status(403).send({ error });
+      res.status(400).send({ error: error.message });
     }
   },
   async show(req, res) {},
@@ -34,7 +34,7 @@ module.exports = {
       const card = await Card.findById(cardId);
       const listId = card.list;
       if (!card) {
-        return res.status(403).send({ error: "Card doesn't exist" });
+        return res.status(400).send({ error: "Card doesn't exist" });
       }
       const result = await Card.findByIdAndDelete(cardId);
       const list = await List.findById(listId);
@@ -43,10 +43,10 @@ module.exports = {
       if (result) {
         return res.send(result);
       } else {
-        return res.status(403).send({ error: 'Something went wrong' });
+        return res.status(400).send({ error: 'Something went wrong' });
       }
     } catch (error) {
-      res.send({ error: error });
+      res.status(400).send({ error: error.message });
     }
   },
   async update(req, res) {
@@ -65,7 +65,7 @@ module.exports = {
 
       res.send(response);
     } catch (error) {
-      console.log(error);
+      res.status(400).send({ error: error.message });
     }
   }
 };

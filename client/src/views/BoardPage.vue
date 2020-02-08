@@ -296,7 +296,10 @@ export default {
             boardId: this.boardId
           });
         } catch (error) {
-          console.log(error);
+          this.$store.dispatch('notify', {
+            message: error.response.data.error,
+            type: 'error'
+          });
         }
       }
     }
@@ -411,16 +414,14 @@ export default {
     const handleKeydownEvents = e => {
       const store = this.$store;
 
-      if (e.ctrlKey && e.key === 'l') {
-        console.log(e.key);
-
+      if (e.altKey && e.key === 'l') {
         e.preventDefault();
         if (store.state.addListIsOpen) {
           store.dispatch('addListIsOpen', false);
         } else {
           store.dispatch('addListIsOpen', true);
         }
-      } else if (e.ctrlKey && e.key === 'u') {
+      } else if (e.altKey && e.key === 'u') {
         e.preventDefault();
         if (store.state.addUserIsOpen) {
           store.dispatch('addUserIsOpen', false);

@@ -56,6 +56,7 @@
       ></button>
     </div>
     <LoadingSpinner v-if="isLoading" class="mt-10 flex items-center justify-center" />
+    <WelcomeMessage />
   </div>
 </template>
 
@@ -66,6 +67,7 @@ import LoadingSpinner from '../components/reusables/LoadingSpinner';
 import CreateBoard from '../components/board/CreateBoard';
 import TheTopbar from '../components/TheTopbar';
 import Sidebar from '../components/Sidebar';
+import WelcomeMessage from '../components/WelcomeMessage';
 import BoardService from '../services/BoardService';
 export default {
   name: 'boardOverview',
@@ -79,7 +81,8 @@ export default {
     CreateBoard,
     TheTopbar,
     Sidebar,
-    LoadingSpinner
+    LoadingSpinner,
+    WelcomeMessage
   },
   computed: {
     ...mapState(['user', 'isLoading'])

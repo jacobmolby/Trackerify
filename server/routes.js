@@ -16,9 +16,11 @@ const teamRoutes = require('./routes/team.routes');
 const teamUserRoutes = require('./routes/teamUser.routes');
 const teamBoardRoutes = require('./routes/teamBoard.routes');
 const boardSearchRoutes = require('./routes/boardSearch.routes');
+const userRoutes = require('./routes/user.routes');
 
 module.exports = app => {
   app.use('/api/auth', authRoutes);
+  app.use('/api/user', userRoutes);
   app.use('/api/board/search', boardSearchRoutes);
   app.use('/api/board/user', userBoardRoutes);
   app.use('/api/board', boardRoutes);

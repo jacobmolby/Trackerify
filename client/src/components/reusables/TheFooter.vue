@@ -1,7 +1,11 @@
 <template>
   <footer class="absolute bottom-0 pt-16 pb-6 text-sm text-center md:text-left fade-in">
     <span class="text-gray-500 no-underline hover:no-underline">
-      &copy; Jacob Mølby 2020
+      &copy; Jacob Mølby 2020 -
+      <a
+        class="hover:text-gray-900"
+        href="https://www.termsfeed.com/privacy-policy/dacfeadef9ec30aa49ef22a20cfaaddf"
+      >Privacy Policy</a>
       <br />This page is designed by
       <a
         class="hover:text-gray-900"

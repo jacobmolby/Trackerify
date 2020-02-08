@@ -13,7 +13,7 @@ module.exports = {
       );
       res.send(card);
     } catch (error) {
-      res.status(403).send({ error });
+      res.status(400).send({ error: error.message });
     }
   },
   //Un-Archives a given card
@@ -29,7 +29,7 @@ module.exports = {
       );
       res.send(card);
     } catch (error) {
-      res.status(403).send({ error });
+      res.status(400).send({ error: error.message });
     }
   }
 };

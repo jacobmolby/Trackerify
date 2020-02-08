@@ -10,7 +10,6 @@ module.exports = (req, res, next) => {
     req.user = verified.user;
     next();
   } catch (error) {
-    console.log('Invalid Token');
     res.status(400).send({ error: 'Invalid Token' });
   }
 };

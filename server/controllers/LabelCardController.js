@@ -12,8 +12,7 @@ module.exports = {
       const response = await card.save();
       res.send(response);
     } catch (error) {
-      console.log(error);
-      res.status(400).send({ error });
+      res.status(400).send({ error: error.message });
     }
   },
   async destroy(req, res) {
@@ -25,8 +24,7 @@ module.exports = {
       const response = await card.save();
       res.send(response);
     } catch (error) {
-      console.log(error);
-      res.status(400).send({ error });
+      res.status(400).send({ error: error.message });
     }
   }
 };

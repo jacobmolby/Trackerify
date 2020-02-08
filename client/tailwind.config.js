@@ -50,6 +50,7 @@ module.exports = {
   },
   plugins: [
     require('tailwindcss-transforms')({ '3d': false }),
-    require('tailwindcss-transitions')()
+    require('tailwindcss-transitions')(),
+    require('@tailwindcss/custom-forms')
   ]
 };

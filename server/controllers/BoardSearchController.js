@@ -29,9 +29,7 @@ module.exports = {
       }
       res.send(boards);
     } catch (error) {
-      console.log(error);
-
-      res.status(400).send({ error });
+      res.status(400).send({ error: error.message });
     }
   }
 };

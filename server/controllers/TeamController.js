@@ -24,7 +24,7 @@ module.exports = {
       }
       res.send(teams);
     } catch (error) {
-      res.status(400).send({ error });
+      res.status(400).send({ error: error.message });
     }
   },
   async create(req, res) {
@@ -54,9 +54,7 @@ module.exports = {
 
       res.send(savedTeam);
     } catch (error) {
-      console.log(error);
-
-      res.status(400).send({ error });
+      res.status(400).send({ error: error.message });
     }
   },
   async update(req, res) {
@@ -69,7 +67,7 @@ module.exports = {
       ).lean();
       res.send(team);
     } catch (error) {
-      res.status(400).send({ error });
+      res.status(400).send({ error: error.message });
     }
   },
   async destroy(req, res) {
@@ -83,7 +81,7 @@ module.exports = {
       );
       res.send(team);
     } catch (error) {
-      res.status(400).send({ error });
+      res.status(400).send({ error: error.message });
     }
   }
 };
