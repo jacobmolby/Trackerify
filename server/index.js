@@ -6,6 +6,8 @@ const io = require('socket.io')(server);
 const morgan = require('morgan');
 const mongoose = require('mongoose');
 const cors = require('cors');
+const compression = require('compression');
+const helmet = require('helmet');
 
 //Import Config
 require('dotenv').config();
@@ -50,6 +52,8 @@ mongoose.connect(
 app.use(morgan('tiny'));
 
 //Other Middleware
+app.use(compression());
+app.use(helmet());
 app.use(cors());
 app.use(express.json());
 
