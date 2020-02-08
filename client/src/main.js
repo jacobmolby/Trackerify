@@ -9,7 +9,7 @@ import '@/assets/css/tailwind.css';
 
 import router from './router';
 
-const development = !process.env.NETLIFY;
+const development = process.env.NODE_ENV == 'development';
 
 Vue.use(VueRouter);
 Vue.use(PortalVue);
