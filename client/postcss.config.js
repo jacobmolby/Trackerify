@@ -1,3 +1,5 @@
+const development = process.env.NODE_ENV == 'development';
+
 // postcss.config.js
 const purgecss = require('@fullhuman/postcss-purgecss')({
   // Specify the paths to all of the template files in your project
@@ -15,6 +17,6 @@ module.exports = {
   plugins: [
     require('tailwindcss')('./tailwind.config.js'),
     require('autoprefixer'),
-    ...(process.env.NETLIFY ? [purgecss] : [])
+    ...(!development ? [purgecss] : [])
   ]
 };
