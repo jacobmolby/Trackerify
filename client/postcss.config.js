@@ -1,4 +1,4 @@
-const development = process.env.NODE_ENV == 'development';
+const development = process.env.VUE_APP_DEBUG !== 'FALSE';
 
 // postcss.config.js
 const purgecss = require('@fullhuman/postcss-purgecss')({
