@@ -10,6 +10,7 @@ module.exports = io => {
         : false;
       socket.tokenIsVerified = verified;
     } catch (error) {
+      console.log(error);
       socket.tokenIsVerified = false;
     }
 
