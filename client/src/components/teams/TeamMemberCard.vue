@@ -49,7 +49,10 @@ export default {
           userId: this.user._id
         });
       } catch (error) {
-        console.log(error);
+        this.$store.dispatch('notify', {
+          message: error.response.data.error,
+          type: 'error'
+        });
       }
     }
   },

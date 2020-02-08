@@ -92,7 +92,10 @@ export default {
         });
         this.editingTitle = false;
       } catch (error) {
-        console.log(error);
+        this.$store.dispatch('notify', {
+          message: error.response.data.error,
+          type: 'error'
+        });
       }
     },
     async leaveTeam() {
@@ -101,7 +104,10 @@ export default {
       try {
         await this.$store.dispatch('leaveTeam', { teamId, userId });
       } catch (error) {
-        console.log(error.response.data.error);
+        this.$store.dispatch('notify', {
+          message: error.response.data.error,
+          type: 'error'
+        });
       }
     },
     async deleteTeam() {
@@ -109,7 +115,10 @@ export default {
       try {
         await this.$store.dispatch('deleteTeam', teamId);
       } catch (error) {
-        console.log(error.response.data.error);
+        this.$store.dispatch('notify', {
+          message: error.response.data.error,
+          type: 'error'
+        });
       }
     }
   },
