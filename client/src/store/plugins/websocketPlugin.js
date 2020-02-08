@@ -5,7 +5,7 @@ import socket from '../../socketInstance';
 export default store => {
   if (!store.state.token) return;
   store.subscribe(({ type, payload }) => {
-    const development = process.env.NODE_ENV == 'development';
+    const development = process.env.DEBUG !== 'FALSE';
     if (development) console.log('Mutation:', type);
 
     // The mutation comes in the format of `{ type, payload }`.
