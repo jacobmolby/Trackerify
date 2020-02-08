@@ -1,3 +1,4 @@
+/* eslint-disable no-console */
 // Import Dependencies
 const express = require('express');
 const app = express();
@@ -15,8 +16,7 @@ const port = process.env.PORT || 8000;
 const DB_USER = process.env.DB_USER;
 const DB_PASS = process.env.DB_PASS;
 const DB_URL = process.env.DB_URL;
-const DB_COLLECTION =
-  process.env.DB_COLLECTION || 'test?retryWrites=true&w=majority';
+const DB_COLLECTION = process.env.DB_COLLECTION;
 const connectionString = `mongodb+srv://${DB_USER}:${DB_PASS}@${DB_URL}${DB_COLLECTION}`;
 
 console.log = (function(log, inspect) {

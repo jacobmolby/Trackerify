@@ -15,12 +15,11 @@ module.exports = {
         return res.status(400).send({ error: 'A comment needs a card' });
       }
       let savedComment = await comment.save();
-      savedComment = await savedComment
-        .populate({
-          path: 'user',
-          select: ['name', '_id']
-        })
-        .lean();
+      savedComment._doc.user = {
+        _id: req.user._id,
+        name: req.user.name
+      };
+
       const commentId = savedComment._id;
       card.comments.addToSet(commentId);
       await card.save();
@@ -48,7 +47,9 @@ module.exports = {
       const result = await comment.remove();
 
       if (result) {
-        return res.send(`Comment with content: "${result.content}" deleted`);
+        return res.send({
+          message: `Comment with content: "${result.content}" deleted`
+        });
       } else {
         return res.status(400).send({ error: 'Something went wrong' });
       }

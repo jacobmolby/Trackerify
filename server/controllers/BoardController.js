@@ -2,6 +2,7 @@ const Board = require('../models/Board');
 const List = require('../models/List');
 const Card = require('../models/Card');
 const Label = require('../models/Label');
+const Comment = require('../models/Comment');
 const defaultLabels = require('../util/DefaultLabels');
 
 const mongoose = require('mongoose');
@@ -120,9 +121,18 @@ module.exports = {
         .populate({
           path: 'lists',
           populate: {
-            path: 'cards'
+            path: 'cards',
+            populate: [
+              {
+                path: 'comments'
+              },
+              {
+                path: 'labels'
+              }
+            ]
           }
-        });
+        })
+        .populate('labels');
 
       if (!board) {
         return res.status(400).send({ error: "Board doesn't exist" });
@@ -137,9 +147,16 @@ module.exports = {
 
       board.lists.forEach(async list => {
         list.cards.forEach(async card => {
+          card.comments.forEach(async comment => {
+            await Comment.findByIdAndDelete(comment._id);
+          });
           await Card.findByIdAndDelete(card._id);
         });
         await List.findByIdAndDelete(list._id);
+      });
+
+      board.labels.forEach(async label => {
+        await Label.findByIdAndDelete(label._id);
       });
 
       const result = await board.remove();
