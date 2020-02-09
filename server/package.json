@@ -9,6 +9,9 @@
   },
   "author": "Jacob Mølby",
   "license": "MIT",
+  "engines": {
+    "node": "10.x"
+  },
   "devDependencies": {
     "nodemon": "^1.19.4",
     "eslint": "^6.8.0"
