@@ -12,7 +12,7 @@ const helmet = require('helmet');
 
 //Import Config
 require('dotenv').config();
-const port = process.env.PORT || 8000;
+const port = process.env.PORT || 8001;
 const DB_USER = process.env.DB_USER;
 const DB_PASS = process.env.DB_PASS;
 const DB_URL = process.env.DB_URL;

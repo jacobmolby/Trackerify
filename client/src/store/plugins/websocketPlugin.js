@@ -6,6 +6,8 @@ export default store => {
   if (!store.state.token) return;
   store.subscribe(({ type, payload }) => {
     const development = process.env.VUE_APP_DEBUG !== 'FALSE';
+    console.log(development);
+
     if (development) console.log('Mutation:', type);
 
     // The mutation comes in the format of `{ type, payload }`.
