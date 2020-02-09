@@ -200,7 +200,7 @@ export default {
       } catch (error) {
         this.error = 'Server is down';
 
-        if (error.response.data.error) {
+        if (error.respose) {
           this.error = error.response.data.error;
         }
       }

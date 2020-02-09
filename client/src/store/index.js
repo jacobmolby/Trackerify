@@ -104,6 +104,7 @@ export const store = new Vuex.Store({
       const { token, user } = (
         await AuthenticationService.login(loginPayload)
       ).data;
+
       socketInstance.query.token = token;
       socketInstance.disconnect();
       socketInstance.connect();

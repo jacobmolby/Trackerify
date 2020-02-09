@@ -1,6 +1,7 @@
 import axios from 'axios';
 import { store } from '@/store/';
 import { API_URL } from '../config';
+import { token } from '../utilities/getTokenFromLocalStorage';
 
 export default () => {
   return axios.create({
@@ -8,7 +9,7 @@ export default () => {
     timeout: 30000,
     //Assign the token, to use protected routes (every right now).
     headers: {
-      Authorization: 'Bearer ' + store.state.token
+      Authorization: 'Bearer ' + token()
     }
   });
 };
