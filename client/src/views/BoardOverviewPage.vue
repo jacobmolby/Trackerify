@@ -102,6 +102,10 @@ export default {
       await this.setBoardOverview();
     } catch (error) {
       this.error = error.response.data.error;
+      this.$store.dispatch('notify', { message: this.error, type: 'error' });
+      if (this.error == 'Invalid Token') {
+        this.$store.dispatch('logout', true);
+      }
     }
   }
 };

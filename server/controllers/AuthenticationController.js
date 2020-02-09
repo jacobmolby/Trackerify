@@ -64,7 +64,7 @@ module.exports = {
 
       //Create and assign JWT
       const token = jwtSignUser(userJson);
-      res.header('auth-token', token).send({
+      res.header('Authentication', 'Bearer ' + token).send({
         user: userJson,
         token
       });
