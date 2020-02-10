@@ -17,6 +17,7 @@ const teamUserRoutes = require('./routes/teamUser.routes');
 const teamBoardRoutes = require('./routes/teamBoard.routes');
 const boardSearchRoutes = require('./routes/boardSearch.routes');
 const userRoutes = require('./routes/user.routes');
+const emailRoutes = require('./routes/email.routes');
 
 module.exports = app => {
   app.use('/api/auth', authRoutes);
@@ -38,4 +39,5 @@ module.exports = app => {
   app.use('/api/team', teamRoutes);
   app.use('/api/team/user', teamUserRoutes);
   app.use('/api/team/board', teamBoardRoutes);
+  app.use('/api/user/email', emailRoutes);
 };
