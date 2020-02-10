@@ -1,6 +1,6 @@
 import BoardService from '../../services/BoardService';
 import UserBoardService from '../../services/UserBoardService';
-
+import Vue from 'vue';
 import Router from '../../router';
 
 export default {
@@ -12,7 +12,13 @@ export default {
       state.board = board;
     },
     createBoard(state, board) {
-      state.user.boards.push(board);
+      //Don't know why, but if a user logs in and have no boards it isn't reactive
+      //So it i have to set the whole user object again
+      if (!state.user.boards.length) {
+        state.user = { ...state.user, boards: [board] };
+      } else {
+        state.user.boards.push(board);
+      }
     },
     updateBoard(state, board) {
       state.board.title = board.title;

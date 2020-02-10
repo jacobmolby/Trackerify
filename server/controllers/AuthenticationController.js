@@ -20,14 +20,14 @@ module.exports = {
       const salt = await bcrypt.genSalt(10);
       const hashPassword = await bcrypt.hash(req.body.password, salt);
 
-      const gender = Math.random() > 0.5 ? 'men' : 'women';
-      const imageNumber = Math.floor(Math.random() * 10);
-      const profileImage = `https://randomuser.me/api/portraits/${gender}/${imageNumber}.jpg`;
+      // const gender = Math.random() > 0.5 ? 'men' : 'women';
+      // const imageNumber = Math.floor(Math.random() * 10);
+      // const profileImage = `https://randomuser.me/api/portraits/${gender}/${imageNumber}.jpg`;
       const user = new User({
         name: req.body.name,
         email: req.body.email,
-        password: hashPassword,
-        profileImage
+        password: hashPassword
+        // profileImage
       });
       const savedUser = await user.save();
       user.password = undefined;
