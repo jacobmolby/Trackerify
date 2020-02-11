@@ -19,6 +19,7 @@ const boardSearchRoutes = require('./routes/boardSearch.routes');
 const userRoutes = require('./routes/user.routes');
 const emailRoutes = require('./routes/email.routes');
 const passwordRoutes = require('./routes/password.routes');
+const profileImageRoutes = require('./routes/profileImage.routes');
 
 module.exports = app => {
   app.use('/api/auth', authRoutes);
@@ -42,4 +43,5 @@ module.exports = app => {
   app.use('/api/team/board', teamBoardRoutes);
   app.use('/api/user/email', emailRoutes);
   app.use('/api/user/password', passwordRoutes);
+  app.use('/api/user/image', profileImageRoutes);
 };

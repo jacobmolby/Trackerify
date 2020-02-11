@@ -33,9 +33,9 @@
         <div class="mb-10">
           <h2 class="text-xl font-semibol text-gray-900 border-b mb-5">Profile Image</h2>
           <div class="flex justify-between mb-2">
-            <div class="flex flex-col justify-around">
-              <button class="btn btn-gray">Upload New Image</button>
-              <button class="btn btn-gray">Delete Image</button>
+            <div class="flex flex-col justify-between">
+              <UploadImage />
+              <DeleteImage />
             </div>
             <img class="h-32 w-32 rounded-full" :src="user.profileImage" alt />
           </div>
@@ -78,6 +78,8 @@ import { mapState } from 'vuex';
 import moment from 'moment';
 import ChangePassword from '../components/settings/ChangePassword';
 import ChangeEmail from '../components/settings/ChangeEmail';
+import DeleteImage from '../components/settings/DeleteImage';
+import UploadImage from '../components/settings/UploadImage';
 import TheTopbar from '../components/TheTopbar';
 import Sidebar from '../components/Sidebar';
 export default {
@@ -86,7 +88,9 @@ export default {
     TheTopbar,
     Sidebar,
     ChangePassword,
-    ChangeEmail
+    ChangeEmail,
+    DeleteImage,
+    UploadImage
   },
   data() {
     return {
