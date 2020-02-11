@@ -21,7 +21,7 @@ const userSchema = new Schema(
     },
     profileImage: {
       type: String,
-      default: 'https://img.icons8.com/officel/48/000000/user.png'
+      default: 'img/no-profile-picture.png'
     },
     hasReadWelcomeMessage: {
       type: Boolean,

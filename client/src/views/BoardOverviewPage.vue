@@ -64,9 +64,9 @@
 import moment from 'moment';
 import { mapState, mapActions } from 'vuex';
 import LoadingSpinner from '../components/reusables/LoadingSpinner';
-import CreateBoard from '../components/board/CreateBoard';
 import TheTopbar from '../components/TheTopbar';
 import Sidebar from '../components/Sidebar';
+import CreateBoard from '../components/board/CreateBoard';
 import WelcomeMessage from '../components/WelcomeMessage';
 import BoardService from '../services/BoardService';
 export default {

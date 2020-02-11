@@ -12,6 +12,7 @@ import board from './events/boardEvents';
 import list from './events/listEvents';
 import card from './events/cardEvents';
 import teams from './events/teamEvents';
+import settings from './events/settingsEvents';
 
 import getters from './getters';
 
@@ -54,6 +55,7 @@ export const store = new Vuex.Store({
   },
   getters,
   mutations: {
+    ...settings.mutations,
     ...teams.mutations,
     ...label.mutations,
     ...card.mutations,
@@ -94,6 +96,7 @@ export const store = new Vuex.Store({
     }
   },
   actions: {
+    ...settings.actions,
     ...teams.actions,
     ...label.actions,
     ...comment.actions,
