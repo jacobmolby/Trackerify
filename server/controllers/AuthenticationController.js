@@ -31,7 +31,6 @@ module.exports = {
       });
       const savedUser = await user.save();
       user.password = undefined;
-      user.created = undefined;
 
       const savedUserJson = savedUser.toJSON();
       //Respond with the user id

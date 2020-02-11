@@ -7,7 +7,7 @@
           <div class="px-6">
             <TheTopbar @openSidebar="isOpen = true" />
             <div class="py-2 flex items-center justify-between">
-              <h1 class="font-semibold text-2xl text-gray-800">User Settings</h1>
+              <h1 class="font-semibold text-2xl text-gray-800">Account Settings</h1>
             </div>
           </div>
         </header>
@@ -27,7 +27,6 @@
           </div>
           <div class="flex justify-between">
             <span>Member since:</span>
-            <!-- createdAt in production version -->
             <span>{{memberSince}}</span>
           </div>
         </div>
@@ -57,7 +56,7 @@
             <ChangeEmail @emailChanged="changingEmail = false" />
           </div>
           <div v-else-if="changingPassword">
-            <ChangePassword />
+            <ChangePassword @passwordChanged="changingPassword = false" />
           </div>
         </div>
       </div>
@@ -101,7 +100,9 @@ export default {
       user: state => state.user
     }),
     memberSince() {
-      return moment(this.user.created).format('DD MMM YY');
+      //TODO "user.createdAt" in production version
+
+      return moment(this.user.created).format('DD MMMM, YYYY');
     }
   },
   methods: {}
