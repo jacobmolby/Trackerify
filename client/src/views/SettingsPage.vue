@@ -14,33 +14,35 @@
       </div>
 
       <!-- MAIN CONTENT -->
-      <div class="p-6 flex flex-col overflow-y-auto justify-between">
-        <div class="mb-10">
-          <h2 class="text-xl font-semibol text-gray-900 border-b mb-5">Information</h2>
-          <div class="flex justify-between mb-2">
-            <span>Name:</span>
-            <span>{{user.name}}</span>
-          </div>
-          <div class="flex justify-between mb-2">
-            <span>Email:</span>
-            <span>{{user.email}}</span>
-          </div>
-          <div class="flex justify-between">
-            <span>Member since:</span>
-            <span>{{memberSince}}</span>
-          </div>
-        </div>
-        <div class="mb-10">
-          <h2 class="text-xl font-semibol text-gray-900 border-b mb-5">Profile Image</h2>
-          <div class="flex justify-between mb-2">
-            <div class="flex flex-col justify-between">
-              <UploadImage />
-              <DeleteImage />
+      <div class="p-6 flex flex-col md:flex-row overflow-y-auto justify-around">
+        <div class="flex-1 p-0 md:pr-10">
+          <div class="mb-10">
+            <h2 class="text-xl font-semibol text-gray-900 border-b mb-5">Information</h2>
+            <div class="flex justify-between mb-2">
+              <span>Name:</span>
+              <span>{{user.name}}</span>
             </div>
-            <img class="h-32 w-32 rounded-full" :src="user.profileImage" alt />
+            <div class="flex justify-between mb-2">
+              <span>Email:</span>
+              <span>{{user.email}}</span>
+            </div>
+            <div class="flex justify-between">
+              <span>Member since:</span>
+              <span>{{memberSince}}</span>
+            </div>
+          </div>
+          <div class="mb-10">
+            <h2 class="text-xl font-semibol text-gray-900 border-b mb-5">Profile Image</h2>
+            <div class="flex justify-between mb-2">
+              <div class="flex flex-col justify-between">
+                <UploadImage />
+                <DeleteImage />
+              </div>
+              <img class="h-32 w-32 rounded-full" :src="user.profileImage" alt />
+            </div>
           </div>
         </div>
-        <div class>
+        <div class="flex-1 p-0 md:pl-10">
           <h2 class="text-xl font-semibol text-gray-900 border-b mb-5">Change Information</h2>
           <div class="flex justify-around mb-4">
             <button
@@ -104,9 +106,7 @@ export default {
       user: state => state.user
     }),
     memberSince() {
-      //TODO "user.createdAt" in production version
-
-      return moment(this.user.created).format('DD MMMM, YYYY');
+      return moment(this.user.createdAt).format('DD MMMM, YYYY');
     }
   },
   methods: {}

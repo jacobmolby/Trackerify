@@ -5,7 +5,6 @@ const Login = () => import('../views/LoginPage');
 const Register = () => import('../views/RegisterPage');
 const BoardOverview = () => import('../views/BoardOverviewPage');
 const Board = () => import('../views/BoardPage');
-const S3test = () => import('../views/S3-testing');
 
 const routes = [
   {
@@ -42,11 +41,6 @@ const routes = [
     path: '/teams',
     name: 'teams',
     component: Teams
-  },
-  {
-    path: '/image',
-    name: 'image',
-    component: S3test
   },
   {
     // Catch all until 404 is made
