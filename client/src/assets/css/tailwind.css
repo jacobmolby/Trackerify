@@ -13,7 +13,12 @@
 
 .btn-gray:hover {
   @apply bg-gray-700;
-  /* @apply translate-y-1px; */
+}
+.btn-purple {
+  @apply text-white bg-purple-800;
+}
+.btn-purple:hover {
+  @apply bg-purple-700;
 }
 
 /* purgecss end ignore */

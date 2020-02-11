@@ -85,6 +85,7 @@
               <label class="text-gray-700 text-xs font-bold">
                 I agree to the
                 <a
+                  target="_blank"
                   class="hover:text-gray-900 hover:border-b border-gray-900"
                   href="https://www.termsfeed.com/privacy-policy/dacfeadef9ec30aa49ef22a20cfaaddf"
                 >Privacy Policy</a>
