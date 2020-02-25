@@ -38,7 +38,9 @@
                 <UploadImage />
                 <DeleteImage />
               </div>
-              <img class="h-32 w-32 rounded-full" :src="user.profileImage" alt />
+              <div class="h-32 w-32">
+                <img class="rounded-full h-full w-full object-cover" :src="user.profileImage" alt />
+              </div>
             </div>
           </div>
         </div>

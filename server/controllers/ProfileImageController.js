@@ -39,7 +39,10 @@ module.exports = {
       const oldImageUrl = user.profileImage;
       user.profileImage = imageUrl;
       await user.save();
-      if (oldImageUrl !== 'img/no-profile-picture.png') {
+      if (
+        oldImageUrl !==
+        'https://trackerify.netlify.com/img/no-profile-picture.png'
+      ) {
         const s3 = new aws.S3();
         const imageKey = oldImageUrl.split('s3-eu-west-1.amazonaws.com/')[1];
         const params = {
@@ -59,10 +62,14 @@ module.exports = {
   async destroy(req, res) {
     try {
       const user = await User.findById(req.user._id).select('profileImage');
-      if (user.profileImage === 'img/no-profile-picture.png') {
+      if (
+        user.profileImage ===
+        'https://trackerify.netlify.com/img/no-profile-picture.png'
+      ) {
         return res.status(400).send({ error: 'User has no profile image.' });
       }
-      user.profileImage = 'img/no-profile-picture.png';
+      user.profileImage =
+        'https://trackerify.netlify.com/img/no-profile-picture.png';
       await user.save();
       res.send({ message: 'Succes' });
     } catch (error) {

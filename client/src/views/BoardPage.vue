@@ -93,7 +93,7 @@
                     class="relative -ml-2 h-8 w-8 z-0"
                   >
                     <img
-                      class="rounded-full block border-white border-2"
+                      class="rounded-full block h-full w-full object-cover border-white border-2"
                       :src="user.profileImage"
                       alt="Profile Image"
                     />
