@@ -21,7 +21,7 @@ const userSchema = new Schema(
     },
     profileImage: {
       type: String,
-      default: 'img/no-profile-picture.png'
+      default: 'https://trackerify.netlify.com/img/no-profile-picture.png'
     },
     hasReadWelcomeMessage: {
       type: Boolean,

@@ -14,8 +14,8 @@ module.exports = {
         .email(),
       password: Joi.string()
         .required()
-        //REGEX: 'A password must atleast contain a letter, a capital letter, a number and must be between 8 and 32 characters long'
         .regex(new RegExp('^(?=.*[a-z])(?=.*[A-Z])(?=.*[0-9])(?=.{8,32})'))
+      //REGEX: 'A password must atleast contain a letter, a capital letter, a number and must be between 8 and 32 characters long'
     });
     // Error handling
     const { error } = schema.validate(req.body);
