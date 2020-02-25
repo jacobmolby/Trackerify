@@ -38,7 +38,7 @@
         <div class="flex flex-shrink-0">
           <div v-for="user in card.assignedUsers" :key="user._id" class="-ml-2 h-6 w-6">
             <img
-              class="rounded-full border-white border-2 object-cover"
+              class="rounded-full h-full w-full border-white border-2 object-cover"
               :src="user.profileImage"
               alt="Profile Image"
             />
@@ -114,7 +114,7 @@
                 class="relative -ml-2 h-8 w-8"
               >
                 <img
-                  class="rounded-full border-white border-2"
+                  class="rounded-full h-full w-full object-cover border-white border-2"
                   :src="user.profileImage"
                   alt="Profile Image"
                 />
